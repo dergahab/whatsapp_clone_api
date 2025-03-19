@@ -4,13 +4,10 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
 class RegisterRequest extends BaseRequest
 {
-    public function authorize()
-    {
-        return true;
-    }
 
     public function rules()
     {

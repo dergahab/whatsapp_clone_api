@@ -62,7 +62,7 @@ class AuthController extends Controller
     }
 
     public function login(LoginRequest $request)
-    {
+    {      
         $request->authenticate();
 
         $count_all = User::count();

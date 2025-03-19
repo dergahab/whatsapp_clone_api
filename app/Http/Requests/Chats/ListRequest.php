@@ -4,6 +4,7 @@ namespace App\Http\Requests\Chats;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User;
+use App\Http\Requests\BaseRequest;
 
 class ListRequest extends FormRequest
 {

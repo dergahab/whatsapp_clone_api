@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
+use App\Http\Requests\BaseRequest;
 
 class LoginRequest extends BaseRequest
 {
@@ -16,11 +17,6 @@ class LoginRequest extends BaseRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
