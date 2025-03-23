@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Users\UpdateNameRequest;
@@ -10,79 +12,45 @@ use App\Http\Resources\Users\UpdateProfilePictureRequest;
 
 class UsersController extends Controller
 {
-    public function update_name(UpdateNameRequest $request)
+    public function updateName(Request $request)
     {
-        $user = $request->user();
+        $request->validate([
+            'uuid' => 'required|exists:users,uuid',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $user = User::where('uuid', $request->uuid)->first();
         $user->name = $request->name;
         $user->save();
 
-        if ($user->save()) {
-            return response()->json(
-                [
-                    'message' => 'Adınız uğurla yeniləndi!',
-                    'status' => Response::HTTP_OK,
-                ]
-            );
-        } else {
-            return response()->json(
-                [
-                    'message' => 'Adınız yenilənmədi!',
-                    'status' => Response::HTTP_BAD_REQUEST,
-                ]
-            );
-        }
+        return response()->json(['message' => 'Name updated successfully', 'user' => $user]);
     }
 
-    public function update_email(UpdateEmailRequest $request)
+    public function updateEmail(Request $request)
     {
-        $user = $request->user();
+        $request->validate([
+            'uuid' => 'required|exists:users,uuid',
+            'email' => 'required|email|unique:users,email,' . $request->uuid . ',uuid',
+        ]);
+
+        $user = User::where('uuid', $request->uuid)->first();
         $user->email = $request->email;
         $user->save();
 
-        if ($user->save()) {
-            return response()->json(
-                [
-                    'message' => 'Email uğurla yeniləndi!',
-                    'status' => Response::HTTP_OK,
-                ]
-            );
-        } else {
-            return response()->json(
-                [
-                    'message' => 'Email yenilənmədi!',
-                    'status' => Response::HTTP_BAD_REQUEST,
-                ]
-            );
-        }
+        return response()->json(['message' => 'Email updated successfully', 'user' => $user]);
     }
 
-    public function update_profile_picture(UpdateProfilePictureRequest $request)
+    public function updateProfilePicture(Request $request)
     {
-        $user = $request->user();
-        $profilePicturePath = null;
+        $request->validate([
+            'uuid' => 'required|exists:users,uuid',
+            'profile_picture' => 'required|url',
+        ]);
 
-        if ($request->hasFile('profile_picture')) {
-            $profilePicture = $request->file('profile_picture');
-            $profilePicturePath = $profilePicture->store('profile_pictures', 'public');
-        }
-
-        $user->profile_picture = $profilePicturePath;
+        $user = User::where('uuid', $request->uuid)->first();
+        $user->profile_picture = $request->profile_picture;
         $user->save();
 
-        if ($user->save()) {
-            return response()->json(
-                [
-                    'message' => 'Profil şəkli uğurla yeniləndi!',
-                    'status' => Response::HTTP_OK,
-                ]
-            );
-        } else {
-            return response()->json(
-                [
-                    'message' => 'Profil şəkli yenilənmədi!',
-                    'status' => Response::HTTP_BAD_REQUEST,
-                ]
-            );
-        }
+        return response()->json(['message' => 'Profile picture updated successfully', 'user' => $user]);
     }
 }

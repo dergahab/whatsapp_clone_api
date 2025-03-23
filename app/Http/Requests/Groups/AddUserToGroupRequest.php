@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests\Groups;
 
-
 use Illuminate\Foundation\Http\FormRequest;
 
-class GroupCreateRequest extends FormRequest
+class AddUserToGroupRequest extends FormRequest
 {
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'user_uuid' => 'required|uuid|exists:users,uuid',
+            'group_uuid' => 'required|uuid|exists:groups,uuid',
         ];
     }
 
@@ -19,4 +19,3 @@ class GroupCreateRequest extends FormRequest
         return true;
     }
 }
-
