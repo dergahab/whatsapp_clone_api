@@ -16,7 +16,8 @@ class Groups extends Model
     protected $keyType = 'bigint';
 
     protected $fillable = [
-        'uuid', 'name'
+        'uuid',
+        'name'
     ];
 
     protected static function boot()

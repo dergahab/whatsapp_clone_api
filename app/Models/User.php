@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -14,6 +15,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens;
+
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'id',
         'password',
         'remember_token',
+        'deleted_at',
     ];
 
     /**
@@ -55,5 +59,22 @@ class User extends Authenticatable implements MustVerifyEmail
         $url = 'https://spa.test/reset-password?token=' . $token;
 
         $this->notify(new ResetPasswordNotification($url));
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
+    }
+
+    public function privateMessagesSent()
+    {
+        return $this->hasMany(ChatPrivate::class, 'from_user');
+    }
+
+    public function privateMessagesReceived()
+    {
+        return $this->hasMany(ChatPrivate::class, 'to_user');
     }
 }
