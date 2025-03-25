@@ -45,9 +45,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/update_name', [UsersController::class, 'updateName']);
     Route::put('/update_email', [UsersController::class, 'updateEmail']);
     Route::put('/update_profile_picture', [UsersController::class, 'updateProfilePicture']);
-    // Route::put('update_name', [UsersController::class, 'update_name'])->middleware('auth:sanctum');
-    // Route::put('update_email', [UsersController::class, 'update_email'])->middleware('auth:sanctum');
-    // Route::put('update_profile_picture', [UsersController::class, 'update_profile_picture'])->middleware('auth:sanctum');
+
+//    Route::put('update_name', [AuthController::class, 'update_name'])->middleware('auth:sanctum');
+//    Route::put('update_email', [AuthController::class, 'update_email'])->middleware('auth:sanctum');
+//    Route::put('update_profile_picture', [AuthController::class, 'update_profile_picture'])->middleware('auth:sanctum');
 });
 
 // User Chats
