@@ -17,7 +17,6 @@ class NewPasswordController extends Controller
 {
     public function forgotPassword(ForgotPasswordRequest $request)
     {
-
         $status = Password::sendResetLink(
             $request->only('email')
         );

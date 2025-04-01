@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Repositories\UserRepositories;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
+class UserRepository implements UserRepositoryİnterface
+{
+    public function index($search=null): array
+    {
+        return User::select('uuid', 'name', 'profile_picture')
+            ->where('uuid', '!=', Auth::id())
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+            })
+            ->get()
+            ->toArray();
+    }
+}

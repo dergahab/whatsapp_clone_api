@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Models\User;
+use App\Services\User\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -10,8 +11,33 @@ use App\Http\Resources\Users\UpdateNameRequest;
 use App\Http\Resources\Users\UpdateEmailRequest;
 use App\Http\Resources\Users\UpdateProfilePictureRequest;
 
+
 class UsersController extends Controller
 {
+
+    public function __construct(public UserService $service)
+    {
+
+    }
+
+    /**
+     * @LRDparam search nullable|string
+     */
+    public function index(Request $request)
+    {
+        try {
+            return response()->json([
+                'data' => $this->service->index( $request),
+                'status' => Response::HTTP_OK
+            ], Response::HTTP_OK);
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $ex->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function updateName(Request $request)
     {
         $request->validate([
