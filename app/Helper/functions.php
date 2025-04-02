@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('rp_response')) {
+
+
+    /**
+     * Parse id to uuid
+     */
+    if (!function_exists('rp_id_to_uuid')) {
+        function rp_id_to_uuid($model, $id): string|null
+        {
+            $query = app($model)->select('id', 'uuid')->where('id', $id);
+            return $query->count() ? implode('', $query->get()->pluck('uuid')->toArray()) : null;
+        }
+    }
     function rp_response($data = [], $message = null, $status = Response::HTTP_OK,$count = null): \Illuminate\Http\JsonResponse
     {
         try {
@@ -229,16 +241,7 @@ if (!function_exists('rp_uuid_to_ids')) {
 }
 
 
-/**
- * Parse id to uuid
- */
-if (!function_exists('rp_id_to_uuid')) {
-    function rp_id_to_uuid($model, $id): string|null
-    {
-        $query = app($model)->select('id', 'uuid')->where('id', $id);
-        return $query->count() ? implode('', $query->get()->pluck('uuid')->toArray()) : null;
-    }
-}
+
 
 if (!function_exists('rp_tabel_to_model')) {
     function rp_tabel_to_model($model, $uuid): string|null

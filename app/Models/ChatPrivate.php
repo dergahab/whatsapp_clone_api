@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Chat\Chat;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class ChatPrivate extends Model

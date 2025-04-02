@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Groups;
 
-use App\Models\Group;
-use App\Models\Chat;
-use App\Models\GroupUser;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Groups\SendGroupMessageRequest;
+use App\Models\Chat\Chat;
 use App\Models\ChatGroup;
-use Illuminate\Support\Str;
+use App\Models\Group;
+use App\Models\GroupUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Groups\SendGroupMessageRequest;
+use Illuminate\Support\Str;
 
 class GroupMessagingController extends Controller
 {

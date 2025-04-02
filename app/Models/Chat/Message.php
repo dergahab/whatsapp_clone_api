@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Chat;
 
+use App\Models\ChatGroup;
+use App\Models\ChatPrivate;
+use App\Models\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
-class Chat extends Model
+class Message extends Model
 {
-    // use SoftDeletes;
-
-    protected $table = 'chat';
-
+    protected $table = "messages";
     protected $fillable = [
         'uuid',
-        'message',
-
+        'user1',
+        'user2'
     ];
 
     protected $hidden = [
         'id',
-        'deleted_at',
+        'created_at',
         'updated_at',
+        'deleted_at'
     ];
 
     protected static function booted()

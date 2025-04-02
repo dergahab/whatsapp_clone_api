@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Chat\ChatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Chats\ChatsController;
+use App\Http\Controllers\Chat\ChatsController;
 use App\Http\Controllers\Users\UsersController;
 use App\Http\Controllers\Api\NewPasswordController;
 use App\Http\Controllers\Groups\GroupsChatsController;
@@ -82,3 +83,6 @@ route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/group/list-messages', [GroupsChatsController::class, 'listMessages']);
     Route::post('/group/list-users-messages', [GroupsChatsController::class, 'listUsersMessages']);
 });
+
+
+Route::apiResource('chat', ChatController::class);

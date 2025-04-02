@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Chat\Chat;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -68,13 +69,13 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
-    public function privateMessagesSent()
+    public function chatAsUserOne()
     {
-        return $this->hasMany(ChatPrivate::class, 'from_user');
+        return $this->hasMany(Chat::class, 'user1');
     }
 
-    public function privateMessagesReceived()
+    public function chatAsUserTwo()
     {
-        return $this->hasMany(ChatPrivate::class, 'to_user');
+        return $this->hasMany(Chat::class, 'user2');
     }
 }

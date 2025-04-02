@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Chats;
+namespace App\Http\Controllers\Chat;
 
-use App\Models\User;
-use App\Models\Chat;
-use Illuminate\Support\Str;
-use App\Models\ChatPrivate;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Chats\ListRequest;
 use App\Http\Requests\Chats\SendPrivateMessageRequest;
-use App\Http\Requests\Chats\GetPrivateMessagesRequest;
+use App\Models\Chat\Chat;
+use App\Models\ChatPrivate;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ChatsController extends Controller
 {
