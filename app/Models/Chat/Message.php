@@ -3,6 +3,7 @@
 namespace App\Models\Chat;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
@@ -20,7 +21,6 @@ class Message extends Model
     protected $hidden = [
         'id',
 	    'chat_id',
-        'created_at',
         'updated_at',
         'deleted_at'
     ];
@@ -65,4 +65,14 @@ class Message extends Model
 			}
 		);
 	}
+
+	protected function createdAt(): Attribute
+	{
+		return Attribute::make(
+			get: fn ($value) => Carbon::parse($value)->isToday()
+				? Carbon::parse($value)->format('H:i')
+				: Carbon::parse($value)->diffForHumans()
+		);
+	}
+
 }
