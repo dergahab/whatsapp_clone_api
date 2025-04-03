@@ -8,8 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatRepository implements ChatRepositoryİnterface
 {
+	public function __construct(public Chat $model)	{}
 
-
+	public function index()
+	{
+		return $this->model->with(['message', 'sendBy:id,uuid,name,profile_picture'])->get();
+	}
     public function store(array $data): Chat
     {
         if ($data['user1'] === $data['user2']) {
@@ -31,4 +35,14 @@ class ChatRepository implements ChatRepositoryİnterface
 
         return Chat::create($data);
     }
+
+	public function show($uuid): Chat
+	{
+		return $this->model->where('uuid', $uuid)->with('messages')->firstOrFail();
+	}
+
+	public function destroy($uuid)
+	{
+		return $this->model->where('uuid', $uuid)->delete();
+	}
 }

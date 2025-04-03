@@ -61,7 +61,21 @@ class ChatsController extends Controller
         }
     }
 
-
+    // public function getPrivateMessages(GetPrivateMessagesRequest $request)
+    // {
+    //     $sender = User::where('uuid', $request->from_user_uuid)->firstOrFail();
+    //     $receiver = User::where('uuid', $request->to_user_uuid)->firstOrFail();
+    //     $messages = ChatPrivate::where('from_user', $sender->id)->where('to_user', $receiver->id)->orWhere('from_user', $receiver->id)->where('to_user', $sender->id)->with('message')->orderBy('created_at', 'desc')->limit(10)->get();
+    //     return response()->json(
+    //         data: [
+    //             'message' => 'Messages retrieved successfully',
+    //             'data' => $messages,
+    //             'sender' => $sender,
+    //             'receiver' => $receiver,
+    //             "status" => Response::HTTP_OK,
+    //         ],
+    //     );
+    // }
 
     public function getPrivateMessages(Request $request)
     {
