@@ -55,16 +55,17 @@ class ChatController extends Controller
 
     public function show(ShowRequest $request)
     {
-	    DB::beginTransaction();
-	    try {
+//	    DB::beginTransaction();
+//	    try {
+
 		    $chat = $this->service->show($request);
 
-		    return  rp_response($chat, __('DataCreatedSuccessfully'),Response::HTTP_CREATED);
+		    return  rp_response(data:$chat,message: Response::HTTP_OK);
 
-	    } catch (\Exception $ex) {
-
-		    return  rp_response([], __('FailureProcess'),Response::HTTP_INTERNAL_SERVER_ERROR);
-	    }
+//	    } catch (\Exception $ex) {
+//
+//		    return  rp_response([], __('FailureProcess'),Response::HTTP_INTERNAL_SERVER_ERROR);
+//	    }
     }
 
     public function destroy(DestroyRequest $request)
