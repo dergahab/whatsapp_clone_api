@@ -22,7 +22,7 @@ class ChatService
 
 	public function show(ShowRequest $request)
 	{
-		return $this->repository->show($request->uuid);
+		return $this->repository->show($request);
 	}
 
 	public function destroy(ShowRequest $request)

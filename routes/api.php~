@@ -5,9 +5,13 @@ use App\Http\Controllers\Chat\ChatController;
 	use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Chat\ChatsController;
 use App\Http\Controllers\Users\UsersController;
 use App\Http\Controllers\Api\NewPasswordController;
+use App\Http\Controllers\Groups\GroupsChatsController;
 use App\Http\Controllers\Api\EmailVerificationController;
+use App\Http\Controllers\Groups\GroupMessagingController;
+use App\Http\Controllers\Groups\GroupManagementController;
 
 /*
 |--------------------------------------------------------------------------

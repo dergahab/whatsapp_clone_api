@@ -36,9 +36,9 @@ class ChatRepository implements ChatRepositoryİnterface
         return Chat::create($data);
     }
 
-	public function show($uuid): Chat
+	public function show($uuid): Chat|null
 	{
-		return $this->model->where('uuid', $uuid)->with('messages')->firstOrFail();
+		return $this->model->where('uuid', $uuid)->with('messages')->first();
 	}
 
 	public function destroy($uuid)
