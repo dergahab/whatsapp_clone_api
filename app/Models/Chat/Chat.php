@@ -5,8 +5,11 @@ namespace App\Models\Chat;
 use App\Models\Base;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Auth;
 
 class Chat extends Base
 {
@@ -22,7 +25,9 @@ class Chat extends Base
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+	    'user1',
+        'user2'
     ];
      public function userOne()
     {
@@ -33,13 +38,23 @@ class Chat extends Base
         return $this->belongsTo(User::class, 'user2');
     }
 
-//    public function message(): HasOne
-//    {
-//        return $this->belongsTo(User::class, 'user2');
-//    }
-//
-//    public function messages(): HasOne
-//    {
-//        return $this->belongsTo(User::class, 'user2');
-//    }
+	public function messages(): HasMany
+	{
+		return $this->hasMany(Message::class, 'chat_id', 'id');
+	}
+    public function message(): HasOne
+    {
+        return $this->hasOne(Message::class, 'chat_id', 'id')->latest();
+    }
+
+	public function sendBy(): BelongsTo
+	{
+		if (Auth::user()?->id == $this->user1) {
+			return $this->userOne();
+		}
+
+		return $this->userTwo();
+	}
+
+
 }

@@ -1,13 +1,15 @@
 <?php
-namespace App\Services\Chat;
+namespace App\Services\Message;
 use App\Http\Requests\Chat\ShowRequest;
-use App\Repositories\ChatRepositories\ChatRepository;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Requests\Message\StoreRequest;
+
+use App\Models\Chat\Message;
+use App\Repositories\Message\MessageRepository;
 use Illuminate\Http\Request;
 
-class ChatService
+class MessageService
 {
-    public function __construct(public ChatRepository $repository)
+    public function __construct(public MessageRepository $repository)
     {
 
     }
@@ -16,9 +18,9 @@ class ChatService
 		return $this->repository->index($request?->search);
 	}
 
-    public function store(array $data)
+    public function store(StoreRequest $request): Message
     {
-        return $this->repository->store($data);
+        return $this->repository->store($request->validatedData());
     }
 
 	public function show(ShowRequest $request): array

@@ -3,86 +3,81 @@
 namespace App\Http\Controllers\Chat;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Chat\DestroyRequest;
+use App\Http\Requests\Chat\ShowRequest;
 use App\Services\Chat\ChatService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\Chat\ChatStoreRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class ChatController extends Controller
 {
-    public function __construct(public ChatService $chatService)
+    public function __construct(public ChatService $service)
     {
-
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        Chat::with('userOne', 'userTwo', "message")->get();
+	    DB::beginTransaction();
+	    try {
+		    $chat = $this->service->index($request);
+
+		    DB::commit();
+		    return  rp_response($chat);
+
+	    } catch (\Exception $ex) {
+		    DB::rollBack();
+
+		    return  rp_response([], __('FailureProcess'),Response::HTTP_INTERNAL_SERVER_ERROR);
+	    }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(ChatStoreRequest $request): JsonResponse
     {
         DB::beginTransaction();
         try {
             $data = $request->validatedData();
-            $chat = $this->chatService->store($data);
-            DB::commit();
+            $chat = $this->service->store($data);
 
-            return response()->json([
-                'data' => $chat,
-                'status' => Response::HTTP_OK
-            ], Response::HTTP_OK);
+            DB::commit();
+			return  rp_response($chat, __('DataCreatedSuccessfully'),Response::HTTP_CREATED);
 
         } catch (\Exception $ex) {
             DB::rollBack();
 
-            return response()->json([
-                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $ex->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+	        return  rp_response([], __('FailureProcess'),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(ShowRequest $request)
     {
-        //
+	    DB::beginTransaction();
+	    try {
+		    $chat = $this->service->show($request);
+
+		    return  rp_response($chat, __('DataCreatedSuccessfully'),Response::HTTP_CREATED);
+
+	    } catch (\Exception $ex) {
+
+		    return  rp_response([], __('FailureProcess'),Response::HTTP_INTERNAL_SERVER_ERROR);
+	    }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(DestroyRequest $request)
     {
-        //
-    }
+	    DB::beginTransaction();
+	    try {
+		    $chat = $this->service->destroy($request);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+		    return  rp_response($chat, __('DataDeletedSuccessfully'),Response::HTTP_OK);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+	    } catch (\Exception $ex) {
+
+		    return  rp_response([], __('FailureProcess'),Response::HTTP_INTERNAL_SERVER_ERROR);
+	    }
     }
 }
