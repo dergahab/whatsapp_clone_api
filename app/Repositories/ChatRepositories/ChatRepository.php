@@ -10,8 +10,17 @@ class ChatRepository implements ChatRepositoryİnterface
 
     public function index()
     {
-        return $this->model->with(['message', 'sendBy:id,uuid,name,profile_picture'])->get();
+        return $this->model
+            ->with([
+                'message',
+                'sendBy:id,uuid,name,profile_picture'
+            ])
+            ->withCount(['message as unread_count' => function ($query) {
+                $query->where('status', 1);
+            }])
+            ->get();
     }
+
 
     public function store(array $data): Chat
     {

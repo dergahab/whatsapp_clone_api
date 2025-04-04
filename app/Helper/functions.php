@@ -26,14 +26,13 @@ if (!function_exists('rp_response')) {
             return $query->count() ? implode('', $query->get()->pluck('uuid')->toArray()) : null;
         }
     }
-    function rp_response($data = [], $message = null, $status = Response::HTTP_OK,$count = null): \Illuminate\Http\JsonResponse
+    function rp_response($data = [], $message = null, $status = Response::HTTP_OK): \Illuminate\Http\JsonResponse
     {
         try {
             return response()->json([
                 "messages" => __($message),
                 "data" => $data,
                 "status" => $status,
-                "count" =>$count
             ], $status > Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED ? Response::HTTP_SEE_OTHER : $status);
         } catch (\Exception $e) {
             return response()->json([

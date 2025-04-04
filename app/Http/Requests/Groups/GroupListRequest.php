@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Groups;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 
 class GroupListRequest extends FormRequest
 {

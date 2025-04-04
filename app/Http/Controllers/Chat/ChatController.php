@@ -16,11 +16,11 @@ class ChatController extends Controller
 {
     public function __construct(public ChatService $service) {}
 
-    public function index(Request $request)
+    public function index()
     {
         DB::beginTransaction();
         try {
-            $chat = $this->service->index($request);
+            $chat = $this->service->index();
 
             DB::commit();
 
@@ -94,11 +94,11 @@ class ChatController extends Controller
         DB::beginTransaction();
         try {
             $chat = $this->service->destroy($request);
-
+            DB::commit();
             return rp_response($chat, __('DataDeletedSuccessfully'), Response::HTTP_OK);
 
         } catch (\Exception $ex) {
-
+            DB::rollBack();
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

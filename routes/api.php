@@ -49,7 +49,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 	Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
 	Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
-
+    Route::get('/chat/messages', [MessageController::class, 'show_messages']);
 
 });
 

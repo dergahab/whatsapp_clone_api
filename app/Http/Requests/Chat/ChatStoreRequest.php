@@ -23,8 +23,8 @@ class ChatStoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'user1' => ['required', 'string', 'uuid', 'exists:' . rp_get_table(User::class) . ',uuid'],
-            'user2' => ['required', 'string', 'uuid', 'exists:' . rp_get_table(User::class) . ',uuid'],
+            'user1' => ['required', 'string', 'uuid', 'exists:'.rp_get_table(User::class).',uuid'],
+            'user2' => ['required', 'string', 'uuid', 'exists:'.rp_get_table(User::class).',uuid'],
         ];
     }
 
@@ -33,8 +33,8 @@ class ChatStoreRequest extends BaseRequest
         $user1Id = rp_uuid_to_id(User::class, $this->input('user1'));
         $user2Id = rp_uuid_to_id(User::class, $this->input('user2'));
 
-        if (!$user1Id || !$user2Id) {
-            throw new \Exception("Invalid UUID");
+        if (! $user1Id || ! $user2Id) {
+            throw new \Exception('Invalid UUID');
         }
 
         $this->merge([
