@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Groups;
 
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class GroupCreateRequest extends FormRequest
@@ -19,4 +18,3 @@ class GroupCreateRequest extends FormRequest
         return true;
     }
 }
-

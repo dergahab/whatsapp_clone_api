@@ -7,21 +7,20 @@ use App\Models\Chat\Chat;
 
 class ShowRequest extends BaseRequest
 {
-	protected function prepareForValidation(): void
-	{
-		if(!is_null($this->route('uuid'))){
-			$this->merge([
-				'uuid' => $this->route('uuid'),
-			]);
-		}
-	}
-
-	public function rules(): array
+    protected function prepareForValidation(): void
     {
-        return [
-            "uuid" => ["required", "uuid", "exists:". rp_get_table(Chat::class).",uuid"],
-        ];
+        if (! is_null($this->route('uuid'))) {
+            $this->merge([
+                'uuid' => $this->route('uuid'),
+                "page" => $this->route('page'),
+            ]);
+        }
     }
 
-
+    public function rules(): array
+    {
+        return [
+            'uuid' => ['required', 'uuid', 'exists:'.rp_get_table(Chat::class).',uuid'],
+        ];
+    }
 }
