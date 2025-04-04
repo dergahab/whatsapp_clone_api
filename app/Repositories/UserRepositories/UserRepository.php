@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Repositories\UserRepositories;
-use Illuminate\Support\Facades\Auth;
+
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryİnterface
 {
-    public function index($search=null): array
+    public function index($search = null): array
     {
         return User::select('uuid', 'name', 'profile_picture')
             ->where('uuid', '!=', Auth::id())

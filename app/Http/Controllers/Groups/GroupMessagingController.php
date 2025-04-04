@@ -46,7 +46,7 @@ class GroupMessagingController extends Controller
                 ];
             }, ),
             'count' => $groupMessages->count(),
-            'status' => Response::HTTP_OK
+            'status' => Response::HTTP_OK,
         ]);
     }
 
@@ -72,20 +72,21 @@ class GroupMessagingController extends Controller
                 [
                     'message' => 'Message sent to group user',
                     'data' => $chatGroup,
-                    "chat" => $chat,
-                    "fromUser" => $fromUser,
-                    "toUser" => $toUser,
-                    "count" => $chatGroup->count(),
-                    "status" => Response::HTTP_CREATED
+                    'chat' => $chat,
+                    'fromUser' => $fromUser,
+                    'toUser' => $toUser,
+                    'count' => $chatGroup->count(),
+                    'status' => Response::HTTP_CREATED,
                 ],
             );
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json(
                 [
                     'error' => $e->getMessage(),
                     'count' => 0,
-                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 ],
             );
         }
@@ -108,7 +109,7 @@ class GroupMessagingController extends Controller
                 'uuid' => $chat->uuid,
                 'message' => $chat->message,
                 'updated_at' => $chat->updated_at,
-            ]
+            ],
         ]);
     }
 
@@ -128,7 +129,7 @@ class GroupMessagingController extends Controller
         $chat->delete();
 
         return response()->json([
-            'message' => 'Qrup mesajı uğurla silindi'
+            'message' => 'Qrup mesajı uğurla silindi',
         ]);
     }
 }

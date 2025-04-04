@@ -11,30 +11,28 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
-	public function __construct( public MessageService $service)
-	{
-
-	}
-
+    public function __construct(public MessageService $service) {}
 
     public function store(StoreRequest $request)
     {
-	    DB::beginTransaction();
-	    try {
-		    $this->service->store($request);
+        DB::beginTransaction();
+        try {
+            $this->service->store($request);
+            DB::commit();
 
-		    return  rp_response([], __('DataCreatedSuccessfully'),Response::HTTP_CREATED);
+            return rp_response([], __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
 
-	    } catch (\Exception $ex) {
+        } catch (\Exception $ex) {
+            DB::rollBack();
 
-		    return  rp_response([], __('FailureProcess'),Response::HTTP_INTERNAL_SERVER_ERROR);
-	    }
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-	public function show(string $id)
-	{
-		//
-	}
+    public function show(string $id)
+    {
+        //
+    }
 
     public function update(Request $request, string $id)
     {

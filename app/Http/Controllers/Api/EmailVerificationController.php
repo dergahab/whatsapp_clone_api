@@ -2,30 +2,29 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class EmailVerificationController extends Controller
 {
-
     public function sendVerificationEmail(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
             return [
                 'message' => 'E-poçt artıq təsdiqlənmişdir!',
-                'status' => Response::HTTP_OK
+                'status' => Response::HTTP_OK,
             ];
         }
 
         $request->user()->sendEmailVerificationNotification();
 
         return [
-            'message'=>'Doğrulama bağlantısı göndərildi!',
-            'status' => Response::HTTP_OK
-            ];
+            'message' => 'Doğrulama bağlantısı göndərildi!',
+            'status' => Response::HTTP_OK,
+        ];
     }
 
     public function verify(EmailVerificationRequest $request)
@@ -33,7 +32,7 @@ class EmailVerificationController extends Controller
         if ($request->user()->hasVerifiedEmail()) {
             return [
                 'message' => 'E-poçt artıq təsdiqlənmişdir!',
-                'status' => Response::HTTP_OK
+                'status' => Response::HTTP_OK,
             ];
         }
 
@@ -42,8 +41,8 @@ class EmailVerificationController extends Controller
         }
 
         return [
-            'message'=>'E-poçt təsdiqləndi!',
-            'status' => Response::HTTP_OK
+            'message' => 'E-poçt təsdiqləndi!',
+            'status' => Response::HTTP_OK,
         ];
     }
 }
