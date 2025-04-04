@@ -42,10 +42,12 @@ class ChatGroup extends Model
     {
         return $this->belongsTo(Chat::class, 'message_id');
     }
+
     public function fromUser()
     {
         return $this->belongsTo(GroupUser::class, 'from_group_user');
     }
+
     public function toUser()
     {
         return $this->belongsTo(GroupUser::class, 'to_group_user');

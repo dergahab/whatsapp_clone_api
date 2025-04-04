@@ -1,36 +1,34 @@
 <?php
+
 namespace App\Services\Message;
+
 use App\Http\Requests\Chat\ShowRequest;
 use App\Http\Requests\Message\StoreRequest;
-
 use App\Models\Chat\Message;
 use App\Repositories\Message\MessageRepository;
 use Illuminate\Http\Request;
 
 class MessageService
 {
-    public function __construct(public MessageRepository $repository)
-    {
+    public function __construct(public MessageRepository $repository) {}
 
+    public function index(Request $request)
+    {
+        return $this->repository->index($request?->search);
     }
-	public function index(Request $request)
-	{
-		return $this->repository->index($request?->search);
-	}
 
     public function store(StoreRequest $request): Message
     {
         return $this->repository->store($request->validatedData());
     }
 
-	public function show(ShowRequest $request): array
-	{
-		return $this->repository->show($request)->toArray();
-	}
+    public function show(ShowRequest $request): array
+    {
+        return $this->repository->show($request)->toArray();
+    }
 
-	public function destroy(ShowRequest $request)
-	{
-		return $this->repository->destroy($request);
-	}
-
+    public function destroy(ShowRequest $request)
+    {
+        return $this->repository->destroy($request);
+    }
 }

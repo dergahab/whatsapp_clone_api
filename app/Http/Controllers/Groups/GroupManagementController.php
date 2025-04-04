@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Groups;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Groups\AddUserToGroupRequest;
+use App\Http\Requests\Groups\GroupCreateRequest;
 use App\Models\Group;
 use App\Models\GroupUser;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Groups\GroupCreateRequest;
-use App\Http\Requests\Groups\AddUserToGroupRequest;
+use Illuminate\Support\Str;
 
 class GroupManagementController extends Controller
 {
@@ -25,8 +25,8 @@ class GroupManagementController extends Controller
             [
                 'message' => 'Group created successfully',
                 'data' => $group,
-                "count" => $group->count(),
-                "status" => Response::HTTP_CREATED
+                'count' => $group->count(),
+                'status' => Response::HTTP_CREATED,
             ],
         );
     }
@@ -89,10 +89,10 @@ class GroupManagementController extends Controller
             [
                 'message' => 'İstifadəçi qrupa əlavə olundu',
                 'data' => $groupUser,
-                "group" => $group,
-                "user" => $user,
-                "count" => $groupUser->count(),
-                "status" => Response::HTTP_CREATED
+                'group' => $group,
+                'user' => $user,
+                'count' => $groupUser->count(),
+                'status' => Response::HTTP_CREATED,
             ],
         );
     }
@@ -134,7 +134,7 @@ class GroupManagementController extends Controller
             'group' => [
                 'uuid' => $group->uuid,
                 'name' => $group->name,
-            ]
+            ],
         ]);
     }
 
@@ -143,9 +143,7 @@ class GroupManagementController extends Controller
         $groups = Group::orderBy('created_at', 'desc')->get(['uuid', 'name', 'created_at']);
 
         return response()->json([
-            'groups' => $groups
+            'groups' => $groups,
         ]);
     }
-
-
 }

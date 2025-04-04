@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -45,7 +45,7 @@ class AuthController extends Controller
                             'token_type' => 'Bearer',
                             'expires_in' => 60 * 24 * 365,
                         ],
-                        'user_info' => $user
+                        'user_info' => $user,
                     ],
                     'count' => $count_all,
                     'status' => Response::HTTP_CREATED,
@@ -62,7 +62,7 @@ class AuthController extends Controller
     }
 
     public function login(LoginRequest $request)
-    {      
+    {
         $request->authenticate();
 
         $count_all = User::count();

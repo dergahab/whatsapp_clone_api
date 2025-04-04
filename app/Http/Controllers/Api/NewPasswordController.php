@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Http\Requests\Auth\ForgotPasswordRequest;
 
 class NewPasswordController extends Controller
 {
@@ -24,7 +23,7 @@ class NewPasswordController extends Controller
         if ($status == Password::RESET_LINK_SENT) {
             return [
                 'message' => 'Parol sıfırlama bağlantısı e-poçt ünvanınıza göndərildi!',
-                'status' => Response::HTTP_OK
+                'status' => Response::HTTP_OK,
             ];
         }
 
@@ -53,13 +52,13 @@ class NewPasswordController extends Controller
         if ($status == Password::PASSWORD_RESET) {
             return response([
                 'message' => 'Parol sıfırlama uğurla!',
-                'status' => Response::HTTP_OK
+                'status' => Response::HTTP_OK,
             ]);
         }
 
         return response([
             'message' => 'Parol sıfırlama bağlantısı yanlış!',
-            'status' => Response::HTTP_UNPROCESSABLE_ENTITY
+            'status' => Response::HTTP_UNPROCESSABLE_ENTITY,
         ]);
     }
 }

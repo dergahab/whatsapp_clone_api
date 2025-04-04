@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Groups;
 
-use App\Models\User;
-use App\Models\Group;
-use App\Models\GroupUser;
-use App\Models\ChatGroup;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Groups\GroupListRequest;
+use App\Models\ChatGroup;
+use App\Models\Group;
+use App\Models\GroupUser;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class GroupsChatsController extends Controller
 {
-
     public function listGroups(Request $request)
     {
         $request->validate([
@@ -38,7 +37,7 @@ class GroupsChatsController extends Controller
                 'user_uuid' => $user->uuid,
                 'groups' => $groups,
                 'count' => $groups->count(),
-                'status' => Response::HTTP_OK
+                'status' => Response::HTTP_OK,
             ],
         );
     }
@@ -118,7 +117,7 @@ class GroupsChatsController extends Controller
                 'messages' => $msgs->map(function ($m) {
                     return [
                         'message' => $m->message->message,
-                        'created_at' => $m->created_at
+                        'created_at' => $m->created_at,
                     ];
                 }),
             ];
@@ -135,7 +134,7 @@ class GroupsChatsController extends Controller
             return response()->json([
                 'message' => 'Giriş uğurlu oldu!',
                 'data' => [
-                    'users' => $data['users']
+                    'users' => $data['users'],
                 ],
                 'count' => $data['count'],
                 'status' => Response::HTTP_OK,

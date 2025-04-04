@@ -45,12 +45,13 @@ class ChatsController extends Controller
                     'receiver' => $receiver,
                     'count_all' => $count_all,
                     'count_private' => $count_private,
-                    "status" => Response::HTTP_CREATED,
+                    'status' => Response::HTTP_CREATED,
                 ],
             );
 
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json(
                 data: [
                     'message' => 'Message not sent!',
@@ -60,8 +61,6 @@ class ChatsController extends Controller
             );
         }
     }
-
-
 
     public function getPrivateMessages(Request $request)
     {
@@ -99,7 +98,7 @@ class ChatsController extends Controller
 
         return response()->json([
             'message' => 'Mesaj uğurla yeniləndi',
-            'data' => $chat
+            'data' => $chat,
         ]);
     }
 
@@ -116,7 +115,7 @@ class ChatsController extends Controller
         $chat->delete();
 
         return response()->json([
-            'message' => 'Şəxsi mesaj uğurla silindi'
+            'message' => 'Şəxsi mesaj uğurla silindi',
         ]);
     }
 
@@ -128,7 +127,7 @@ class ChatsController extends Controller
             return response()->json([
                 'message' => 'Giriş uğurlu oldu!',
                 'data' => [
-                    'users' => $data['users']
+                    'users' => $data['users'],
                 ],
                 'count' => $data['count'],
                 'status' => Response::HTTP_OK,

@@ -6,13 +6,10 @@ use App\Models\Chat\Message;
 
 class MessageRepository
 {
-	public function __construct(public Message $model)
-	{
-	}
+    public function __construct(public Message $model) {}
 
-	public function store(array $data): Message
-	{
-		return $this->model->create($data);
-	}
-
+    public function store(array $data): Message
+    {
+        return $this->model->create($data);
+    }
 }
