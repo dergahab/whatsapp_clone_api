@@ -53,7 +53,7 @@ class ChatRepository implements ChatRepositoryİnterface
 
     public function show($uuid): ?Chat
     {
-        return $this->model->where('uuid', $uuid)->with('messages')->first();
+        return $this->model->where('uuid', $uuid)->with(['message','sendBy'])->first();
     }
 
     public function destroy($uuid)

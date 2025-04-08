@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Chat;
 
-use App\Events\Message;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Chat\ChatStoreRequest;
 use App\Http\Requests\Chat\DestroyRequest;
-use App\Http\Requests\Chat\SearcRequest;
 use App\Http\Requests\Chat\ShowRequest;
 use App\Services\Chat\ChatService;
 use Illuminate\Http\JsonResponse;
@@ -18,11 +16,11 @@ class ChatController extends Controller
 {
     public function __construct(public ChatService $service) {}
 
-    public function index(SearcRequest $request)
+    public function index()
     {
         DB::beginTransaction();
         try {
-            $chat = $this->service->index($request);
+            $chat = $this->service->index();
 
             DB::commit();
 
@@ -103,11 +101,5 @@ class ChatController extends Controller
             DB::rollBack();
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public function message(Request $request)
-    {
-        event(new Message($request->input('username'),$request->input('message')));
-        return [];
     }
 }
