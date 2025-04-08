@@ -9,7 +9,7 @@ class ForgotPasswordRequest extends BaseRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users,email',
         ];
     }
 }

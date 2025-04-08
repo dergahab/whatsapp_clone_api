@@ -6,6 +6,7 @@ use App\Events\Message;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Chat\ChatStoreRequest;
 use App\Http\Requests\Chat\DestroyRequest;
+use App\Http\Requests\Chat\SearcRequest;
 use App\Http\Requests\Chat\ShowRequest;
 use App\Services\Chat\ChatService;
 use Illuminate\Http\JsonResponse;
@@ -17,11 +18,11 @@ class ChatController extends Controller
 {
     public function __construct(public ChatService $service) {}
 
-    public function index()
+    public function index(SearcRequest $request)
     {
         DB::beginTransaction();
         try {
-            $chat = $this->service->index();
+            $chat = $this->service->index($request);
 
             DB::commit();
 
