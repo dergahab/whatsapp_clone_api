@@ -42,6 +42,7 @@ Route::post('reset-password', [NewPasswordController::class, 'reset']);
 Route::middleware(['auth:sanctum'])->group(function () {
 	// User
     Route::get('/users', [UsersController::class, 'index']);
+    Route::post('/user_register', [UsersController::class, 'register']);
     Route::put('/update_name', [UsersController::class, 'updateName']);
     Route::put('/update_email', [UsersController::class, 'updateEmail']);
     Route::put('/update_profile_picture', [UsersController::class, 'updateProfilePicture']);
@@ -51,6 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 	Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
 
+    Route::post('message',[ChatController::class,'message']);
 });
 
 

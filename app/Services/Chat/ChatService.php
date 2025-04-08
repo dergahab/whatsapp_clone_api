@@ -4,7 +4,7 @@ namespace App\Services\Chat;
 
 use App\Http\Requests\Chat\DestroyRequest;
 use App\Http\Requests\Chat\ShowRequest;
-use App\Repositories\ChatRepositories\ChatRepository;
+use App\Repositories\Chat\ChatRepository;
 
 
 class ChatService

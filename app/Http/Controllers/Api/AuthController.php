@@ -32,7 +32,7 @@ class AuthController extends Controller
         ]);
 
         $count_all = User::count();
-        event(new Registered($user));
+//        event(new Registered($user));
         $token = $user->createToken('authtoken');
 
         if ($user) {
