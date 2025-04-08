@@ -4,18 +4,18 @@ namespace App\Services\Chat;
 
 use App\Http\Requests\Chat\DestroyRequest;
 use App\Http\Requests\Chat\ShowRequest;
-use App\Repositories\ChatRepositories\ChatRepository;
+use App\Repositories\Chat\ChatRepository;
+use Illuminate\Http\Request;
 
 
 class ChatService
 {
     public function __construct(public ChatRepository $repository) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->repository->index();
+        return $this->repository->index($request?->search);
     }
-
     public function store(array $data)
     {
         return $this->repository->store($data);

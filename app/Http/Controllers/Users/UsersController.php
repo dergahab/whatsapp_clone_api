@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
 use App\Services\User\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -70,5 +73,21 @@ class UsersController extends Controller
         $user->save();
 
         return response()->json(['message' => 'Profile picture updated successfully', 'user' => $user]);
+    }
+
+    public function register(StoreRequest $request): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $data = $request->validatedData();
+            $chat = $this->service->store($data);
+
+            DB::commit();
+            return rp_response($chat, __('DataCreatedSuccessfully'), \Symfony\Component\HttpFoundation\Response::HTTP_CREATED);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

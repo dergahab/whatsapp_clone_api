@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\UserRepositories;
+namespace App\Repositories\User;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -17,4 +17,10 @@ class UserRepository implements UserRepositoryİnterface
             ->get()
             ->toArray();
     }
+    public function store(array $data): User
+    {
+        unset($data['password_confirmation']);
+        return User::create($data);
+    }
+
 }

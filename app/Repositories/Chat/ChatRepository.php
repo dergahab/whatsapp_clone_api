@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\ChatRepositories;
+namespace App\Repositories\Chat;
 
 use App\Models\Chat\Chat;
 
@@ -8,7 +8,7 @@ class ChatRepository implements ChatRepositoryİnterface
 {
     public function __construct(public Chat $model) {}
 
-    public function index()
+    public function index($search = null): array
     {
         return $this->model
             ->with([
@@ -18,8 +18,15 @@ class ChatRepository implements ChatRepositoryİnterface
             ->withCount(['message as unread_count' => function ($query) {
                 $query->where('status', 1);
             }])
-            ->get();
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('sendBy', function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%');
+                });
+            })
+            ->get()
+            ->toArray();
     }
+
 
 
     public function store(array $data): Chat
