@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Auth;
-use Illuminate\Support\Facades\Hash;
+namespace App\Http\Requests\User;
+
 use App\Http\Requests\BaseRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
-class RegisterRequest extends BaseRequest
+class StoreRequest extends BaseRequest
 {
     public function rules(): array
     {
@@ -17,11 +19,11 @@ class RegisterRequest extends BaseRequest
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
-    protected function passedValidation()
+    public function validatedData()
     {
-        $this->merge([
-            'password' => Hash::make($this->input('password')),
-        ]);
+        $validated = $this->validated();
+        $validated['password'] = Hash::make($this->input('password'));
+        return $validated;
     }
 
 }
