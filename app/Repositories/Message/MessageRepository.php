@@ -16,7 +16,7 @@ class MessageRepository
     }
     public function show($uuid): ?Message
     {
-        return $this->model->where('uuid', $uuid)->select('uuid','message')->first();
+        return $this->model->where('uuid', $uuid)->with('creator')->first();
     }
     public function update(array $data,$uuid): int
     {

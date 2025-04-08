@@ -2,8 +2,11 @@
 
 namespace App\Models\Chat;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -39,6 +42,11 @@ class Message extends Model
             get: fn ($value) => $value == Auth::user()?->id ? 'sender' : 'receiver'
         );
     }
+
+	public function creator(): BelongsTo
+	{
+		return $this->belongsTo(User::class,  'create_by', 'id');
+	}
 
     protected function editStatus(): Attribute
     {
