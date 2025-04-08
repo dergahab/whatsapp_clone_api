@@ -53,6 +53,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
 
     Route::post('message',[ChatController::class,'message']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
 });
 
 
