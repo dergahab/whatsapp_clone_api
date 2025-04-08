@@ -17,11 +17,11 @@ class ChatController extends Controller
 {
     public function __construct(public ChatService $service) {}
 
-    public function index()
+    public function index(Request $request)
     {
         DB::beginTransaction();
         try {
-            $chat = $this->service->index();
+            $chat = $this->service->index($request);
 
             DB::commit();
 
