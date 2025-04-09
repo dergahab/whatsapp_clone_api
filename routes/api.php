@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Chat\ChatController;
-	use App\Http\Controllers\Message\MessageController;
-	use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Users\UsersController;
-use App\Http\Controllers\Api\NewPasswordController;
 use App\Http\Controllers\Api\EmailVerificationController;
+use App\Http\Controllers\Api\NewPasswordController;
+use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Message\MessageController;
+use App\Http\Controllers\Users\UsersController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,31 +38,18 @@ Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'ver
 Route::post('forgot-password', [NewPasswordController::class, 'forgotPassword']);
 Route::post('reset-password', [NewPasswordController::class, 'reset']);
 
-	Route::post('/user_register', [UsersController::class, 'register']);
+Route::post('/user_register', [UsersController::class, 'register']);
+
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/verify-code', [AuthController::class, 'isVerificationCodeValid']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-	// User
+    // User
     Route::get('/users', [UsersController::class, 'index']);
-//    Route::put('/update_name', [UsersController::class, 'updateName']);
-//    Route::put('/update_email', [UsersController::class, 'updateEmail']);
-//    Route::put('/update_profile_picture', [UsersController::class, 'updateProfilePicture']);
     Route::put('/profile_update', [UsersController::class, 'updateUserProfile']);
 
-
-
-	Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
-	Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
+    Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
+    Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
-
-
-    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-    Route::post('/verify-code', [AuthController::class, 'isVerificationCodeValid']);
-
-
 });
-
-
-
-
-
