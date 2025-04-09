@@ -18,10 +18,11 @@ class ResetPasswordRequest extends BaseRequest
         ];
     }
 
-    protected function passedValidation()
+    public function validatedData()
     {
-        $this->merge([
-            'password' => Hash::make($this->input('password')),
-        ]);
+        $validated = $this->validated();
+        $validated['password'] = Hash::make($this->input('password'));
+        return $validated;
+
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Chat;
 
-use App\Events\Message;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Chat\ChatStoreRequest;
 use App\Http\Requests\Chat\DestroyRequest;
@@ -103,11 +102,5 @@ class ChatController extends Controller
             DB::rollBack();
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public function message(Request $request)
-    {
-        event(new Message($request->input('username'),$request->input('message')));
-        return [];
     }
 }

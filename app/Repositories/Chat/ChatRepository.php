@@ -27,8 +27,6 @@ class ChatRepository implements ChatRepositoryİnterface
             ->toArray();
     }
 
-
-
     public function store(array $data): Chat
     {
         if ($data['user1'] === $data['user2']) {
@@ -53,7 +51,7 @@ class ChatRepository implements ChatRepositoryİnterface
 
     public function show($uuid): ?Chat
     {
-        return $this->model->where('uuid', $uuid)->with('messages')->first();
+        return $this->model->where('uuid', $uuid)->with(['message','sendBy'])->first();
     }
 
     public function destroy($uuid)

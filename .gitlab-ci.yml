@@ -1,0 +1,25 @@
+stages:
+  - testing
+  - development
+
+"Publish Development":
+  stage: development
+  tags:
+    - backend-chat
+  only:
+    - development
+  before_script:
+    - ls
+    - echo "Starting Job"
+    - cd domains/erp-intel.az/public_html/backend/chat/
+    - git config --global --add domains/erp-intel.az/public_html/backend/chat/
+    - git status
+    - git reset --hard
+    - git pull origin development
+    - cp .env.dev .env
+    - composer update --ignore-platform-req=ext-http
+    - php artisan optimize:clear
+    - echo $USER
+  script:
+    - echo "Backend Erp Intel Runner is Start"
+    - echo "Development is ready"

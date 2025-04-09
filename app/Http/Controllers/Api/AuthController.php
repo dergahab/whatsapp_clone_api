@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\Auth\CheckPasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
+
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -38,7 +40,6 @@ class AuthController extends Controller
         ]);
 
         $count_all = User::count();
-//        event(new Registered($user));
         $token = $user->createToken('authtoken');
 
         if ($user) {
@@ -147,7 +148,7 @@ class AuthController extends Controller
                 ->from('c.mhatzadeh@gmail.com', 'Chat App')
                 ->subject('Password Reset Verification Code');
         });
-        return response()->json(['message' => 'Verification code sent to your email.']);
+        return rp_response([], message: __('VerificationCodeSentSuccessfully'), status: Response::HTTP_OK);
     }
 
 
@@ -157,27 +158,27 @@ class AuthController extends Controller
         $verificationCode = $request->verification_code;
         $filePath = 'verification_codes/codes.json';
         if (!Storage::exists($filePath)) {
-            return response()->json(['message' => 'Verification code not found'], 400);
+            return rp_response([], message: __('VerificationCodeNotFound'), status: Response::HTTP_INTERNAL_SERVER_ERROR);
         }
         $existingCodes = json_decode(Storage::get($filePath), true) ?? [];
         if (isset($existingCodes[$email]) && $existingCodes[$email] == $verificationCode) {
-            return response()->json(['message' => 'Verification successful'], 200);
+            return rp_response([], message: __('VerificationSuccessful'), status: Response::HTTP_OK);
         }
-        return response()->json(['message' => 'Invalid verification code'], 400);
+        return rp_response([], message: __('InvalidVerificationCode'), status: Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        $request->validatedData();
+       $validated= $request->validatedData();
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return response()->json(['message' => 'User not found.'], 404);
+            return rp_response([], message: __('UserNotFound'), status: Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $user->password = $request->password;
+        $user->password =  $validated['password'];
         $user->save();
         $this->removeStoredVerificationCode($request->email);
-        return response()->json(['message' => 'Password successfully reset.'], 200);
+        return rp_response([], message: __('PasswordSuccessfullyReset'), status: Response::HTTP_OK);
     }
 
 
@@ -195,4 +196,5 @@ class AuthController extends Controller
             Storage::put($filePath, json_encode($codes, JSON_PRETTY_PRINT));
         }
     }
+
 }

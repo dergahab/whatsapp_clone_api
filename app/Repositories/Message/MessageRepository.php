@@ -3,8 +3,6 @@
 namespace App\Repositories\Message;
 
 use App\Models\Chat\Message;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Ramsey\Collection\Collection;
 
 class MessageRepository
 {
@@ -16,7 +14,7 @@ class MessageRepository
     }
     public function show($uuid): ?Message
     {
-        return $this->model->where('uuid', $uuid)->select('uuid','message')->first();
+        return $this->model->where('uuid', $uuid)->with('creator')->first();
     }
     public function update(array $data,$uuid): int
     {
@@ -41,4 +39,8 @@ class MessageRepository
         ];
     }
 
+    public function destroy($uuid)
+    {
+        return $this->model->where('uuid', $uuid)->delete();
+    }
 }
