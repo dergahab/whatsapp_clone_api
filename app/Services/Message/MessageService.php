@@ -10,13 +10,12 @@ use App\Http\Requests\Message\StoreRequest;
 use App\Http\Requests\Message\UpdateRequest;
 use App\Models\Chat\Chat;
 use App\Models\Chat\Message;
-use App\Repositories\ChatRepositories\ChatRepository;
 use App\Repositories\Message\MessageRepository;
 use Illuminate\Http\Request;
 
 class MessageService
 {
-    public function __construct(public MessageRepository $repository, public ChatRepository $chatRepository) {}
+    public function __construct(public MessageRepository $repository) {}
 
     public function index(Request $request)
     {
