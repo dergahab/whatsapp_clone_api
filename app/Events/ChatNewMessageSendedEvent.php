@@ -44,7 +44,7 @@ class ChatNewMessageSendedEvent implements ShouldBroadcast
 	public function broadcastWith(): array
 	{
 		return [
-			'message' => $this->data
+			'data' => $this->data
 		];
 	}
 }
