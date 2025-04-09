@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\CheckPasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\LogoutRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\User;
@@ -70,44 +71,64 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $request->authenticate();
+        try {
+            $email = trim(strtolower($request->input('email')));
+            $password = $request->input('password');
+            Log::info('Giriş için e-posta:', ['email' => $email]);
+            $user = User::whereRaw('LOWER(email) = ?', [$email])->first();
 
-        $count_all = User::count();
-        $token = $request->user()->createToken('authtoken');
-
-        if ($token) {
-            return response()->json(
-                [
-                    'message' => 'Giriş uğurlu oldu!',
+            if (!$user) {
+                Log::warning("Kullanıcı bulunamadı", ['email' => $email]);
+                return response()->json([
+                    'message' => 'Kullanıcı bulunamadı',
+                    'status' => Response::HTTP_NOT_FOUND,
+                ]);
+            }
+            if (!Hash::check($password, $user->password)) {
+                Log::warning("Şifre hatalı", ['email' => $email]);
+                return response()->json([
+                    'message' => 'Şifre hatalı',
+                    'status' => Response::HTTP_UNAUTHORIZED,
+                ]);
+            }
+            $token = $user->createToken('authtoken');
+            if ($token) {
+                return response()->json([
+                    'message' => 'Giriş başarılı!',
                     'data' => [
                         'Authorization' => [
                             'access_token' => $token->plainTextToken,
                             'token_type' => 'Bearer',
-                            'expires_in' => 60 * 24 * 365,
+                            'expires_in' => 60 * 24 * 365, // 1 yıl
                         ],
-                        'user_info' => $request->user(),
+                        'user_info' => $user,
                     ],
-                    'count' => $count_all,
                     'status' => Response::HTTP_OK,
+                ]);
+            } else {
+                Log::error("Token oluşturulamadı", ['user_id' => $user->id]);
+                return response()->json([
+                    'message' => 'Token oluşturulamadı',
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                ]);
+            }
 
-                ]
-            );
-        } else {
-            return response()->json(
-                [
-                    'message' => 'Giriş uğurlu olmadı!',
-                    'status' => Response::HTTP_BAD_REQUEST,
-                ]
-            );
+        } catch (\Exception $e) {
+            Log::error("Giriş hatası: " . $e->getMessage());
+            return response()->json([
+                'message' => 'Bir hata oluştu',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+            ]);
         }
     }
 
-    public function logout(Request $request)
+    public function logout(LogoutRequest $request)
     {
+        $user = User::where('uuid', $request->route('uuid'))->first();
 
-        $request->user()->tokens()->delete();
+        if ($user) {
+            $user->tokens()->delete();
 
-        if ($request->user()->tokens()->delete()) {
             return response()->json(
                 [
                     'message' => 'Çıxış uğurlu oldu!',
@@ -117,12 +138,13 @@ class AuthController extends Controller
         } else {
             return response()->json(
                 [
-                    'message' => 'Çıxış uğurlu olmadı!',
+                    'message' => 'İstifadəçi tapılmadı!',
                     'status' => Response::HTTP_BAD_REQUEST,
                 ]
             );
         }
     }
+
 
     public function forgotPassword(ForgotPasswordRequest $request)
     {
