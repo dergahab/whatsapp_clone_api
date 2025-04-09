@@ -42,14 +42,23 @@ Route::post('reset-password', [NewPasswordController::class, 'reset']);
 Route::middleware(['auth:sanctum'])->group(function () {
 	// User
     Route::get('/users', [UsersController::class, 'index']);
-    Route::put('/update_name', [UsersController::class, 'updateName']);
-    Route::put('/update_email', [UsersController::class, 'updateEmail']);
-    Route::put('/update_profile_picture', [UsersController::class, 'updateProfilePicture']);
+//    Route::put('/update_name', [UsersController::class, 'updateName']);
+//    Route::put('/update_email', [UsersController::class, 'updateEmail']);
+//    Route::put('/update_profile_picture', [UsersController::class, 'updateProfilePicture']);
+    Route::post('/user_register', [UsersController::class, 'register']);
+    Route::put('/profile_update', [UsersController::class, 'updateUserProfile']);
+
 
 
 	Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
 	Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
+
+
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/verify-code', [AuthController::class, 'isVerificationCodeValid']);
+
 
 });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Message;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Message\DestroyRequest;
 use App\Http\Requests\Message\ShowAllMessageRequest;
 use App\Http\Requests\Message\ShowRequest;
 use App\Http\Requests\Message\StoreRequest;
@@ -63,9 +64,18 @@ class MessageController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(DestroyRequest $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $message = $this->service->destroy($request);
+            DB::commit();
+            return rp_response($message, __('DataDeletedSuccessfully'), Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
     public function show_messages(ShowAllMessageRequest $request)
     {

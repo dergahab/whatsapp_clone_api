@@ -27,8 +27,6 @@ class ChatRepository implements ChatRepositoryİnterface
             ->toArray();
     }
 
-
-
     public function store(array $data): Chat
     {
         if ($data['user1'] === $data['user2']) {

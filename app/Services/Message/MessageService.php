@@ -4,6 +4,7 @@ namespace App\Services\Message;
 
 
 use App\Events\ChatNewMessageSendedEvent;
+use App\Http\Requests\Message\DestroyRequest;
 use App\Http\Requests\Message\ShowAllMessageRequest;
 use App\Http\Requests\Message\ShowRequest;
 use App\Http\Requests\Message\StoreRequest;
@@ -43,7 +44,10 @@ class MessageService
     {
         return $this->repository->showAllMessages($request->chat_id, $request->input('page', 1));
     }
-
+    public function destroy(DestroyRequest $request)
+    {
+        return $this->repository->destroy($request->uuid);
+    }
 
 
 }

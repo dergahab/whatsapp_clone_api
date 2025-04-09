@@ -3,6 +3,7 @@
 namespace App\Services\Chat;
 
 use App\Http\Requests\Chat\DestroyRequest;
+use App\Http\Requests\Chat\SearcRequest;
 use App\Http\Requests\Chat\ShowRequest;
 use App\Repositories\Chat\ChatRepository;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class ChatService
 {
     public function __construct(public ChatRepository $repository) {}
 
-    public function index(Request $request)
+    public function index(SearcRequest $request)
     {
         return $this->repository->index($request?->search);
     }

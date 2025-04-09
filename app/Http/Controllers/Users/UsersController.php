@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UserProfileUpdateRequest;
 use App\Models\User;
 use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
@@ -33,48 +34,19 @@ class UsersController extends Controller
         }
     }
 
-    public function updateName(Request $request)
+    public function updateUserProfile(UserProfileUpdateRequest $request)
     {
-        $request->validate([
-            'uuid' => 'required|exists:users,uuid',
-            'name' => 'required|string|max:255',
-        ]);
+        DB::beginTransaction();
+        try {
+            $this->service->updateUserProfile($request);
+            DB::commit();
+            return rp_response([], message: __('UserProfileUpdatedSuccessfully'), status: Response::HTTP_OK);
 
-        $user = User::where('uuid', $request->uuid)->first();
-        $user->name = $request->name;
-        $user->save();
-
-        return response()->json(['message' => 'Name updated successfully', 'user' => $user]);
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-
-    public function updateEmail(Request $request)
-    {
-        $request->validate([
-            'uuid' => 'required|exists:users,uuid',
-            'email' => 'required|email|unique:users,email,'.$request->uuid.',uuid',
-        ]);
-
-        $user = User::where('uuid', $request->uuid)->first();
-        $user->email = $request->email;
-        $user->save();
-
-        return response()->json(['message' => 'Email updated successfully', 'user' => $user]);
-    }
-
-    public function updateProfilePicture(Request $request)
-    {
-        $request->validate([
-            'uuid' => 'required|exists:users,uuid',
-            'profile_picture' => 'required|url',
-        ]);
-
-        $user = User::where('uuid', $request->uuid)->first();
-        $user->profile_picture = $request->profile_picture;
-        $user->save();
-
-        return response()->json(['message' => 'Profile picture updated successfully', 'user' => $user]);
-    }
-
     public function register(StoreRequest $request): JsonResponse
     {
         DB::beginTransaction();
@@ -90,4 +62,6 @@ class UsersController extends Controller
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }
