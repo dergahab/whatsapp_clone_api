@@ -38,6 +38,7 @@ Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'ver
 Route::post('forgot-password', [NewPasswordController::class, 'forgotPassword']);
 Route::post('reset-password', [NewPasswordController::class, 'reset']);
 
+	Route::post('/user_register', [UsersController::class, 'register']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
 	// User
@@ -45,7 +46,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //    Route::put('/update_name', [UsersController::class, 'updateName']);
 //    Route::put('/update_email', [UsersController::class, 'updateEmail']);
 //    Route::put('/update_profile_picture', [UsersController::class, 'updateProfilePicture']);
-    Route::post('/user_register', [UsersController::class, 'register']);
     Route::put('/profile_update', [UsersController::class, 'updateUserProfile']);
 
 
