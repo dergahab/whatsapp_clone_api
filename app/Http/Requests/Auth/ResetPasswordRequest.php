@@ -3,16 +3,25 @@
 namespace App\Http\Requests\Auth;
 
 use App\Http\Requests\BaseRequest;
-use Illuminate\Validation\Rules\Password as RulesPassword;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+
 
 class ResetPasswordRequest extends BaseRequest
 {
     public function rules()
     {
         return [
-            'email' => 'required|email|exists:users,email',
-            'verification_code' => 'required|numeric',
-            'new_password' => 'required|min:6',
+            'email' => 'required|string|email',
+            'password' => ['required', 'confirmed', Password::defaults()],
+            'password_confirmation' => 'required',
         ];
+    }
+
+    protected function passedValidation()
+    {
+        $this->merge([
+            'password' => Hash::make($this->input('password')),
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\CheckPasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -126,7 +127,6 @@ class AuthController extends Controller
     {
         $email = strtolower(trim($request->email));
         $verificationCode = rand(100000, 999999);
-
         $filePath = 'verification_codes/codes.json';
         $existingCodes = [];
         if (Storage::exists($filePath)) {
@@ -147,55 +147,39 @@ class AuthController extends Controller
                 ->from('c.mhatzadeh@gmail.com', 'Chat App')
                 ->subject('Password Reset Verification Code');
         });
-
         return response()->json(['message' => 'Verification code sent to your email.']);
     }
 
 
+    protected function isVerificationCodeValid(CheckPasswordRequest $request)
+    {
+        $email = strtolower(trim($request->email));
+        $verificationCode = $request->verification_code;
+        $filePath = 'verification_codes/codes.json';
+        if (!Storage::exists($filePath)) {
+            return response()->json(['message' => 'Verification code not found'], 400);
+        }
+        $existingCodes = json_decode(Storage::get($filePath), true) ?? [];
+        if (isset($existingCodes[$email]) && $existingCodes[$email] == $verificationCode) {
+            return response()->json(['message' => 'Verification successful'], 200);
+        }
+        return response()->json(['message' => 'Invalid verification code'], 400);
+    }
+
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        $email = strtolower(trim($request->email));
-        $storedVerificationCode = $this->getStoredVerificationCode($email);
-
-        if (!$storedVerificationCode) {
-            return response()->json(['message' => 'Verification code not found.'], 400);
-        }
-
-        if ($storedVerificationCode != trim($request->verification_code)) {
-            Log::warning("Verification code mismatch for {$email}", [
-                'stored_code' => $storedVerificationCode,
-                'provided_code' => $request->verification_code,
-            ]);
-            return response()->json(['message' => 'Invalid verification code.'], 400);
-        }
-
-        $user = User::where('email', $email)->first();
-
+        $request->validatedData();
+        $user = User::where('email', $request->email)->first();
         if (!$user) {
-            Log::error("User not found for {$email}");
             return response()->json(['message' => 'User not found.'], 404);
         }
-
-        $user->update(['password' => Hash::make($request->new_password)]);
-        $this->removeStoredVerificationCode($email);
-
-        Log::info("Password reset successfully for {$email}");
-
-        return response()->json(['message' => 'Password reset successfully.']);
+        $user->password = $request->password;
+        $user->save();
+        $this->removeStoredVerificationCode($request->email);
+        return response()->json(['message' => 'Password successfully reset.'], 200);
     }
 
-    protected function getStoredVerificationCode($email)
-    {
-        $filePath = 'verification_codes/codes.json';
-
-        if (!Storage::exists($filePath)) {
-            return null;
-        }
-
-        $codes = json_decode(Storage::get($filePath), true);
-        return $codes[$email] ?? null;
-    }
 
     protected function removeStoredVerificationCode($email)
     {
@@ -204,7 +188,6 @@ class AuthController extends Controller
         if (!Storage::exists($filePath)) {
             return;
         }
-
         $codes = json_decode(Storage::get($filePath), true);
 
         if (isset($codes[$email])) {
