@@ -16,7 +16,7 @@ class Group extends Base
     protected $fillable = [
         'uuid',
         'name',
-        'image',
+        'file',
     ];
 
     protected $hidden = [

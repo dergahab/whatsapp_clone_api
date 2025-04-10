@@ -25,6 +25,7 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
+
         $profilePicturePath = null;
 
         if ($request->hasFile('profile_picture')) {

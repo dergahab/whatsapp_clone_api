@@ -14,7 +14,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'users' => ['required', 'array'],
             'users.*' => ['required', 'uuid', 'exists:' . rp_get_table(User::class) . ',uuid'],
         ];
