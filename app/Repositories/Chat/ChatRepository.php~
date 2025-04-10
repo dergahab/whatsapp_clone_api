@@ -46,7 +46,7 @@ class ChatRepository implements ChatRepositoryİnterface
             throw new \InvalidArgumentException('A chat between these users already exists.');
         }
 
-        return $this->model::create($data);
+        return Chat::create($data);
     }
 
     public function show($uuid): ?Chat
