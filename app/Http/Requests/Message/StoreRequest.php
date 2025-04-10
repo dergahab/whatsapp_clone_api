@@ -12,8 +12,17 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'chat_id' => 'required|uuid|exists:'.rp_get_table(Chat::class).',uuid',
-            'message' => 'required|string|max:255|min:1',
+            'chat_id' => [
+                'required',
+                'uuid',
+                'exists:' . rp_get_table(Chat::class) . ',uuid',
+            ],
+            'message' => [
+                'required',
+                'string',
+                'max:255',
+                'min:1',
+            ],
         ];
     }
 

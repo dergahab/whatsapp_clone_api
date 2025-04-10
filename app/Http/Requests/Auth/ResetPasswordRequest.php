@@ -12,9 +12,9 @@ class ResetPasswordRequest extends BaseRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|email',
+            'email' => ['required', 'string', 'email'],
             'password' => ['required', 'confirmed', Password::defaults()],
-            'password_confirmation' => 'required',
+            'password_confirmation' => ['required'],
         ];
     }
 
