@@ -54,7 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
     Route::apiResource('groups', GroupController::class)->parameters(['groups' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
-    Route::post('addUser', [GroupController::class, 'addUser']);
+    Route::post('add-user', [GroupController::class, 'addUser']);
 
 
 

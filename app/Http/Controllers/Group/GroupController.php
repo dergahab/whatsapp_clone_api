@@ -83,7 +83,7 @@ class GroupController extends Controller
         try {
             $group = $this->service->addUser($request);
             DB::commit();
-            return rp_response($group, __('GroupCreatedSuccessfully'), Response::HTTP_CREATED);
+            return rp_response($group, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
         } catch (\Exception $ex) {
             DB::rollBack();
             return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);
