@@ -3,6 +3,7 @@
 namespace App\Services\Group;
 
 
+use App\Http\Requests\Group\AddUserToGroupRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Models\Chat\Group;
 use App\Repositories\Group\GroupRepository;
@@ -23,4 +24,10 @@ class GroupService extends Base
             $request->groupUsersData()
         );
     }
+    public function addUser(AddUserToGroupRequest $request): Group
+    {
+        return $this->repository->addUser($request->group_uuid,  $request->groupUsersData());
+    }
+
+
 }

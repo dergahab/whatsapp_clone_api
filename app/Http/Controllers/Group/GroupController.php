@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Group\AddUserToGroupRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Services\Group\GroupService;
 use Illuminate\Http\Request;
@@ -74,5 +75,18 @@ class GroupController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function addUser(AddUserToGroupRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $group = $this->service->addUser($request);
+            DB::commit();
+            return rp_response($group, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

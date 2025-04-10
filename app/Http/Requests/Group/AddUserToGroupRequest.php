@@ -8,17 +8,18 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreRequest extends BaseRequest
+class AddUserToGroupRequest extends BaseRequest
 {
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255','unique:groups'],
-            'file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'group_uuid' => ['required', 'uuid', 'exists:' . rp_get_table(Group::class) . ',uuid'],
             'users' => ['required', 'array'],
             'users.*' => ['required', 'uuid', 'exists:' . rp_get_table(User::class) . ',uuid'],
         ];
     }
+
+
     public function passedValidation()
     {
         $this->merge([
@@ -31,15 +32,7 @@ class StoreRequest extends BaseRequest
     }
     public function groupUsersData()
     {
-        $users = $this->input('users', []);
-        $users[] = [
-            'user_id' => Auth::id()
-        ];
-        return $users;
-    }
-    public function groupData()
-    {
-        return $this->only(app(Group::class)->getfillable());
+        return $this->input('users', []);
     }
 
 }
