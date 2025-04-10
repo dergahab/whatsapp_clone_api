@@ -19,8 +19,18 @@ class UpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'uuid' => 'required|uuid|exists:'.rp_get_table(Message::class).',uuid',
-            'message' => 'required|string|max:255|min:1',
+            'uuid' => [
+                'required',
+                'uuid',
+                'exists:' . rp_get_table(Message::class) . ',uuid',
+            ],
+            'message' => [
+                'required',
+                'string',
+                'max:255',
+                'min:1',
+            ],
+
         ];
     }
     public function validatedData()

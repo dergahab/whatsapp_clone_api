@@ -74,27 +74,27 @@ class AuthController extends Controller
         try {
             $email = trim(strtolower($request->input('email')));
             $password = $request->input('password');
-            Log::info('Giriş için e-posta:', ['email' => $email]);
+            Log::info('Login email:', ['email' => $email]);
             $user = User::whereRaw('LOWER(email) = ?', [$email])->first();
 
             if (!$user) {
-                Log::warning("Kullanıcı bulunamadı", ['email' => $email]);
+                Log::warning("User not found", ['email' => $email]);
                 return response()->json([
-                    'message' => 'Kullanıcı bulunamadı',
+                    'message' => 'User not found',
                     'status' => Response::HTTP_NOT_FOUND,
                 ]);
             }
             if (!Hash::check($password, $user->password)) {
-                Log::warning("Şifre hatalı", ['email' => $email]);
+                Log::warning("The password is incorrect", ['email' => $email]);
                 return response()->json([
-                    'message' => 'Şifre hatalı',
+                    'message' => 'The password is incorrect',
                     'status' => Response::HTTP_UNAUTHORIZED,
                 ]);
             }
             $token = $user->createToken('authtoken');
             if ($token) {
                 return response()->json([
-                    'message' => 'Giriş başarılı!',
+                    'message' => 'Login successful!',
                     'data' => [
                         'Authorization' => [
                             'access_token' => $token->plainTextToken,
@@ -106,17 +106,17 @@ class AuthController extends Controller
                     'status' => Response::HTTP_OK,
                 ]);
             } else {
-                Log::error("Token oluşturulamadı", ['user_id' => $user->id]);
+                Log::error("Failed to generate token", ['user_id' => $user->id]);
                 return response()->json([
-                    'message' => 'Token oluşturulamadı',
+                    'message' => 'Failed to generate token',
                     'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 ]);
             }
 
         } catch (\Exception $e) {
-            Log::error("Giriş hatası: " . $e->getMessage());
+            Log::error("Login error: " . $e->getMessage());
             return response()->json([
-                'message' => 'Bir hata oluştu',
+                'message' => 'An error occurred',
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
             ]);
         }
@@ -131,15 +131,15 @@ class AuthController extends Controller
 
             return response()->json(
                 [
-                    'message' => 'Çıxış uğurlu oldu!',
+                    'message' => 'The speech was successful!',
                     'status' => Response::HTTP_OK,
                 ]
             );
         } else {
             return response()->json(
                 [
-                    'message' => 'İstifadəçi tapılmadı!',
-                    'status' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'User not found!',
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 ]
             );
         }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\NewPasswordController;
 use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Group\GroupController;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
 
 // Auth
 Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
+//Route::post('register', [AuthController::class, 'register']);
 Route::post('logout/{uuid}', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 // Route::post('refresh', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
 
@@ -51,5 +52,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
     Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
+    Route::apiResource('groups', GroupController::class)->parameters(['groups' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
 });

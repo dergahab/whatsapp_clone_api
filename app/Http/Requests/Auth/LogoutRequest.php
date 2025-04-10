@@ -19,7 +19,11 @@ class LogoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'uuid' => 'required|uuid|exists:'.rp_get_table(User::class).',uuid',
+            'uuid' => [
+                'required',
+                'uuid',
+                'exists:' . rp_get_table(User::class) . ',uuid',
+            ],
         ];
     }
 }
