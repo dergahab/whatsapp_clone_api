@@ -6,7 +6,6 @@ use App\Models\Base;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class Group extends Base
 {
     use SoftDeletes;
@@ -16,14 +15,14 @@ class Group extends Base
     protected $fillable = [
         'uuid',
         'name',
-        'image',
+        'file',
     ];
 
     protected $hidden = [
         'id',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     public function users()

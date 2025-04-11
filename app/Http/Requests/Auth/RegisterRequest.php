@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Requests\Auth;
-use Illuminate\Support\Facades\Hash;
+
 use App\Http\Requests\BaseRequest;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends BaseRequest
@@ -17,11 +18,11 @@ class RegisterRequest extends BaseRequest
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
+
     protected function passedValidation()
     {
         $this->merge([
             'password' => Hash::make($this->input('password')),
         ]);
     }
-
 }

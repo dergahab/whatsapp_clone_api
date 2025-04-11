@@ -22,7 +22,7 @@ class LogoutRequest extends FormRequest
             'uuid' => [
                 'required',
                 'uuid',
-                'exists:' . rp_get_table(User::class) . ',uuid',
+                'exists:'.rp_get_table(User::class).',uuid',
             ],
         ];
     }

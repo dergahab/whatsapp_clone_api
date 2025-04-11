@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Repositories\Group;
+
 use App\Models\Chat\Group;
-use App\Models\Chat\GroupUser;
 
 class GroupRepository
 {
@@ -15,7 +15,16 @@ class GroupRepository
         );
 
         $group->users()->attach($userUuids);
+
         return $group->load('users:id,uuid,name');
     }
 
+    public function addUser($uuid, array $userUuids): Group
+    {
+        $group = $this->model::where('uuid', $uuid)->first();
+
+        $group->users()->attach($userUuids);
+
+        return $group->load('users:id,uuid,name');
+    }
 }

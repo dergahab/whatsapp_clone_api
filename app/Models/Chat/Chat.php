@@ -15,6 +15,7 @@ class Chat extends Base
     use SoftDeletes;
 
     protected $table = 'chats';
+
     protected $fillable = [
         'uuid',
         'user1',

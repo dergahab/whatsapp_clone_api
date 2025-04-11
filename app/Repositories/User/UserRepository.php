@@ -17,9 +17,11 @@ class UserRepository implements UserRepositoryİnterface
             ->get()
             ->toArray();
     }
+
     public function store(array $data): User
     {
         unset($data['password_confirmation']);
+
         return User::create($data);
     }
 
@@ -29,7 +31,7 @@ class UserRepository implements UserRepositoryİnterface
         $data = [
             'name' => $request->has('name') ? $request->name : null,
             'email' => $request->has('email') ? $request->email : null,
-            'profile_picture' => $request->has('profile_picture') ? $request->profile_picture : null
+            'profile_picture' => $request->has('profile_picture') ? $request->profile_picture : null,
         ];
         if ($data['name'] !== null) {
             $user->name = $data['name'];
@@ -41,7 +43,7 @@ class UserRepository implements UserRepositoryİnterface
             $user->profile_picture = $data['profile_picture'];
         }
         $user->save();
+
         return $user;
     }
-
 }

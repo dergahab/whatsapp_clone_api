@@ -12,20 +12,20 @@ class NotificationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'message' => 'required|string',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
         $data = [
             'message' => $request->input('message'),
             'user_id' => $request->input('user_id'),
-            'timestamp' => now()->toDateTimeString()
+            'timestamp' => now()->toDateTimeString(),
         ];
 
         event(new ApiNotificationEvent($data));
@@ -33,7 +33,7 @@ class NotificationController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Notification sent',
-            'data' => $data
+            'data' => $data,
         ], 200);
     }
 }
