@@ -21,29 +21,13 @@ class UserRepository implements UserRepositoryİnterface
     public function store(array $data): User
     {
         unset($data['password_confirmation']);
-
         return User::create($data);
     }
 
-    public function updateUserProfile($uuid, $request)
+    public function update(array $data, string $uuid): ?User
     {
-        $user = User::where('uuid', $uuid)->first();
-        $data = [
-            'name' => $request->has('name') ? $request->name : null,
-            'email' => $request->has('email') ? $request->email : null,
-            'profile_picture' => $request->has('profile_picture') ? $request->profile_picture : null,
-        ];
-        if ($data['name'] !== null) {
-            $user->name = $data['name'];
-        }
-        if ($data['email'] !== null) {
-            $user->email = $data['email'];
-        }
-        if ($data['profile_picture'] !== null) {
-            $user->profile_picture = $data['profile_picture'];
-        }
-        $user->save();
-
-        return $user;
+        $group = User::where('uuid', $uuid)->firstOrFail();
+        $group->update($data);
+        return $group;
     }
 }

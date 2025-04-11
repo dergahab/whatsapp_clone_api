@@ -8,8 +8,13 @@
 	class GroupMessageService
 	{
 		public function __construct(public GroupMessageRepository $repository) {}
+
+		public function index()
+		{
+			return $this->repository->index();
+		}
 		public function store(StoreRequest $request)
 		{
-			return $this->repository->store($request->validated());
+			return $this->repository->store($request->validationData());
 		}
 	}

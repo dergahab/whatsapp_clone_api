@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Base
@@ -17,4 +18,15 @@ class Base
 
         return $path = $file->storeAs('public', $fileName);
     }
+
+    public function fileDeleteStorage($filePath)
+    {
+
+        if (Storage::exists('public/' . $filePath)) {
+            Storage::delete('public/' . $filePath);
+            return true;
+        }
+        return false;
+    }
+
 }

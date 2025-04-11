@@ -48,13 +48,16 @@ Route::post('/verify-code', [AuthController::class, 'isVerificationCodeValid']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     // User
+    Route::apiResource('group-messages', GroupMessageController::class);
     Route::get('/users', [UsersController::class, 'index']);
-    Route::put('/profile_update', [UsersController::class, 'updateUserProfile']);
+    Route::post('users/{uuid}', [UsersController::class, 'update']);
 
     Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
     Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
-    Route::apiResource('groups', GroupController::class)->parameters(['groups' => 'uuid']);
-    Route::apiResource('group/messages', GroupMessageController::class);
+    Route::apiResource('groups', GroupController::class)->except('update')->parameters(['groups' => 'uuid']);
+    Route::post('groups/{uuid}', [GroupController::class, 'update']);
+
+
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
     Route::post('add-user', [GroupController::class, 'addUser']);
 

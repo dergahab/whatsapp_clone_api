@@ -17,9 +17,8 @@ class MessageResource extends JsonResource
 	    return [
 		    'uuid' => $this->uuid,
 		    'status' => $this->status,
-		    'edit_status' => (bool) $this->edit_status,
+		    'edit_status' =>  $this->edit_status,
 		    'message' => $this->message,
-		    'group_id' => $this->group_id,
 		    'created_at' => $this->created_at,
 		    'create_by' => $this->create_by,
 	    ];

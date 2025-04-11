@@ -5,6 +5,7 @@ namespace App\Services\Group;
 use App\Http\Requests\Group\AddUserToGroupRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Http\Resources\GroupResource;
+use App\Http\Requests\Group\UpdateRequest;
 use App\Models\Chat\Group;
 use App\Repositories\Group\GroupRepository;
 use App\Services\Base;
@@ -15,9 +16,9 @@ class GroupService extends Base
 
 	public function index()
 	{
-		$chats = $this->repository->index();
+		 $data = $this->repository->index();
 
-		return GroupResource::collection($chats);
+		return GroupResource::collection($data);
 	}
 
 	public function store(StoreRequest $request): Group
@@ -32,6 +33,21 @@ class GroupService extends Base
             $request->groupUsersData()
         );
     }
+
+    public function update(UpdateRequest $request, $uuid)
+    {
+        $filenames = Group::where('uuid', $request->uuid)->pluck('file');
+        $groupdata = $request->validated();
+
+        if ($request->hasFile('file') && $filenames->isNotEmpty()) {
+            $this->fileDeleteStorage($filenames);
+            $groupdata['file'] = $this->fileUploadStorage($request->file('file'), 'group');
+        }
+
+        return $this->repository->update($groupdata, $uuid);
+    }
+
+
 
     public function addUser(AddUserToGroupRequest $request): Group
     {

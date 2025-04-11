@@ -27,5 +27,8 @@ class StoreRequest extends BaseRequest
 		]);
 	}
 
-
+	public function validationData()
+	{
+		return $this->only(app(Message::class)->getfillable());
+	}
 }
