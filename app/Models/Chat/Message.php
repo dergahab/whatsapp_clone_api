@@ -22,6 +22,7 @@ class Message extends Model
         'create_by',
         'message',
         'chat_id',
+        'group_id',
     ];
 
     protected $hidden = [
@@ -29,6 +30,8 @@ class Message extends Model
         'chat_id',
         'updated_at',
         'deleted_at',
+	    'group_id',
+	    'create_by'
     ];
 
     protected static function booted()
@@ -38,17 +41,16 @@ class Message extends Model
         });
     }
 
-    protected function createBy(): Attribute
+    protected function createByLabel(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value == Auth::user()?->id ? 'sender' : 'receiver'
         );
     }
-
-    public function creator(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'create_by', 'id');
-    }
+	public function creator(): BelongsTo
+	{
+		return $this->belongsTo(User::class, 'create_by', 'id');
+	}
 
     protected function editStatus(): Attribute
     {

@@ -59,4 +59,9 @@ class Chat extends Base
 
         return $this->userTwo();
     }
+
+	public function unread_messages(): HasMany
+	{
+		return $this->hasMany(Message::class, 'chat_id', 'id')->where('status', 1);
+	}
 }
