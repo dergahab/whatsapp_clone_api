@@ -15,7 +15,12 @@ class ChatService
 
     public function index(SearcRequest $request)
     {
-        return $this->repository->index($request?->search);
+	    return collect($this->repository->index($request->search))->map(function ($item) {
+		    if ($item->message) {
+			    $item->message->create_by_label = $item->message?->createByLabel;
+		    }
+		    return $item;
+	    });
     }
 
     public function store(array $data)

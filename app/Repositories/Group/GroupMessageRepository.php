@@ -9,6 +9,10 @@ class GroupMessageRepository
 {
     public function __construct(public Message $model) {}
 
+	public function index()
+	{
+		//
+	}
     public function store(array $data): Message
     {
        return $this->model::create($data);

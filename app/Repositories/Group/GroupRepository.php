@@ -8,6 +8,14 @@ class GroupRepository
 {
     public function __construct(public Group $model) {}
 
+	public function index()
+	{
+		return $this->model->with([
+			'message.creator:id,name,uuid'
+		])
+			->withCount('unread_messages')
+			->get();
+	}
     public function store(array $groupData, array $userUuids): Group
     {
         $group = Group::create(
