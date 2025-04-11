@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreRequest;
-use App\Http\Requests\User\UserProfileUpdateRequest;
+use App\Http\Requests\User\UpdateRequest;
 use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,11 +33,11 @@ class UsersController extends Controller
         }
     }
 
-    public function updateUserProfile(UserProfileUpdateRequest $request)
+    public function update(UpdateRequest $request,string $uuid)
     {
         DB::beginTransaction();
         try {
-            $this->service->updateUserProfile($request);
+            $this->service->update($request, $uuid);
             DB::commit();
 
             return rp_response([], message: __('UserProfileUpdatedSuccessfully'), status: Response::HTTP_OK);
@@ -53,8 +53,7 @@ class UsersController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = $request->validatedData();
-            $chat = $this->service->store($data);
+            $chat = $this->service->store($request);
 
             DB::commit();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Group;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Group\AddUserToGroupRequest;
 use App\Http\Requests\Group\StoreRequest;
+use App\Http\Requests\Group\UpdateRequest;
 use App\Services\Group\GroupService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -50,19 +51,25 @@ class GroupController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @lrd:start
+     *
+     * group update api
+     *
+     * @lrd:end
      */
-    public function edit(string $id)
+    public function update(UpdateRequest $request, string $uuid)
     {
-        //
-    }
+        DB::beginTransaction();
+        try {
+            $group = $this->service->update($request, $uuid);
+            DB::commit();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+            return rp_response($group, __('GroupUpdateSuccessfully'), Response::HTTP_CREATED);
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

@@ -2,11 +2,14 @@
 
 namespace App\Services\User;
 
-use App\Http\Requests\User\UserProfileUpdateRequest;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
+use App\Models\User;
 use App\Repositories\User\UserRepository;
+use App\Services\Base;
 use Illuminate\Http\Request;
 
-class UserService
+class UserService extends Base
 {
     public function __construct(public UserRepository $repositories) {}
 
@@ -15,13 +18,25 @@ class UserService
         return $this->repositories->index($request?->search);
     }
 
-    public function store(array $data)
+    public function store(StoreRequest $request)
     {
-        return $this->repositories->store($data);
+        $groupdata = $request->validatedData();
+        if ($request->file('profile_picture')) {
+            $groupdata['profile_picture'] = $this->fileUploadStorage($request->file('profile_picture'), 'user');
+        }
+        return $this->repositories->store($groupdata);
     }
 
-    public function updateUserProfile(UserProfileUpdateRequest $request)
+    public function update(UpdateRequest $request,$uuid)
     {
-        return $this->repositories->updateUserProfile($request->uuid, $request);
+        $filenames = User::where('uuid', $request->uuid)->pluck('profile_picture');
+        $groupdata = $request->validated();
+
+        if ($request->hasFile('profile_picture') && $filenames->isNotEmpty()) {
+            $this->fileDeleteStorage($filenames);
+            $groupdata['profile_picture'] = $this->fileUploadStorage($request->file('profile_picture'), 'user');
+        }
+
+        return $this->repositories->update($groupdata, $uuid);
     }
 }

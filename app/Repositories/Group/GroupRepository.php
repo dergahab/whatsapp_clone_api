@@ -27,6 +27,11 @@ class GroupRepository
         return $group->load('users:id,uuid,name');
     }
 
+    public function update($data, $uuid)
+    {
+        return $this->model::where('uuid', $uuid)->update($data);
+    }
+
     public function addUser($uuid, array $userUuids): Group
     {
         $group = $this->model::where('uuid', $uuid)->first();
