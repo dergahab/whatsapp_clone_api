@@ -18,11 +18,12 @@ class StoreRequest extends BaseRequest
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
+
     public function validatedData()
     {
         $validated = $this->validated();
         $validated['password'] = Hash::make($this->input('password'));
+
         return $validated;
     }
-
 }

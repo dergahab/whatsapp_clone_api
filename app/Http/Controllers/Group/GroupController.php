@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class GroupController extends Controller
 {
     public function __construct(public GroupService $service) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -38,11 +39,13 @@ class GroupController extends Controller
         try {
             $group = $this->service->store($request);
             DB::commit();
+
             return rp_response($group, __('GroupCreatedSuccessfully'), Response::HTTP_CREATED);
         } catch (\Exception $ex) {
-           DB::rollBack();
-            return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);
-       }
+            DB::rollBack();
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -83,10 +86,12 @@ class GroupController extends Controller
         try {
             $group = $this->service->addUser($request);
             DB::commit();
+
             return rp_response($group, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
         } catch (\Exception $ex) {
             DB::rollBack();
-            return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

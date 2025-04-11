@@ -6,25 +6,33 @@ use App\Http\Requests\Chat\DestroyRequest;
 use App\Http\Requests\Chat\SearcRequest;
 use App\Http\Requests\Chat\ShowRequest;
 use App\Repositories\Chat\ChatRepository;
-use Illuminate\Http\Request;
-
+use App\Repositories\Message\MessageRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 class ChatService
 {
-    public function __construct(public ChatRepository $repository) {}
+    public function __construct(public ChatRepository $repository, public MessageRepository $messageRepository) {}
 
     public function index(SearcRequest $request)
     {
         return $this->repository->index($request?->search);
     }
+
     public function store(array $data)
     {
-        return $this->repository->store($data);
+        if ($this->repository->findChat($data)) {
+            $data = $this->messageRepository->showAllMessages($this->repository->findChat($data));
+
+            return rp_response(data: $data, status: Response::HTTP_CREATED);
+        }
+        $data = $this->repository->store($data);
+
+        return rp_response($data, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
     }
 
     public function show(ShowRequest $request)
     {
-        return $this->repository->show($request->uuid , $request->page);
+        return $this->repository->show($request->uuid, $request->page);
     }
 
     public function destroy(DestroyRequest $request)

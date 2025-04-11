@@ -9,7 +9,6 @@ use App\Http\Requests\Chat\SearcRequest;
 use App\Http\Requests\Chat\ShowRequest;
 use App\Services\Chat\ChatService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,12 +38,11 @@ class ChatController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->validatedData();
-            $chat = $this->service->store($data);
+            $response = $this->service->store($data);
 
             DB::commit();
 
-            return rp_response($chat, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
-
+            return $response;
         } catch (\Exception $ex) {
             DB::rollBack();
 
@@ -96,10 +94,12 @@ class ChatController extends Controller
         try {
             $chat = $this->service->destroy($request);
             DB::commit();
+
             return rp_response($chat, __('DataDeletedSuccessfully'), Response::HTTP_OK);
 
         } catch (\Exception $ex) {
             DB::rollBack();
+
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

@@ -12,7 +12,7 @@ class ShowRequest extends BaseRequest
         if (! is_null($this->route('uuid'))) {
             $this->merge([
                 'uuid' => $this->route('uuid'),
-                "page" => $this->route('page'),
+                'page' => $this->route('page'),
             ]);
         }
     }

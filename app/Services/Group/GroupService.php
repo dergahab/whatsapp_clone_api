@@ -2,7 +2,6 @@
 
 namespace App\Services\Group;
 
-
 use App\Http\Requests\Group\AddUserToGroupRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Models\Chat\Group;
@@ -19,15 +18,15 @@ class GroupService extends Base
         if ($request->file('file')) {
             $groupdata['file'] = $this->fileUploadStorage($request->file('file'), 'group');
         }
+
         return $this->repository->store(
             $groupdata,
             $request->groupUsersData()
         );
     }
+
     public function addUser(AddUserToGroupRequest $request): Group
     {
-        return $this->repository->addUser($request->group_uuid,  $request->groupUsersData());
+        return $this->repository->addUser($request->group_uuid, $request->groupUsersData());
     }
-
-
 }

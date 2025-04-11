@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
 
 // Auth
 Route::post('login', [AuthController::class, 'login']);
-//Route::post('register', [AuthController::class, 'register']);
+// Route::post('register', [AuthController::class, 'register']);
 Route::post('logout/{uuid}', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 // Route::post('refresh', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
 
@@ -55,7 +55,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('groups', GroupController::class)->parameters(['groups' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
     Route::post('add-user', [GroupController::class, 'addUser']);
-
-
 
 });

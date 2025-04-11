@@ -14,10 +14,12 @@ class UserService
     {
         return $this->repositories->index($request?->search);
     }
+
     public function store(array $data)
     {
         return $this->repositories->store($data);
     }
+
     public function updateUserProfile(UserProfileUpdateRequest $request)
     {
         return $this->repositories->updateUserProfile($request->uuid, $request);

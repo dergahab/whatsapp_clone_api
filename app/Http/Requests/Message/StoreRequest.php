@@ -15,7 +15,7 @@ class StoreRequest extends BaseRequest
             'chat_id' => [
                 'required',
                 'uuid',
-                'exists:' . rp_get_table(Chat::class) . ',uuid',
+                'exists:'.rp_get_table(Chat::class).',uuid',
             ],
             'message' => [
                 'required',

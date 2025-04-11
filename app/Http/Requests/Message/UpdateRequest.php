@@ -5,7 +5,6 @@ namespace App\Http\Requests\Message;
 use App\Http\Requests\BaseRequest;
 use App\Models\Chat\Message;
 
-
 class UpdateRequest extends BaseRequest
 {
     protected function prepareForValidation(): void
@@ -16,13 +15,14 @@ class UpdateRequest extends BaseRequest
             ]);
         }
     }
+
     public function rules(): array
     {
         return [
             'uuid' => [
                 'required',
                 'uuid',
-                'exists:' . rp_get_table(Message::class) . ',uuid',
+                'exists:'.rp_get_table(Message::class).',uuid',
             ],
             'message' => [
                 'required',
@@ -33,6 +33,7 @@ class UpdateRequest extends BaseRequest
 
         ];
     }
+
     public function validatedData()
     {
         return collect($this)->only(app(Message::class)->getFillable())->all();
