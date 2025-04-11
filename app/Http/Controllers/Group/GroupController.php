@@ -19,7 +19,17 @@ class GroupController extends Controller
      */
     public function index()
     {
-        //
+	    DB::beginTransaction();
+	    try {
+		    $group = $this->service->index();
+		    DB::commit();
+
+		    return rp_response($group, __('GroupCreatedSuccessfully'), Response::HTTP_CREATED);
+	    } catch (\Exception $ex) {
+		    DB::rollBack();
+
+		    return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+	    }
     }
 
     /**

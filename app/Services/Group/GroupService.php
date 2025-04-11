@@ -4,6 +4,7 @@ namespace App\Services\Group;
 
 use App\Http\Requests\Group\AddUserToGroupRequest;
 use App\Http\Requests\Group\StoreRequest;
+use App\Http\Resources\GroupResource;
 use App\Models\Chat\Group;
 use App\Repositories\Group\GroupRepository;
 use App\Services\Base;
@@ -12,7 +13,14 @@ class GroupService extends Base
 {
     public function __construct(public GroupRepository $repository) {}
 
-    public function store(StoreRequest $request): Group
+	public function index()
+	{
+		$chats = $this->repository->index();
+
+		return GroupResource::collection($chats);
+	}
+
+	public function store(StoreRequest $request): Group
     {
         $groupdata = $request->groupData();
         if ($request->file('file')) {

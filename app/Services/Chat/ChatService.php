@@ -5,6 +5,7 @@ namespace App\Services\Chat;
 use App\Http\Requests\Chat\DestroyRequest;
 use App\Http\Requests\Chat\SearcRequest;
 use App\Http\Requests\Chat\ShowRequest;
+use App\Http\Resources\ChatResource;
 use App\Repositories\Chat\ChatRepository;
 use App\Repositories\Message\MessageRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,9 @@ class ChatService
 
     public function index(SearcRequest $request)
     {
-        return $this->repository->index($request?->search);
+	    $chats = $this->repository->index($request->search);
+
+	    return ChatResource::collection($chats);
     }
 
     public function store(array $data)

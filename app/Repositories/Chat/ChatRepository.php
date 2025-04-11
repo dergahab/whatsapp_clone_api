@@ -9,7 +9,7 @@ class ChatRepository implements ChatRepositoryİnterface
 {
     public function __construct(public Chat $model, public MessageService $messageService) {}
 
-    public function index($search = null): array
+    public function index($search = null)
     {
         return $this->model
             ->with([
@@ -24,8 +24,7 @@ class ChatRepository implements ChatRepositoryİnterface
                     $q->where('name', 'like', '%'.$search.'%');
                 });
             })
-            ->get()
-            ->toArray();
+            ->get();
     }
 
     public function store(array $data): Chat
