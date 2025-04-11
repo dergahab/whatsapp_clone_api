@@ -10,7 +10,7 @@ class GroupMessageRepository
     public function __construct(public Message $model) {}
 
     public function store(array $data): Message
-    {   dd($data);
+    {
        return $this->model::create($data);
     }
 
