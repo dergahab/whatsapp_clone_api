@@ -18,7 +18,7 @@ class ShowAllMessageRequest extends FormRequest
     public function passedValidation()
     {
         $this->merge([
-            'chat_id' => rp_uuid_to_id(Chat::class, $this->input('chat_id'))
+            'chat_id' => rp_uuid_to_id(Chat::class, $this->input('chat_id')),
         ]);
     }
 }

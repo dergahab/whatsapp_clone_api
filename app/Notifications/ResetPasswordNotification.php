@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -43,9 +42,9 @@ class ResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Şifrəni unutmusunuz?')
-                    ->action('Silmək üçün vurun', $this->url)
-                    ->line('Tətbiqimizdən istifadə etdiyiniz üçün təşəkkür edirik!');
+            ->line('Şifrəni unutmusunuz?')
+            ->action('Silmək üçün vurun', $this->url)
+            ->line('Tətbiqimizdən istifadə etdiyiniz üçün təşəkkür edirik!');
     }
 
     /**

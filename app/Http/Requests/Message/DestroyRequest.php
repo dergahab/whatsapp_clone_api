@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Requests\Message;
-use Illuminate\Foundation\Http\FormRequest;
+
 use App\Models\Chat\Message;
+use Illuminate\Foundation\Http\FormRequest;
+
 class DestroyRequest extends FormRequest
 {
     protected function prepareForValidation()
@@ -20,7 +22,7 @@ class DestroyRequest extends FormRequest
             'uuid' => [
                 'required',
                 'uuid',
-                'exists:' . rp_get_table(Message::class) . ',uuid',
+                'exists:'.rp_get_table(Message::class).',uuid',
             ],
 
         ];

@@ -22,7 +22,7 @@ class DestroyRequest extends BaseRequest
             'uuid' => [
                 'required',
                 'uuid',
-                'exists:' . rp_get_table(Chat::class) . ',uuid',
+                'exists:'.rp_get_table(Chat::class).',uuid',
             ],
         ];
     }

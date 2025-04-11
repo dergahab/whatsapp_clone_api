@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UserProfileUpdateRequest;
-use App\Models\User;
 use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,13 +39,16 @@ class UsersController extends Controller
         try {
             $this->service->updateUserProfile($request);
             DB::commit();
+
             return rp_response([], message: __('UserProfileUpdatedSuccessfully'), status: Response::HTTP_OK);
 
         } catch (\Exception $ex) {
             DB::rollBack();
+
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     public function register(StoreRequest $request): JsonResponse
     {
         DB::beginTransaction();
@@ -55,13 +57,13 @@ class UsersController extends Controller
             $chat = $this->service->store($data);
 
             DB::commit();
+
             return rp_response($chat, __('DataCreatedSuccessfully'), \Symfony\Component\HttpFoundation\Response::HTTP_CREATED);
 
         } catch (\Exception $ex) {
             DB::rollBack();
+
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

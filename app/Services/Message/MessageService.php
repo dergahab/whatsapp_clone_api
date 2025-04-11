@@ -2,7 +2,6 @@
 
 namespace App\Services\Message;
 
-
 use App\Events\ChatNewMessageSendedEvent;
 use App\Http\Requests\Message\DestroyRequest;
 use App\Http\Requests\Message\ShowAllMessageRequest;
@@ -26,30 +25,29 @@ class MessageService
     public function store(StoreRequest $request): Message
     {
         $message = $this->repository->store($request->validatedData());
-		$data = $this->repository->show($message->uuid)->toArray();
-	    event(new ChatNewMessageSendedEvent($data, rp_id_to_uuid(Chat::class, $request->chat_id)));
+        $data = $this->repository->show($message->uuid)->toArray();
+        event(new ChatNewMessageSendedEvent($data, rp_id_to_uuid(Chat::class, $request->chat_id)));
 
-		return $message;
+        return $message;
     }
 
     public function show(ShowRequest $request)
     {
         return $this->repository->show($request->uuid);
     }
-    public function update(UpdateRequest $request,$uuid): int
+
+    public function update(UpdateRequest $request, $uuid): int
     {
-        return $this->repository->update($request->validatedData(),$uuid);
+        return $this->repository->update($request->validatedData(), $uuid);
     }
+
     public function showAllMessages(ShowAllMessageRequest $request)
     {
         return $this->repository->showAllMessages($request->chat_id, $request->input('page', 1));
     }
+
     public function destroy(DestroyRequest $request)
     {
         return $this->repository->destroy($request->uuid);
     }
-
-
 }
-
-

@@ -12,17 +12,20 @@ class MessageRepository
     {
         return $this->model->create($data);
     }
+
     public function show($uuid): ?Message
     {
         return $this->model->where('uuid', $uuid)->with('creator')->first();
     }
-    public function update(array $data,$uuid): int
+
+    public function update(array $data, $uuid): int
     {
-        return $this->model->where('uuid',$uuid)->update($data);
+        return $this->model->where('uuid', $uuid)->update($data);
     }
+
     public function showAllMessages($chat_id, $page = 1): array
     {
-        $messages =  $this->model
+        $messages = $this->model
             ->where('chat_id', $chat_id)
             ->select('uuid', 'message')
             ->orderBy('created_at', 'desc')
@@ -35,7 +38,7 @@ class MessageRepository
             'last_page' => $messages->lastPage(),
             'per_page' => $messages->perPage(),
             'to' => $messages->lastItem(),
-            'total' => $messages->total()
+            'total' => $messages->total(),
         ];
     }
 

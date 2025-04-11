@@ -9,7 +9,6 @@ use App\Http\Requests\Message\ShowRequest;
 use App\Http\Requests\Message\StoreRequest;
 use App\Http\Requests\Message\UpdateRequest;
 use App\Services\Message\MessageService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,18 +18,18 @@ class MessageController extends Controller
 
     public function store(StoreRequest $request)
     {
-//        DB::beginTransaction();
-//        try {
+        DB::beginTransaction();
+        try {
             $this->service->store($request);
-//            DB::commit();
+            DB::commit();
 
             return rp_response([], __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
 
-//        } catch (\Exception $ex) {
-//            DB::rollBack();
-//
-//            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-//        }
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function show(ShowRequest $request)
@@ -40,7 +39,7 @@ class MessageController extends Controller
 
             $message = $this->service->show($request);
 
-            return rp_response(data:  $message, message: Response::HTTP_OK);
+            return rp_response(data: $message, message: Response::HTTP_OK);
 
         } catch (\Exception $ex) {
 
@@ -52,7 +51,7 @@ class MessageController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->service->update($request,$uuid);
+            $this->service->update($request, $uuid);
             DB::commit();
 
             return rp_response($this->service->show(new ShowRequest($request->toArray())), __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
@@ -70,13 +69,16 @@ class MessageController extends Controller
         try {
             $message = $this->service->destroy($request);
             DB::commit();
+
             return rp_response($message, __('DataDeletedSuccessfully'), Response::HTTP_OK);
 
         } catch (\Exception $ex) {
             DB::rollBack();
+
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     public function show_messages(ShowAllMessageRequest $request)
     {
         try {
@@ -87,7 +89,4 @@ class MessageController extends Controller
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 }
