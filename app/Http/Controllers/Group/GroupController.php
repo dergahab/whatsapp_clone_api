@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Group\AddUserToGroupRequest;
+use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Http\Requests\Group\UpdateRequest;
 use App\Services\Group\GroupService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -20,11 +20,11 @@ class GroupController extends Controller
      */
     public function index()
     {
-//	    try {
-		    return rp_response($this->service->index(), __('ProcessSuccessfully'), Response::HTTP_CREATED);
-//	    } catch (\Exception $ex) {
-//		    return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-//	    }
+        //	    try {
+        return rp_response($this->service->index(), __('ProcessSuccessfully'), Response::HTTP_CREATED);
+        //	    } catch (\Exception $ex) {
+        //		    return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        //	    }
     }
 
     public function store(StoreRequest $request)
@@ -45,9 +45,18 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(ShowRequest $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $group = $this->service->show($request);
+
+            return rp_response(data: $group, message: Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Http\Requests\User\ShowRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Models\User;
@@ -24,19 +25,26 @@ class UserService extends Base
         if ($request->file('profile_picture')) {
             $groupdata['profile_picture'] = $this->fileUploadStorage($request->file('profile_picture'), 'user');
         }
+
         return $this->repositories->store($groupdata);
     }
 
-    public function update(UpdateRequest $request,$uuid)
+    public function update(UpdateRequest $request, $uuid)
     {
         $filenames = User::where('uuid', $request->uuid)->pluck('profile_picture');
+        $filepath = $filenames[0];
         $groupdata = $request->validated();
 
         if ($request->hasFile('profile_picture') && $filenames->isNotEmpty()) {
-            $this->fileDeleteStorage($filenames);
+            $this->fileDeleteStorage($filepath);
             $groupdata['profile_picture'] = $this->fileUploadStorage($request->file('profile_picture'), 'user');
         }
 
         return $this->repositories->update($groupdata, $uuid);
+    }
+
+    public function show(ShowRequest $request)
+    {
+        return $this->repositories->show($request->uuid, $request->page);
     }
 }
