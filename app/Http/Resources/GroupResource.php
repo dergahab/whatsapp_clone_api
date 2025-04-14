@@ -7,12 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GroupResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-
 	public function toArray($request): array
 	{
 		$message = $this->message ? new MessageResource($this->message) : null;
