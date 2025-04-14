@@ -17,7 +17,7 @@ class ChatResource extends JsonResource
 
 		return [
 			'uuid' => $this->uuid,
-			'type' => 'chat',
+			'type' => 'group',
 			'name' => $this->sendBy->name ?? null,
 			'unread_count' => $this->unread_count ?? 0,
 			'image' => $this->sendBy->profile_picture ?? null,

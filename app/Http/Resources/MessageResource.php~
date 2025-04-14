@@ -15,7 +15,7 @@ class MessageResource extends JsonResource
 		    'edit_status' =>  $this->edit_status,
 		    'message' => $this->message,
 		    'created_at' => $this->created_at,
-		    'create_by' => $this->creator->name,
+		    'create_by' => $this->creator,
 	    ];
     }
 }
