@@ -34,15 +34,6 @@ class Group extends Base
         return $this->belongsToMany(User::class, rp_get_table(GroupUser::class), 'group_id', 'user_id');
     }
 
-	public function sendBy(): BelongsTo
-	{
-		if (Auth::user()?->id == $this->user1) {
-			return $this->userOne();
-		}
-
-		return $this->userTwo();
-	}
-
 	public function message(): HasOne
 	{
 		return $this->hasOne(Message::class, 'group_id', 'id')->latest();

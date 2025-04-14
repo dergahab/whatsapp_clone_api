@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class MessageResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+	    return [
+		    'uuid' => $this->uuid,
+		    'status' => $this->status,
+		    'edit_status' =>  $this->edit_status,
+		    'message' => $this->message,
+		    'created_at' => $this->created_at,
+		    'create_by' => $this->create_by,
+	    ];
+    }
+}
