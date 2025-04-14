@@ -21,11 +21,10 @@ class GroupMessageController extends Controller
 	    try {
 		    $group = $this->service->index();
 		    DB::commit();
-		    return rp_response($group, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
+            return rp_response(data: $group, message: \Symfony\Component\HttpFoundation\Response::HTTP_OK);
 	    } catch (\Exception $ex) {
-		    DB::rollBack();
-		    return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);
-	    }
+            return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 
