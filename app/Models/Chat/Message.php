@@ -80,9 +80,7 @@ class Message extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->isToday()
-                ? Carbon::parse($value)->format('H:i')
-                : Carbon::parse($value)->diffForHumans()
+            get: fn ($value) => Carbon::parse($value)->format('Y-m-d H:i:s')
         );
     }
 }

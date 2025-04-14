@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Requests\Chat;
+namespace App\Http\Requests\Sidebar;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class SearcRequest extends FormRequest
+use App\Http\Requests\BaseRequest;
+class SearchRequest extends BaseRequest
 {
     public function rules(): array
     {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Group\GroupController;
 use App\Http\Controllers\Group\GroupMessageController;
 use App\Http\Controllers\Message\MessageController;
+use App\Http\Controllers\Sidebar\SidebarController;
 use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -53,12 +54,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('users/{uuid}', [UsersController::class, 'update']);
     Route::get('users/{uuid}', [UsersController::class, 'show']);
 
-    Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
+    Route::apiResource('chats', ChatController::class)->except(['update', 'index'])->parameters(['chat' => 'uuid']);
     Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
-    Route::apiResource('groups', GroupController::class)->except('update')->parameters(['groups' => 'uuid']);
+    Route::apiResource('groups', GroupController::class)->except('update', 'index')->parameters(['groups' => 'uuid']);
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
 
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
     Route::post('add-user', [GroupController::class, 'addUser']);
+
+    Route::get('sidebar', SidebarController::class);
 
 });

@@ -15,25 +15,6 @@ class GroupController extends Controller
 {
     public function __construct(public GroupService $service) {}
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //	    try {
-        return rp_response($this->service->index(), __('ProcessSuccessfully'), Response::HTTP_CREATED);
-        //	    } catch (\Exception $ex) {
-        //		    return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-        //	    }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
