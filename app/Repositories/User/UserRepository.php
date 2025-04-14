@@ -27,12 +27,13 @@ class UserRepository implements UserRepositoryİnterface
 
     public function update(array $data, string $uuid): ?User
     {
-        $user = User::where('uuid', $uuid)->firstOrFail();
+        $data = array_filter($data, fn($value) => !is_null($value));
 
-        $user->update($data);
+        User::where('uuid', $uuid)->update($data);
 
-        return $user;
+        return User::where('uuid', $uuid)->first();
     }
+
 
     public function show($uuid): ?User
     {

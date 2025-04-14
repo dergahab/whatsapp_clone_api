@@ -30,12 +30,13 @@ class GroupRepository
 
     public function update($data, $uuid)
     {
-        $group = Group::where('uuid', $uuid)->firstOrFail();
+        $data = array_filter($data, fn($value) => !is_null($value));
 
-        $group->update($data);
+        Group::where('uuid', $uuid)->update($data);
 
-        return $group;
+        return Group::where('uuid', $uuid)->first();
     }
+
 
     public function addUser($uuid, array $userUuids): Group
     {
