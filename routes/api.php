@@ -5,8 +5,8 @@ use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\NewPasswordController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Group\GroupController;
-	use App\Http\Controllers\Group\GroupMessageController;
-	use App\Http\Controllers\Message\MessageController;
+use App\Http\Controllers\Group\GroupMessageController;
+use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -51,12 +51,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('group-messages', GroupMessageController::class);
     Route::get('/users', [UsersController::class, 'index']);
     Route::post('users/{uuid}', [UsersController::class, 'update']);
+    Route::get('users/{uuid}', [UsersController::class, 'show']);
 
     Route::apiResource('chats', ChatController::class)->except(['update'])->parameters(['chat' => 'uuid']);
     Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
     Route::apiResource('groups', GroupController::class)->except('update')->parameters(['groups' => 'uuid']);
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
-
 
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
     Route::post('add-user', [GroupController::class, 'addUser']);
