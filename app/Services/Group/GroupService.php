@@ -3,6 +3,7 @@
 namespace App\Services\Group;
 
 use App\Http\Requests\Group\AddUserToGroupRequest;
+use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Http\Resources\GroupResource;
 use App\Http\Requests\Group\UpdateRequest;
@@ -38,19 +39,22 @@ class GroupService extends Base
     {
         $filenames = Group::where('uuid', $request->uuid)->pluck('file');
         $groupdata = $request->validated();
-
+        $filepath = $filenames[0];
         if ($request->hasFile('file') && $filenames->isNotEmpty()) {
-            $this->fileDeleteStorage($filenames);
+            $this->fileDeleteStorage($filepath);
             $groupdata['file'] = $this->fileUploadStorage($request->file('file'), 'group');
         }
 
         return $this->repository->update($groupdata, $uuid);
     }
 
-
-
     public function addUser(AddUserToGroupRequest $request): Group
     {
         return $this->repository->addUser($request->group_uuid, $request->groupUsersData());
+    }
+
+    public function show(ShowRequest $request)
+    {
+        return $this->repository->show($request->uuid, $request->page);
     }
 }

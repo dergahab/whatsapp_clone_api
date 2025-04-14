@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Base
@@ -15,18 +14,22 @@ class Base
         $timestamp = now()->format('Y-m-d_His');
         $directory = 'uploads/files/'.$directory;
         $fileName = "{$directory}/{$slugifiedName}_{$timestamp}.{$extension}";
+        $file->storeAs('public', $fileName);
 
-        return $path = $file->storeAs('public', $fileName);
+        return 'storage/'.$fileName;
     }
 
     public function fileDeleteStorage($filePath)
     {
+        $relativePath = Str::replaceFirst('storage/', '', $filePath);
+        $fullPath = storage_path('app/public/'.$relativePath);
 
-        if (Storage::exists('public/' . $filePath)) {
-            Storage::delete('public/' . $filePath);
+        if (file_exists($fullPath)) {
+            unlink($fullPath);
+
             return true;
         }
+
         return false;
     }
-
 }

@@ -8,14 +8,15 @@ class GroupRepository
 {
     public function __construct(public Group $model) {}
 
-	public function index()
-	{
-		return $this->model->with([
-			'message.creator:id,name,uuid'
-		])
-			->withCount('unread_messages')
-			->get();
-	}
+    public function index()
+    {
+        return $this->model->with([
+            'message.creator:id,name,uuid',
+        ])
+            ->withCount('unread_messages')
+            ->get();
+    }
+
     public function store(array $groupData, array $userUuids): Group
     {
         $group = Group::create(
@@ -29,7 +30,11 @@ class GroupRepository
 
     public function update($data, $uuid)
     {
-        return $this->model::where('uuid', $uuid)->update($data);
+        $group = Group::where('uuid', $uuid)->firstOrFail();
+
+        $group->update($data);
+
+        return $group;
     }
 
     public function addUser($uuid, array $userUuids): Group
@@ -39,5 +44,10 @@ class GroupRepository
         $group->users()->attach($userUuids);
 
         return $group->load('users:id,uuid,name');
+    }
+
+    public function show($uuid): ?Group
+    {
+        return Group::select('name', 'file')->where('uuid', $uuid)->first();
     }
 }

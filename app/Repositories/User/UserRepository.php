@@ -21,13 +21,21 @@ class UserRepository implements UserRepositoryİnterface
     public function store(array $data): User
     {
         unset($data['password_confirmation']);
+
         return User::create($data);
     }
 
     public function update(array $data, string $uuid): ?User
     {
-        $group = User::where('uuid', $uuid)->firstOrFail();
-        $group->update($data);
-        return $group;
+        $user = User::where('uuid', $uuid)->firstOrFail();
+
+        $user->update($data);
+
+        return $user;
+    }
+
+    public function show($uuid): ?User
+    {
+        return User::select('name', 'email', 'profile_picture')->where('uuid', $uuid)->first();
     }
 }
