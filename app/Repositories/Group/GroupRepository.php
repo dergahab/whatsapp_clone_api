@@ -8,11 +8,14 @@ class GroupRepository
 {
     public function __construct(public Group $model) {}
 
-    public function index()
+    public function index($search)
     {
         return $this->model->with([
             'message.creator:id,name,uuid',
         ])
+            ->when($search, function($q) use($search){
+                $q->where('name', 'like', '%'.$search.'%');
+            })
             ->withCount('unread_messages')
             ->get();
     }

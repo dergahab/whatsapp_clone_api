@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GroupResource extends JsonResource
 {
+
 	public function toArray($request): array
 	{
 		$message = $this->message ? new MessageResource($this->message) : null;
@@ -24,8 +25,6 @@ class GroupResource extends JsonResource
 			'message_edit_status' => $messageArray['edit_status'] ?? null,
 			'message_time' => $messageArray['created_at'] ?? null,
 			'message_create_by' => $messageArray['create_by'] ?? null,
-
-			'send_by' => $this->sendBy ? new UserResource($this->sendBy) : null,
-		];
+        ];
 	}
 }

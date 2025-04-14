@@ -5,21 +5,23 @@ namespace App\Services\Group;
 use App\Http\Requests\Group\AddUserToGroupRequest;
 use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
+use App\Http\Requests\Sidebar\SearchRequest;
 use App\Http\Resources\GroupResource;
 use App\Http\Requests\Group\UpdateRequest;
 use App\Models\Chat\Group;
 use App\Repositories\Group\GroupRepository;
 use App\Services\Base;
 
+
 class GroupService extends Base
 {
     public function __construct(public GroupRepository $repository) {}
 
-	public function index()
+	public function index(SearchRequest $request)
 	{
-		 $data = $this->repository->index();
+		 $data = $this->repository->index($request->search);
 
-		return GroupResource::collection($data);
+		return GroupResource::collection($data)->resolve();
 	}
 
 	public function store(StoreRequest $request): Group
