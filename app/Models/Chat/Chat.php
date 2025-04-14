@@ -53,7 +53,7 @@ class Chat extends Base
 
     public function sendBy(): BelongsTo
     {
-        if (Auth::user()?->id == $this->user1) {
+        if (Auth::user()?->id != $this->user1) {
             return $this->userOne();
         }
 
