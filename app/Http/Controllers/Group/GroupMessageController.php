@@ -16,17 +16,6 @@ class GroupMessageController extends Controller
 	{
 
 	}
-    public function index()
-    {
-	    DB::beginTransaction();
-	    try {
-		    $group = $this->service->index();
-		    DB::commit();
-            return rp_response(data: $group, message: \Symfony\Component\HttpFoundation\Response::HTTP_OK);
-	    } catch (\Exception $ex) {
-            return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
     public function store(StoreRequest $request)
     {
 	    DB::beginTransaction();
@@ -38,27 +27,6 @@ class GroupMessageController extends Controller
             DB::rollBack();
             return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
     public function show_messages(ShowAllMessageRequest $request)
     {

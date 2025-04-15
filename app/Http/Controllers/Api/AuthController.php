@@ -21,14 +21,12 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-
         $profilePicturePath = null;
 
         if ($request->hasFile('profile_picture')) {
             $profilePicture = $request->file('profile_picture');
             $profilePicturePath = $profilePicture->store('profile_pictures', 'public');
         }
-
         $user = User::create([
             'uuid' => Str::uuid(),
             'name' => $request->name,

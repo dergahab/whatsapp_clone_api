@@ -27,42 +27,43 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
     return $request->user();
 });
 
-// Auth
-Route::post('login', [AuthController::class, 'login']);
-// Route::post('register', [AuthController::class, 'register']);
-Route::post('logout/{uuid}', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-// Route::post('refresh', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
 
-// Email Verification
-Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])->middleware('auth:sanctum');
-Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify')->middleware('auth:sanctum');
+//// Email Verification
+//Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])->middleware('auth:sanctum');
+//Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify')->middleware('auth:sanctum');
 
 // Password Reset
-Route::post('forgot-password', [NewPasswordController::class, 'forgotPassword']);
-Route::post('reset-password', [NewPasswordController::class, 'reset']);
+//Route::post('forgot-password', [NewPasswordController::class, 'forgotPassword']);
+//Route::post('reset-password', [NewPasswordController::class, 'reset']);
 
+//AuthController
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout/{uuid}', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+// UsersController
 Route::post('/user_register', [UsersController::class, 'register']);
-
+// AuthController
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/verify-code', [AuthController::class, 'isVerificationCodeValid']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    // User
-    Route::apiResource('group-messages', GroupMessageController::class);
-    Route::get('/users', [UsersController::class, 'index']);
+    // UsersController
     Route::post('users/{uuid}', [UsersController::class, 'update']);
     Route::get('users/{uuid}', [UsersController::class, 'show']);
-
-    Route::apiResource('chats', ChatController::class)->except(['update', 'index'])->parameters(['chat' => 'uuid']);
-    Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
+    Route::get('/users', [UsersController::class, 'index']);
+    //GroupController
     Route::apiResource('groups', GroupController::class)->except('update', 'index')->parameters(['groups' => 'uuid']);
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
-
-    Route::get('/chat/messages', [MessageController::class, 'show_messages']);
-    Route::get('/group/messages', [GroupMessageController::class, 'show_messages']);
     Route::post('add-user', [GroupController::class, 'addUser']);
-
+    //GroupMessageController
+    Route::apiResource('group-messages', GroupMessageController::class)->except('index','show', 'update','destroy');
+    Route::get('/group/messages', [GroupMessageController::class, 'show_messages']);
+    //ChatController
+    Route::apiResource('chats', ChatController::class)->except(['update', 'index'])->parameters(['chat' => 'uuid']);
+   //MessageController
+    Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
+    Route::get('/chat/messages', [MessageController::class, 'show_messages']);
+   //SidebarController
     Route::get('sidebar', SidebarController::class);
-
 });
