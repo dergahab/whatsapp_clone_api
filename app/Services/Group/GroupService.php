@@ -3,6 +3,7 @@
 namespace App\Services\Group;
 
 use App\Http\Requests\Group\AddUserToGroupRequest;
+use App\Http\Requests\Group\DestroyRequest;
 use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Http\Requests\Sidebar\SearchRequest;
@@ -58,5 +59,10 @@ class GroupService extends Base
     public function show(ShowRequest $request)
     {
         return $this->repository->show($request->uuid, $request->page);
+    }
+
+    public function destroy(DestroyRequest $request)
+    {
+        return $this->repository->destroy($request->uuid);
     }
 }

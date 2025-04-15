@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GroupMessage\ShowAllMessageRequest;
 use App\Http\Requests\GroupMessage\StoreRequest;
 use App\Services\Group\GroupMessageService;
 use Illuminate\Http\Request;
@@ -26,8 +27,6 @@ class GroupMessageController extends Controller
             return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
     public function store(StoreRequest $request)
     {
 	    DB::beginTransaction();
@@ -60,5 +59,15 @@ class GroupMessageController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function show_messages(ShowAllMessageRequest $request)
+    {
+        try {
+            $messages = $this->service->showAllMessages($request);
+
+            return rp_response(data: $messages, message: \Symfony\Component\HttpFoundation\Response::HTTP_OK);
+        } catch (\Exception $ex) {
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

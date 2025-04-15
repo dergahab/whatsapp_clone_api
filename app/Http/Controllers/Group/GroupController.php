@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Group\AddUserToGroupRequest;
+use App\Http\Requests\Group\DestroyRequest;
 use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
 use App\Http\Requests\Group\UpdateRequest;
@@ -76,9 +77,20 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(DestroyRequest $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $group = $this->service->destroy($request);
+            DB::commit();
+
+            return rp_response($group, __('DataDeletedSuccessfully'), Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function addUser(AddUserToGroupRequest $request)
