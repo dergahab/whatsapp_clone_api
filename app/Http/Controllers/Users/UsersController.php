@@ -36,18 +36,18 @@ class UsersController extends Controller
 
     public function update(UpdateRequest $request, string $uuid)
     {
-//        DB::beginTransaction();
-//        try {
+        DB::beginTransaction();
+        try {
             $this->service->update($request, $uuid);
-//            DB::commit();
-//
-//            return rp_response([], message: __('UserProfileUpdatedSuccessfully'), status: Response::HTTP_OK);
-//
-//        } catch (\Exception $ex) {
-//            DB::rollBack();
-//
-//            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-//        }
+            DB::commit();
+
+            return rp_response([], message: __('UserProfileUpdatedSuccessfully'), status: Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function register(StoreRequest $request): JsonResponse
