@@ -54,4 +54,10 @@ class GroupRepository
     {
         return Group::select('name', 'file')->where('uuid', $uuid)->first();
     }
+
+    public function destroy($uuid)
+    {
+        return $this->model->where('uuid', $uuid)->delete();
+    }
+
 }

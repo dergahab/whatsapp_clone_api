@@ -60,6 +60,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
 
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
+    Route::get('/group/messages', [GroupMessageController::class, 'show_messages']);
     Route::post('add-user', [GroupController::class, 'addUser']);
 
     Route::get('sidebar', SidebarController::class);
