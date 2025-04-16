@@ -29,7 +29,7 @@ class MessageRepository
             ->where('chat_id', $chat_id)
             ->select('uuid', 'message')
             ->orderBy('created_at', 'desc')
-            ->paginate(2, ['*'], 'page', $page);
+            ->paginate(30, ['*'], 'page', $page);
 
         return [
             'current_page' => $messages->currentPage(),
