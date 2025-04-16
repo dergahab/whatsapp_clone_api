@@ -27,7 +27,6 @@ class MessageService
         $message = $this->repository->store($request->validatedData());
         $data = $this->repository->show($message->uuid)->toArray();
         event(new ChatNewMessageSendedEvent($data, rp_id_to_uuid(Chat::class, $request->chat_id)));
-
         return $message;
     }
 

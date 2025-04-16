@@ -12,6 +12,10 @@ class GroupMessageRepository
     {
        return $this->model::create($data);
     }
+    public function show($uuid): ?Message
+    {
+        return $this->model->where('uuid', $uuid)->with('creator')->first();
+    }
     public function showAllMessages($group_id, $page = 1): array
     {
         $messages = $this->model
