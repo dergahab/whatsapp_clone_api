@@ -20,7 +20,7 @@ class GroupMessageRepository
     {
         $messages = $this->model
             ->where('group_id', $group_id)
-            ->select('uuid', 'message')
+            ->with('creator')
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
