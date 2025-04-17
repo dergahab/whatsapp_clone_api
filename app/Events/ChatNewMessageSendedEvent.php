@@ -24,7 +24,7 @@ class ChatNewMessageSendedEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('message.' . $this->chatUuid),
+            new Channel('message.' . $this->chatUuid),
         ];
     }
 

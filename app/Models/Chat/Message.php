@@ -41,11 +41,10 @@ class Message extends Model
             $model->uuid = Str::uuid();
         });
     }
-
     protected function createByLabel(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value == Auth::user()?->id ? 'sender' : 'receiver'
+            get: fn () => $this->create_by == Auth::id() ? 'sender' : 'receiver'
         );
     }
 	public function creator(): BelongsTo
