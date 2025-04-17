@@ -16,6 +16,7 @@ class Message extends Model
     use SoftDeletes;
 
     protected $table = 'messages';
+    protected $appends = ['create_by_label'];
 
     protected $fillable = [
         'uuid',

@@ -27,7 +27,6 @@ class MessageRepository
     {
         $messages = $this->model
             ->where('chat_id', $chat_id)
-            ->select('uuid', 'message')
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
