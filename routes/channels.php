@@ -24,7 +24,8 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid) {
     return $chatUuid == $uuid;
 });
-//Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid) {
-//    return $groupUuid == $uuid;
-//});
+
+Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid) {
+    return $groupUuid == $uuid;
+});
 

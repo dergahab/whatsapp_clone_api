@@ -20,8 +20,7 @@ class GroupMessageController extends Controller
     {
 	    DB::beginTransaction();
         try {
-        $data=$request->validationData();
-	    $group = $this->service->store($data);
+        $group = $this->service->store($request);
 	    DB::commit();
 	    return rp_response($group, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
         } catch (\Exception $ex) {

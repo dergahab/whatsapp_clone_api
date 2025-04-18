@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Events;
-
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -13,12 +13,6 @@ class GroupNewMessageSendedEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $data;
-
-    /**
-     * Create a new event instance.
-     */
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
     public $groupUuid;
 
     public function __construct($data, $groupUuid)
@@ -30,7 +24,7 @@ class GroupNewMessageSendedEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('message.'.$this->groupUuid),
+            new Channel('message.' . $this->groupUuid),
         ];
     }
 

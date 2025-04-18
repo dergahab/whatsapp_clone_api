@@ -12,11 +12,12 @@
 	class GroupMessageService
 	{
 		public function __construct(public GroupMessageRepository $repository) {}
-        public function store(array $data): Message
+        public function store(StoreRequest $request): Message
         {
+            $data=$request->validationData();
             $message = $this->repository->store($data);
             $showdata = $this->repository->show($message->uuid)->toArray();
-            event(new GroupNewMessageSendedEvent( $showdata,$data['group_id']));
+            event(new GroupNewMessageSendedEvent($showdata, rp_id_to_uuid(Group::class,$request->input('group_id'))));
             return $message;
         }
 
