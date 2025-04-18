@@ -24,11 +24,13 @@ class MessageService
 
     public function store(StoreRequest $request): Message
     {
-        $message = $this->repository->store($request->validatedData());
-        $data = $this->repository->show($message->uuid)->toArray();
-        event(new ChatNewMessageSendedEvent($data, rp_id_to_uuid(Chat::class, $request->chat_id)));
+        $data = $request->validationData();
+        $message = $this->repository->store($data);
+        $showdata = $this->repository->show($message->uuid)->toArray();
+        event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
         return $message;
     }
+
 
     public function show(ShowRequest $request)
     {

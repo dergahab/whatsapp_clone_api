@@ -12,17 +12,8 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'chat_id' => [
-                'required',
-                'uuid',
-                'exists:'.rp_get_table(Chat::class).',uuid',
-            ],
-            'message' => [
-                'required',
-                'string',
-                'max:255',
-                'min:1',
-            ],
+            'chat_id' => ['required','uuid','exists:'.rp_get_table(Chat::class).',uuid',],
+            'message' => ['required','string','max:255','min:1',],
         ];
     }
 
@@ -34,8 +25,8 @@ class StoreRequest extends BaseRequest
         ]);
     }
 
-    public function validatedData()
+    public function validationData()
     {
-        return collect($this)->only(app(Message::class)->getFillable())->all();
+        return $this->only(app(Message::class)->getfillable());
     }
 }

@@ -23,7 +23,7 @@ class StoreRequest extends BaseRequest
 	{
 		$this->merge([
 			'group_id' => rp_uuid_to_id(Group::class, $this->input('group_id')),
-			"create_by" => Auth::user()?->id,
+			"create_by" => Auth::id(),
 		]);
 	}
 
