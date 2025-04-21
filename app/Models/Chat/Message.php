@@ -2,6 +2,7 @@
 
 namespace App\Models\Chat;
 
+use App\Models\Attachments;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -83,4 +84,10 @@ class Message extends Model
             get: fn ($value) => Carbon::parse($value)->format('Y-m-d H:i:s')
         );
     }
+
+    public function attachments()
+    {
+        return $this->hasOne(Attachments::class);
+    }
+
 }

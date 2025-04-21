@@ -8,19 +8,24 @@ use App\Http\Requests\Message\ShowAllMessageRequest;
 use App\Http\Requests\Message\ShowRequest;
 use App\Http\Requests\Message\StoreRequest;
 use App\Http\Requests\Message\UpdateRequest;
+use App\Services\Attachment\AttachmentService;
 use App\Services\Message\MessageService;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
-    public function __construct(public MessageService $service) {}
+    public function __construct(public MessageService $service,public AttachmentService $attachmentService) {}
 
     public function store(StoreRequest $request)
     {
         DB::beginTransaction();
         try {
-            $this->service->store($request);
+           $message=$this->service->store($request);
+            $file = $request->file('file',$message->id);
+            if ($file) {
+                $this->attachmentService->store($file);
+            }
             DB::commit();
 
             return rp_response([], __('DataCreatedSuccessfully'), Response::HTTP_CREATED);

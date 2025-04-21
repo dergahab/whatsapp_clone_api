@@ -15,7 +15,8 @@ class StoreRequest extends BaseRequest
     {
         return [
             "group_id" =>[ "nullable", "uuid", "exists:".rp_get_table(Group::class).",uuid"],
-	        "message" => ["required", "string"],
+	        "message" => ["nullable", "string"],
+            'file'=>['nullable','file','max:10240']
         ];
     }
 
