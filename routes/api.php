@@ -7,6 +7,7 @@ use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Group\GroupController;
 use App\Http\Controllers\Group\GroupMessageController;
 use App\Http\Controllers\Message\MessageController;
+use App\Http\Controllers\Vault\PasswordController;
 use App\Http\Controllers\Sidebar\SidebarController;
 use App\Http\Controllers\Users\UsersController;
 use Illuminate\Http\Request;
@@ -66,4 +67,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
    //SidebarController
     Route::get('sidebar', SidebarController::class);
+    // PasswordController
+    Route::apiResource('credentials', PasswordController::class);
 });
