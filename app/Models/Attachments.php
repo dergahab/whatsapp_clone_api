@@ -2,11 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Chat\Message;
 
-class Attachments extends Model
+class Attachments extends Base
 {
-    use HasFactory;
+    protected $table = 'attachments';
+
+    protected $fillable = [
+        'message_id',
+        'attachment_type',
+        'name',
+        'path',
+        'size'
+    ];
+
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
+
+    public function messages()
+    {
+        return $this->belongsTo(Message::class);
+    }
+
 
 }

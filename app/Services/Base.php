@@ -19,6 +19,16 @@ class Base
         return 'storage/'.$fileName;
     }
 
+    function exampl()
+    {
+
+//        return [
+//            'name' => $file->getname()
+//        ]
+    }
+
+
+
     public function fileDeleteStorage($filePath)
     {
         $relativePath = Str::replaceFirst('storage/', '', $filePath);
