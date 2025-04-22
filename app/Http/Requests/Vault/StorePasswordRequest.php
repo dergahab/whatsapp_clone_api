@@ -15,7 +15,7 @@ class StorePasswordRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'credential' => 'required|string',
+            'credential' => 'required|array',
             'title' => 'nullable|string|max:50',
             'description' => 'nullable|string|max:800',
         ];

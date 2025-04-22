@@ -6,6 +6,7 @@ use App\Http\Requests\Vault\DestroyPasswordRequest;
 use App\Http\Requests\Vault\StorePasswordRequest;
 use App\Repositories\Vault\PasswordRepository;
 use App\Http\Requests\Vault\UpdateRequest;
+use App\Http\Requests\Vault\IndexRequest;
 use App\Http\Requests\Vault\ShowRequest;
 use Illuminate\Support\Facades\Crypt;
 
@@ -15,9 +16,9 @@ class PasswordService
     {
     }
 
-    public function index()
+    public function index(IndexRequest $request)
     {
-        return $this->repository->index();
+        return $this->repository->index($request->search);
     }
 
     public function store(StorePasswordRequest $request)

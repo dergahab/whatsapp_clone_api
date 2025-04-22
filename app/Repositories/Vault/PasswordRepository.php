@@ -13,11 +13,18 @@ class PasswordRepository
         $this->model = new Password();
     }
 
-    public function index()
+    public function index($search = null)
     {
-        return $this->model->all();
+        return $this->model
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%')
+                        ->orWhere('description', 'like', '%' . $search . '%');
+                });
+            })
+            ->get();
     }
-    
+
     public function store(array $data): Password
     {
         return $this->model->create($data);
@@ -25,7 +32,7 @@ class PasswordRepository
 
     public function show($uuid): ?Password
     {
-        return $this->model->where( 'uuid', $uuid)->first();
+        return $this->model->where('uuid', $uuid)->first();
     }
 
     public function update(array $data, $uuid)
