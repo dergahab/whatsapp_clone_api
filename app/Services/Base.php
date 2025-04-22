@@ -15,16 +15,33 @@ class Base
         $directory = 'uploads/files/'.$directory;
         $fileName = "{$directory}/{$slugifiedName}_{$timestamp}.{$extension}";
         $file->storeAs('public', $fileName);
-
         return 'storage/'.$fileName;
     }
 
-    function exampl()
+    public function getFileInfo($file)
     {
+        $path=$this->fileUploadStorage($file,'file');
+        $originalName = str_replace(' ', '', $file->getClientOriginalName());
+        $extension = strtolower($file->getClientOriginalExtension());
+        if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'])) {
+            $type = 'image';
+        } elseif ($extension === 'pdf') {
+            $type = 'pdf';
+        } elseif (in_array($extension, ['doc', 'docx'])) {
+            $type = 'word';
+        } elseif (in_array($extension, ['xls', 'xlsx'])) {
+            $type = 'excel';
+        } else {
+            $type = 'other';
+        }
+        $sizeInKB = round($file->getSize() / 1024, 2);
 
-//        return [
-//            'name' => $file->getname()
-//        ]
+        return [
+            'attachment_type' => $type,
+            'name' => $originalName,
+            'size' => $sizeInKB,
+            'path'=>$path
+        ];
     }
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Group;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupMessage\ShowAllMessageRequest;
 use App\Http\Requests\GroupMessage\StoreRequest;
+use App\Services\Attachment\AttachmentService;
 use App\Services\Group\GroupMessageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class GroupMessageController extends Controller
 {
-	public function __construct(public GroupMessageService $service)
+	public function __construct(public GroupMessageService $service,public AttachmentService $attachmentService)
 	{
 
 	}
@@ -20,9 +21,13 @@ class GroupMessageController extends Controller
     {
 	    DB::beginTransaction();
         try {
-        $group = $this->service->store($request);
+        $message = $this->service->store($request);
+
+        if ($request->file('file')) {
+            $this->attachmentService->store($request->file('file'),$message->id);
+        }
 	    DB::commit();
-	    return rp_response($group, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
+	    return rp_response($message, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
         } catch (\Exception $ex) {
             DB::rollBack();
             return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);

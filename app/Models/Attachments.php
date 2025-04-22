@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Models\Chat\Message;
+use Illuminate\Database\Eloquent\Model;
 
-class Attachments extends Base
+class Attachments extends Model
 {
     protected $table = 'attachments';
 

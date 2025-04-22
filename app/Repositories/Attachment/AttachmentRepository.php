@@ -8,10 +8,9 @@ class AttachmentRepository
 {
     public function __construct(public Attachments $model) {}
 
-    public function store($file)
+    public function store($fileInfo)
     {
-        dd($file);
-        return $this->model->create($file);
+        return $this->model->create($fileInfo);
     }
 
 }

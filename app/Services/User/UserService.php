@@ -25,7 +25,6 @@ class UserService extends Base
         if ($request->file('profile_picture')) {
             $groupdata['profile_picture'] = $this->fileUploadStorage($request->file('profile_picture'), 'user');
         }
-
         return $this->repositories->store($groupdata);
     }
 

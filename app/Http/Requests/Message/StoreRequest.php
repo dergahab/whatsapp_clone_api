@@ -12,8 +12,16 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'chat_id' => ['required','uuid',Rule::exists(rp_get_table(Chat::class), 'uuid')->whereNull('deleted_at'),],
-            'message' => ['nullable', 'string', 'max:255', 'min:1'],
+            'chat_id' => [
+                'required',
+                'uuid',
+                Rule::exists(rp_get_table(Chat::class), 'uuid')->whereNull('deleted_at'),
+            ],
+            'message' => [
+                Rule::requiredIf(function () {
+                    return !$this->hasFile('file');
+                }),
+            ],
             'file' => ['nullable', 'file', 'max:10240'],
         ];
     }
