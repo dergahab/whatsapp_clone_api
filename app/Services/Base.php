@@ -49,14 +49,13 @@ class Base
     public function fileDeleteStorage($filePath)
     {
         $relativePath = Str::replaceFirst('storage/', '', $filePath);
-        $fullPath = storage_path('app/public/'.$relativePath);
-
-        if (file_exists($fullPath)) {
+        $fullPath = storage_path('app/public/' . $relativePath);
+        if (file_exists($fullPath) && is_file($fullPath)) {
             unlink($fullPath);
-
             return true;
         }
-
         return false;
     }
+
+
 }
