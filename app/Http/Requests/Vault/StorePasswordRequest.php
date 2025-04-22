@@ -4,6 +4,7 @@ namespace App\Http\Requests\Vault;
 
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\BaseRequest;
+use App\Models\Vault\Password;
 
 class StorePasswordRequest extends BaseRequest
 {
@@ -15,17 +16,23 @@ class StorePasswordRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'credential' => 'required|string',
+            'credential' => 'required|array',
             'title' => 'nullable|string|max:50',
             'description' => 'nullable|string|max:800',
         ];
     }
 
+    public function passedValidation()
+    {
+        $credential =  $this->input('credential') ? json_encode($this->input('credential')) : null;
+        $this->merge([
+            'credential' => Crypt::encrypt($credential),
+        ]);
+    }
+
     public function validatedData()
     {
-        $validated = $this->validated(); //Crypt::encrypt
-        $validated['credential'] = Crypt::encrypt($this->input('credential'));
+        return $this->only(app(Password::class)->getfillable());
 
-        return $validated;
     }
 }

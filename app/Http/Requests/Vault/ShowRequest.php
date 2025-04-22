@@ -13,4 +13,5 @@ class ShowRequest extends BaseRequest
             'uuid' => ['required', 'uuid', 'exists:' . rp_get_table(Password::class) . ',uuid'],
         ];
     }
+    
 }
