@@ -19,8 +19,8 @@ class MessageController extends Controller
 
     public function store(StoreRequest $request)
     {
-//        DB::beginTransaction();
-//        try {
+        DB::beginTransaction();
+        try {
            $message=$this->service->store($request);
             if ($request->file('file')) {
                 $this->attachmentService->store($request->file('file'),$message->id);
@@ -29,11 +29,11 @@ class MessageController extends Controller
 
             return rp_response([], __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
 
-//        } catch (\Exception $ex) {
-//            DB::rollBack();
-//
-//            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-//        }
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function show(ShowRequest $request)
