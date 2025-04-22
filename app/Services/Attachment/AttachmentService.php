@@ -2,17 +2,18 @@
 
 namespace App\Services\Attachment;
 
-
-use App\Http\Requests\Message\StoreRequest;
 use App\Repositories\Attachment\AttachmentRepository;
+use App\Services\Base;
 
-class AttachmentService
+class AttachmentService extends Base
 {
     public function __construct(public AttachmentRepository $repository) {}
 
-    public function store($file)
+    public function store($file,$message_id)
     {
-        $this->repository->store($file);
+        $fileInfo=$this->getFileInfo($file);
+        $fileInfo['message_id'] = $message_id;
+        $this->repository->store($fileInfo);
     }
 
 }

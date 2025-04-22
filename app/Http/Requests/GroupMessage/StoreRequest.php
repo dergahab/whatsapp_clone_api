@@ -7,6 +7,7 @@ use App\Models\Chat\Group;
 use App\Models\Chat\Message;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends BaseRequest
 {
@@ -14,8 +15,12 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            "group_id" =>[ "nullable", "uuid", "exists:".rp_get_table(Group::class).",uuid"],
-	        "message" => ["nullable", "string"],
+            "group_id" =>["required","uuid", "exists:".rp_get_table(Group::class).",uuid"],
+            'message' => [
+                Rule::requiredIf(function () {
+                    return !$this->hasFile('file');
+                }),
+            ],
             'file'=>['nullable','file','max:10240']
         ];
     }
