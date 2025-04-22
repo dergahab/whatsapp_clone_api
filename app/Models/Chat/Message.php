@@ -91,4 +91,7 @@ class Message extends Model
         return $this->hasOne(Attachments::class,'message_id','id');
     }
 
+
+
+
 }

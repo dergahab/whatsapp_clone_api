@@ -25,8 +25,10 @@ class MessageRepository
 
     public function showAllMessages($chat_id, $page = 1): array
     {
+        $this->changeMessageStatus($chat_id,2);
         $messages = $this->model
             ->where('chat_id', $chat_id)
+            ->with('creator','attachment')
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
@@ -44,5 +46,12 @@ class MessageRepository
     public function destroy($uuid)
     {
         return $this->model->where('uuid', $uuid)->delete();
+    }
+
+    public function changeMessageStatus($chat_id,$status)
+    {
+            $this->model
+            ->where('chat_id', $chat_id)
+            ->update(['status' =>$status]);
     }
 }

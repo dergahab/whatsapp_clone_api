@@ -14,13 +14,14 @@ class GroupMessageRepository
     }
     public function show($uuid): ?Message
     {
-        return $this->model->where('uuid', $uuid)->with('creator')->first();
+        return $this->model->where('uuid', $uuid)->with('creator','attachment')->first();
     }
     public function showAllMessages($group_id, $page = 1): array
     {
+        $this->changeMessageStatus($group_id,2);
         $messages = $this->model
             ->where('group_id', $group_id)
-            ->with('creator')
+            ->with('creator','attachment')
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
@@ -33,5 +34,12 @@ class GroupMessageRepository
             'to' => $messages->lastItem(),
             'total' => $messages->total(),
         ];
+    }
+
+    public function changeMessageStatus($group_id,$status)
+    {
+        $this->model
+            ->where('group_id', $group_id)
+            ->update(['status' =>$status]);
     }
 }

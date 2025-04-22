@@ -25,7 +25,6 @@ class ChatService
     {
         if ($this->repository->findChat($data)) {
             $data = $this->messageRepository->showAllMessages($this->repository->findChat($data));
-
             return rp_response(data: $data, status: Response::HTTP_CREATED);
         }
         $data = $this->repository->store($data);
