@@ -12,7 +12,6 @@ use App\Services\Vault\PasswordService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-
 class PasswordController extends Controller
 {
     public function __construct(public PasswordService $service)
