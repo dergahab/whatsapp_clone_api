@@ -23,6 +23,7 @@ class PasswordService
 
     public function store(StorePasswordRequest $request)
     {
+        // dd($request->validatedData());
         $password = $request->validatedData();
         return $this->repository->store($password);
     }
@@ -30,8 +31,8 @@ class PasswordService
     public function show(ShowRequest $request)
     {
         $password = $this->repository->show($request->uuid);
-        $password->credential = rescue(fn() => Crypt::decrypt(optional($password)->credential), null);
-
+        $password->credential = rescue(fn() => json_decode(Crypt::decrypt(optional($password)->credential)), null);
+        
         return $password;
     }
 
