@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -85,9 +86,9 @@ class Message extends Model
         );
     }
 
-    public function attachments()
+    public function attachment():HasOne
     {
-        return $this->hasOne(Attachments::class);
+        return $this->hasOne(Attachments::class,'message_id','id');
     }
 
 }
