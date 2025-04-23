@@ -62,6 +62,6 @@ class Chat extends Base
 
 	public function unread_messages(): HasMany
 	{
-		return $this->hasMany(Message::class, 'chat_id', 'id')->where('status', 1);
+		return $this->hasMany(Message::class, 'chat_id', 'id')->whereIn('status', [0,1]);
 	}
 }
