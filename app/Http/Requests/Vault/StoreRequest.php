@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\BaseRequest;
 use App\Models\Vault\Password;
 
-class StorePasswordRequest extends BaseRequest
+class StoreRequest extends BaseRequest
 {
     public function authorize(): bool
     {

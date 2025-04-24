@@ -2,17 +2,17 @@
 
 namespace App\Services\Vault;
 
-use App\Http\Requests\Vault\DestroyPasswordRequest;
-use App\Http\Requests\Vault\StorePasswordRequest;
-use App\Repositories\Vault\PasswordRepository;
+use App\Repositories\Vault\CredentialsRepository;
+use App\Http\Requests\Vault\DestroyRequest;
+use App\Http\Requests\Vault\StoreRequest;
 use App\Http\Requests\Vault\UpdateRequest;
 use App\Http\Requests\Vault\IndexRequest;
 use App\Http\Requests\Vault\ShowRequest;
 use Illuminate\Support\Facades\Crypt;
 
-class PasswordService
+class CredentialsService
 {
-    public function __construct(public PasswordRepository $repository)
+    public function __construct(public CredentialsRepository $repository)
     {
     }
 
@@ -21,9 +21,8 @@ class PasswordService
         return $this->repository->index($request->search);
     }
 
-    public function store(StorePasswordRequest $request)
+    public function store(StoreRequest $request)
     {
-        // dd($request->validatedData());
         $password = $request->validatedData();
         return $this->repository->store($password);
     }
@@ -32,7 +31,7 @@ class PasswordService
     {
         $password = $this->repository->show($request->uuid);
         $password->credential = rescue(fn() => json_decode(Crypt::decrypt(optional($password)->credential)), null);
-        
+
         return $password;
     }
 
@@ -43,7 +42,7 @@ class PasswordService
         return $this->repository->update($data, $uuid);
     }
 
-    public function destroy(DestroyPasswordRequest $request)
+    public function destroy(DestroyRequest $request)
     {
         return $this->repository->destroy($request->uuid);
     }

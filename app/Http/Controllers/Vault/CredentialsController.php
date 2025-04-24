@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Vault;
 
-use App\Http\Requests\Vault\DestroyPasswordRequest;
-use App\Http\Requests\Vault\StorePasswordRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\Vault\DestroyRequest;
 use App\Http\Requests\Vault\UpdateRequest;
 use App\Http\Requests\Vault\IndexRequest;
+use App\Http\Requests\Vault\StoreRequest;
 use App\Http\Requests\Vault\ShowRequest;
-use App\Services\Vault\PasswordService;
+use App\Services\Vault\CredentialsService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class PasswordController extends Controller
+class CredentialsController extends Controller
 {
-    public function __construct(public PasswordService $service)
+    public function __construct(public CredentialsService $service)
     {
     }
 
@@ -28,7 +28,7 @@ class PasswordController extends Controller
         }
     }
 
-    public function store(StorePasswordRequest $request)
+    public function store(StoreRequest $request)
     {
         DB::beginTransaction();
         try {
@@ -67,8 +67,7 @@ class PasswordController extends Controller
         }
     }
 
-
-    public function destroy(DestroyPasswordRequest $request)
+    public function destroy(DestroyRequest $request)
     {
         DB::beginTransaction();
         try {
