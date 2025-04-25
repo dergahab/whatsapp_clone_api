@@ -13,6 +13,7 @@ class Password extends Base
     protected $table = 'passwords';
 
     protected $fillable = [
+        'uuid',
         'credential',
         'title',
         'description',
@@ -27,6 +28,7 @@ class Password extends Base
         'deleted_at',
         'create_by',
         'modify_by',
+        "pivot"
     ];
 
     protected $casts = [
@@ -42,5 +44,12 @@ class Password extends Base
     public function modifier()
     {
         return $this->belongsTo(User::class, 'modify_by');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_passwords')
+            ->withTimestamps()
+            ->withPivot(['uuid']);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Chat\Chat;
+use App\Models\Vault\Password;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,6 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
         'deleted_at',
+        "pivot"
     ];
 
     /**
@@ -54,7 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
 
-        $url = 'https://spa.test/reset-password?token='.$token;
+        $url = 'https://spa.test/reset-password?token=' . $token;
 
         $this->notify(new ResetPasswordNotification($url));
     }
@@ -74,5 +76,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function chatAsUserTwo()
     {
         return $this->hasMany(Chat::class, 'user2');
+    }
+
+    public function passwords()
+    {
+        return $this->belongsToMany(Password::class, 'user_passwords')
+            ->withTimestamps()
+            ->withPivot(['uuid']);
     }
 }

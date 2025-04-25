@@ -5,7 +5,7 @@ namespace App\Http\Requests\Vault;
 use App\Http\Requests\BaseRequest;
 use App\Models\Vault\Password;
 
-class DestroyPasswordRequest extends BaseRequest
+class DestroyRequest extends BaseRequest
 {
     public function authorize(): bool
     {

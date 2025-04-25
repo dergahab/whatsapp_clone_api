@@ -4,7 +4,7 @@ namespace App\Repositories\Vault;
 
 use App\Models\Vault\Password;
 
-class PasswordRepository
+class CredentialsRepository
 {
     protected $model;
 
@@ -37,7 +37,6 @@ class PasswordRepository
 
     public function update(array $data, $uuid)
     {
-        // $data = array_filter($data, fn($value) => !is_null($value));
         $this->model->where('uuid', $uuid)->update($data);
 
         return $this->show($uuid);
