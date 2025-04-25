@@ -1,7 +1,4 @@
 <?php
-
-//use App\Http\Controllers\Api\EmailVerificationController;
-//use App\Http\Controllers\Api\NewPasswordController;
 use App\Http\Controllers\Group\GroupMessageController;
 use App\Http\Controllers\Vault\MenageCredentialsController;
 use App\Http\Controllers\Vault\CredentialsController;
@@ -70,7 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('sidebar', SidebarController::class);
     // CredentialsController
     Route::apiResource('credentials', CredentialsController::class);
-    // AdminPasswordController
-    Route::apiResource('menage/credentials', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid']);;
+//    // AdminPasswordController
+//    Route::apiResource('menage/credentials', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid']);
 
 });

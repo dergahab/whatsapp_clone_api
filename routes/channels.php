@@ -1,5 +1,6 @@
 <?php
 
+use App\Repositories\Message\MessageRepository;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -21,8 +22,15 @@ use Illuminate\Support\Facades\Broadcast;
 //
 //	return true;
 // });
-Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid) {
-    return $chatUuid == $uuid;
+
+Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid,MessageRepository $repository) {
+    if( $chatUuid == $uuid){
+        $repository->changeMessageStatus($chatUuid, 2);
+        return true;
+    }else {
+        return false;
+    }
+
 });
 
 Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid) {
