@@ -20,7 +20,7 @@ class Base
 
     public function getFileInfo($file)
     {
-        $path=$this->fileUploadStorage($file,'file');
+        $path=$this->fileUploadStorage($file,'uploads');
         $originalName = str_replace(' ', '', $file->getClientOriginalName());
         $extension = strtolower($file->getClientOriginalExtension());
         if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'])) {
@@ -43,8 +43,6 @@ class Base
             'path'=>$path
         ];
     }
-
-
 
     public function fileDeleteStorage($filePath)
     {

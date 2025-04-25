@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Chat\Message;
+use App\Models\User;
+use App\Notifications\MessageSentNotification;
+use App\Repositories\Group\GroupMessageRepository;
 use App\Repositories\Message\MessageRepository;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -23,17 +27,30 @@ use Illuminate\Support\Facades\Broadcast;
 //	return true;
 // });
 
-Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid,MessageRepository $repository) {
-    if( $chatUuid == $uuid){
+Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepository $repository) {
+    if ($chatUuid == $uuid) {
         $repository->changeMessageStatus($chatUuid, 2);
         return true;
-    }else {
-        return false;
     }
-
+//    elseif ($chatUuid != $uuid)
+//    {
+//        $message = Message::where('chat_id', $chatUuid)->latest()->first();
+//        $recipient = User::where('chat_uuid', $chatUuid)->first();
+//        if ($recipient) {
+//            $recipient->notify(new MessageSentNotification($message->content));
+//        }
+//    }
+    return false;
 });
 
-Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid) {
-    return $groupUuid == $uuid;
+
+Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid,GroupMessageRepository $repository) {
+    if ($groupUuid == $uuid) {
+        $repository->changeMessageStatus($groupUuid, 2);
+        return true;
+    }
+    else{
+         return  false;
+    }
 });
 
