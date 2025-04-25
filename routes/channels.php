@@ -32,13 +32,14 @@ Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepo
         $repository->changeMessageStatus($chatUuid, 2);
         return true;
     }
-    $message = Message::where('chat_id', $chatUuid)->latest()->first();
-    if ($message) {
-        $recipient = User::where('chat_uuid', $chatUuid)->first();
-        if ($recipient) {
-            $recipient->notify(new MessageSentNotification($message->content));
-        }
-    }
+//    elseif ($chatUuid != $uuid)
+//    {
+//        $message = Message::where('chat_id', $chatUuid)->latest()->first();
+//        $recipient = User::where('chat_uuid', $chatUuid)->first();
+//        if ($recipient) {
+//            $recipient->notify(new MessageSentNotification($message->content));
+//        }
+//    }
     return false;
 });
 
