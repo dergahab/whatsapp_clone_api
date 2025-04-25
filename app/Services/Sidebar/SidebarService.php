@@ -3,7 +3,6 @@
 namespace App\Services\Sidebar;
 
 use App\Http\Requests\Sidebar\SearchRequest;
-use App\Repositories\Sidebar\SidebarRepository;
 use App\Services\Chat\ChatService;
 use App\Services\Group\GroupService;
 
