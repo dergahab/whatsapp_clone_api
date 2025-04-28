@@ -35,7 +35,6 @@ class MessageService
         return $message;
     }
 
-
     public function show(ShowRequest $request)
     {
         return $this->repository->show($request->uuid);
