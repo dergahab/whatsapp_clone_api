@@ -14,7 +14,7 @@ class GroupMessageRepository
     }
     public function show($uuid): ?Message
     {
-        return $this->model->where('uuid', $uuid)->with('creator','attachment')->first();
+        return $this->model->where('uuid', $uuid)->with(['creator', 'attachment'])->first();
     }
     public function showAllMessages($group_id, $page = 1): array
     {
