@@ -69,10 +69,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('credentials', CredentialsController::class);
 
 });
-
-// AdminPasswordController
-// Route::apiResource('menage/credential', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid'])->middleware(['auth:sanctum']);
-
+// MenageCredentialsController
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('menage/credential', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid']);
 });

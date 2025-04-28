@@ -44,7 +44,6 @@ class CredentialsRepository
     public function update(array $data, $uuid)
     {
         $this->model->where('uuid', $uuid)->update($data);
-
         return $this->show($uuid);
     }
 

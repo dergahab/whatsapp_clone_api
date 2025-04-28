@@ -53,9 +53,7 @@ class CredentialsController extends Controller
     {
         try {
             $this->authorize('show', User::class);
-
             $password = $this->service->show($request);
-
             return rp_response(data: $password, message: Response::HTTP_OK);
         } catch (AuthorizationException $e) {
             return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
@@ -71,13 +69,11 @@ class CredentialsController extends Controller
             $this->authorize('update', User::class);
             $password = $this->service->update($request, $uuid);
             DB::commit();
-
             return rp_response($password, __('PasswordUpdatedSuccessfully'), Response::HTTP_CREATED);
         } catch (AuthorizationException $e) {
             return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
         } catch (\Exception $ex) {
             DB::rollBack();
-
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

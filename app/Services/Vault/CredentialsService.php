@@ -4,9 +4,9 @@ namespace App\Services\Vault;
 
 use App\Repositories\Vault\CredentialsRepository;
 use App\Http\Requests\Vault\DestroyRequest;
-use App\Http\Requests\Vault\StoreRequest;
 use App\Http\Requests\Vault\UpdateRequest;
 use App\Http\Requests\Vault\IndexRequest;
+use App\Http\Requests\Vault\StoreRequest;
 use App\Http\Requests\Vault\ShowRequest;
 use Illuminate\Support\Facades\Crypt;
 
@@ -31,14 +31,12 @@ class CredentialsService
     {
         $password = $this->repository->show($request->uuid);
         $password->credential = rescue(fn() => json_decode(Crypt::decrypt(optional($password)->credential)), null);
-
         return $password;
     }
 
     public function update(UpdateRequest $request, $uuid)
     {
         $data = $request->validatedData();
-
         return $this->repository->update($data, $uuid);
     }
 

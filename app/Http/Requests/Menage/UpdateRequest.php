@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Menage;
 
 use App\Http\Requests\BaseRequest;
-use App\Models\Vault\UserPassword;
+use App\Models\Vault\Password;
 use App\Models\User;
 
 
@@ -14,7 +14,7 @@ class UpdateRequest extends BaseRequest
         return [
             'user_id' => ['required', "uuid", 'exists:' . rp_get_table(User::class) . ',uuid'],
             'credentials' => ['required', 'array', 'min:1'],
-            'credentials.*.password_id' => ['required', 'uuid', 'distinct', 'exists:' . rp_get_table(UserPassword::class) . ',uuid'],
+            'credentials.*.password_id' => ['required', 'uuid', 'distinct', 'exists:' . rp_get_table(Password::class) . ',uuid'],
         ];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Requests\Vault;
 
-use App\Http\Requests\BaseRequest;
 use Illuminate\Support\Facades\Crypt;
+use App\Http\Requests\BaseRequest;
 
 class UpdateRequest extends BaseRequest
 {

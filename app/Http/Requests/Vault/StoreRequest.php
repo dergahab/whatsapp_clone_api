@@ -24,7 +24,7 @@ class StoreRequest extends BaseRequest
 
     public function passedValidation()
     {
-        $credential =  $this->input('credential') ? json_encode($this->input('credential')) : null;
+        $credential = $this->input('credential') ? json_encode($this->input('credential')) : null;
         $this->merge([
             'credential' => Crypt::encrypt($credential),
         ]);

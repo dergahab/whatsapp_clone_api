@@ -3,9 +3,8 @@
 namespace App\Policies;
 
 
-use App\Models\User;
-use App\Models\Vault\Password;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\User;
 
 class CredentialsPolicy
 {

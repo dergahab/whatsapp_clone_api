@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Closure;
 
 class MenageCredentialMiddleware
 {
@@ -18,9 +18,8 @@ class MenageCredentialMiddleware
     {
         $type = auth()->user()->type;
         if ($type == 'user') {
-            return rp_response( ['message' => 'Unauthorized'], 403);
+            return rp_response(['message' => 'Unauthorized'], 403);
         }
-
         return $next($request);
     }
 }
