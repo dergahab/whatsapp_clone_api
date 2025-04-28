@@ -22,6 +22,12 @@ class CredentialsRepository
                         ->orWhere('description', 'like', '%' . $search . '%');
                 });
             })
+            ->when(auth()->user()->type === 0, function ($query) {
+                $query->whereHas('users', function ($q) {
+                    $q->where('user_id', auth()->user()->id);
+                });
+            })
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 

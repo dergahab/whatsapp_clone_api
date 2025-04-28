@@ -9,7 +9,7 @@ class UserRepository implements UserRepositoryİnterface
 {
     public function index($search = null): array
     {
-        return User::select('uuid', 'name', 'profile_picture')
+        return User::select('uuid', 'name', 'profile_picture','type')
             ->where('uuid', '!=', Auth::id())
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");

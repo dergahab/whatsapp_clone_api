@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\DB;
 
 class MenageCredentialsController extends Controller
 {
-    public function __construct(private MenageCredentialsService $service) {}
+    public function __construct(private MenageCredentialsService $service)
+    {
+        $this->middleware('admin');
+    }
 
     public function index()
     {
@@ -38,7 +41,7 @@ class MenageCredentialsController extends Controller
         }
     }
 
-    public function update(UpdateRequest $request)
+    public function update(UpdateRequest $request, $uuid)
     {
         DB::beginTransaction();
         try {
@@ -56,7 +59,7 @@ class MenageCredentialsController extends Controller
         try {
             $password = $this->service->show($request);
 
-            return rp_response( $password, message: Response::HTTP_OK);
+            return rp_response($password, message: Response::HTTP_OK);
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

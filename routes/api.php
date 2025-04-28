@@ -56,18 +56,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
     Route::post('add-user', [GroupController::class, 'addUser']);
     //GroupMessageController
-    Route::apiResource('group-messages', GroupMessageController::class)->except('index','show', 'update','destroy');
+    Route::apiResource('group-messages', GroupMessageController::class)->except('index', 'show', 'update', 'destroy');
     Route::get('/group/messages', [GroupMessageController::class, 'show_messages']);
     //ChatController
     Route::apiResource('chats', ChatController::class)->except(['update', 'index'])->parameters(['chat' => 'uuid']);
-   //MessageController
+    //MessageController
     Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
-   //SidebarController
+    //SidebarController
     Route::get('sidebar', SidebarController::class);
     // CredentialsController
     Route::apiResource('credentials', CredentialsController::class);
-//    // AdminPasswordController
-    Route::apiResource('menage/credential', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid']);
 
+});
+
+// AdminPasswordController
+// Route::apiResource('menage/credential', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid'])->middleware(['auth:sanctum']);
+
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::apiResource('menage/credential', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid']);
 });
