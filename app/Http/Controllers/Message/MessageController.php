@@ -15,16 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
-    public function __construct(public MessageService $service,public AttachmentService $attachmentService) {}
+    public function __construct(public MessageService $service) {}
 
     public function store(StoreRequest $request)
     {
         DB::beginTransaction();
         try {
            $message=$this->service->store($request);
-            if ($request->file('file')) {
-                $this->attachmentService->store($request->file('file'),$message->id);
-            }
             DB::commit();
 
             return rp_response([], __('DataCreatedSuccessfully'), Response::HTTP_CREATED);

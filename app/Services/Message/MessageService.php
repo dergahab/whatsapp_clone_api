@@ -11,11 +11,12 @@ use App\Http\Requests\Message\UpdateRequest;
 use App\Models\Chat\Chat;
 use App\Models\Chat\Message;
 use App\Repositories\Message\MessageRepository;
+use App\Services\Attachment\AttachmentService;
 use Illuminate\Http\Request;
 
 class MessageService
 {
-    public function __construct(public MessageRepository $repository) {}
+    public function __construct(public MessageRepository $repository,public AttachmentService $attachmentService) {}
 
     public function index(Request $request)
     {
@@ -26,11 +27,13 @@ class MessageService
     {
         $data = $request->validationData();
         $message = $this->repository->store($data);
+        if ($request->file('file')) {
+            $this->attachmentService->store($request->file('file'),$message->id);
+        }
         $showdata = $this->repository->show($message->uuid)->toArray();
         event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
         return $message;
     }
-
 
     public function show(ShowRequest $request)
     {
