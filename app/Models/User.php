@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -29,6 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'type',
+
     ];
 
     /**
@@ -41,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
         'deleted_at',
-        "pivot"
+        "pivot",
     ];
 
     /**
@@ -83,5 +86,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Password::class, 'user_passwords')
             ->withTimestamps()
             ->withPivot(['uuid']);
+    }
+
+    protected function type(): Attribute
+    {
+        return Attribute::make(
+            get: function($value) {
+                return $value == 0 ? 'user' : 'admin';
+            }
+        );
     }
 }
