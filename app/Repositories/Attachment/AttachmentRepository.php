@@ -12,5 +12,4 @@ class AttachmentRepository
     {
         return $this->model->create($fileInfo);
     }
-
 }

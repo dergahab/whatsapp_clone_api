@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Base
 {
@@ -55,5 +57,13 @@ class Base
         return false;
     }
 
+    public function fileDownloads($filePath)
+    {
+        $relativePath = str_replace('storage/', '', $filePath);
+        if (Storage::disk('public')->exists($relativePath)) {
+            return Storage::disk('public')->download($relativePath);
+        } else
+           return false;
+    }
 
 }
