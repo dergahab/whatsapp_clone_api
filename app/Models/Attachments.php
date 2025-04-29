@@ -6,7 +6,7 @@ use App\Models\Chat\Message;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Attachments extends Model
+class Attachments extends Base
 {
     protected $table = 'attachments';
 

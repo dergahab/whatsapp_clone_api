@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Attachment\AttachmentController;
 use App\Http\Controllers\Group\GroupMessageController;
 use App\Http\Controllers\Vault\MenageCredentialsController;
 use App\Http\Controllers\Vault\CredentialsController;
@@ -65,6 +67,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
    //SidebarController
     Route::get('sidebar', SidebarController::class);
+    //AttachmentController
+    Route::get('fileDownload', [AttachmentController::class,'fileDownload']);
     // CredentialsController
     Route::apiResource('credentials', CredentialsController::class);
 //    // AdminPasswordController

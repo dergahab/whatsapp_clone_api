@@ -15,5 +15,9 @@ class AttachmentService extends Base
         $fileInfo['message_id'] = $message_id;
         $this->repository->store($fileInfo);
     }
+    public function fileDownload()
+    {
+      return $this->repository->fileDownload();
+    }
 
 }

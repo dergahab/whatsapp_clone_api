@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Base
 {
@@ -55,5 +57,10 @@ class Base
         return false;
     }
 
+    public function fileDownload($filePath): StreamedResponse
+    {
+        $relativePath = str_replace('storage/', '', $filePath);
+        return Storage::disk('public')->download($relativePath);
+    }
 
 }
