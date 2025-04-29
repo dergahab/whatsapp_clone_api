@@ -17,14 +17,15 @@ class StoreRequest extends BaseRequest
     {
         return [
             'credential' => 'required|array',
-            'title' => 'required|string|max:50',
+            'title' => 'nullable|string|max:50',
             'description' => 'nullable|string|max:800',
         ];
     }
 
     public function passedValidation()
     {
-        $credential = $this->input('credential') ? json_encode($this->input('credential')) : null;
+        // $credential = $this->input('credential') ? json_encode($this->input('credential')) : null;
+        $credential = $this->input('credential') ? $this->input('credential') : null;
         $this->merge([
             'credential' => Crypt::encrypt($credential),
         ]);
