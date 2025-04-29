@@ -9,8 +9,8 @@ class UpdateRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'credential' => ['nullable', 'string', 'max:255'],
-            'title' => ['nullable', 'string', 'max:50'],
+            'credential' => ['required', 'array'],
+            'title' => ['required', 'string', 'max:50'],
             'description' => ['nullable', 'string', 'max:800'],
         ];
     }

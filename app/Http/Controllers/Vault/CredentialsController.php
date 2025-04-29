@@ -49,7 +49,7 @@ class CredentialsController extends Controller
         }
     }
 
-    public function show(ShowRequest $request, $credential)
+    public function show(ShowRequest $request)
     {
         try {
             $this->authorize('show', User::class);

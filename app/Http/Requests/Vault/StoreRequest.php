@@ -17,7 +17,7 @@ class StoreRequest extends BaseRequest
     {
         return [
             'credential' => 'required|array',
-            'title' => 'nullable|string|max:50',
+            'title' => 'required|string|max:50',
             'description' => 'nullable|string|max:800',
         ];
     }

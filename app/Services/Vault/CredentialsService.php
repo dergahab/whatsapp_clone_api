@@ -30,6 +30,13 @@ class CredentialsService
     public function show(ShowRequest $request)
     {
         $password = $this->repository->show($request->uuid);
+
+        dd($password);
+        dd($password->credential);
+        dd(decrypt($password->credential));
+        dd(json_decode(decrypt($password->credential), true));
+
+        
         $password->credential = rescue(fn() => json_decode(Crypt::decrypt(optional($password)->credential)), null);
         return $password;
     }

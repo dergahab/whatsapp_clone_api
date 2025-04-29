@@ -66,7 +66,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //SidebarController
     Route::get('sidebar', SidebarController::class);
     // CredentialsController
-    Route::apiResource('credentials', CredentialsController::class);
+    Route::apiResource('credentials', CredentialsController::class)->parameters(['credentials' => 'uuid']);;
 
 });
 // MenageCredentialsController
