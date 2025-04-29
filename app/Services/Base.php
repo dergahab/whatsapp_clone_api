@@ -57,10 +57,13 @@ class Base
         return false;
     }
 
-    public function fileDownload($filePath): StreamedResponse
+    public function fileDownloads($filePath)
     {
         $relativePath = str_replace('storage/', '', $filePath);
-        return Storage::disk('public')->download($relativePath);
+        if (Storage::disk('public')->exists($relativePath)) {
+            return Storage::disk('public')->download($relativePath);
+        } else
+           return false;
     }
 
 }

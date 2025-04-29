@@ -2,6 +2,7 @@
 
 namespace App\Services\Attachment;
 
+use App\Models\Attachments;
 use App\Repositories\Attachment\AttachmentRepository;
 use App\Services\Base;
 
@@ -15,9 +16,10 @@ class AttachmentService extends Base
         $fileInfo['message_id'] = $message_id;
         $this->repository->store($fileInfo);
     }
-    public function fileDownload()
+    public function fileDownload($uuid)
     {
-      return $this->repository->fileDownload();
+      $filepath= Attachments::where('uuid',$uuid)->value('path');
+      return $this->fileDownloads($filepath);
     }
 
 }
