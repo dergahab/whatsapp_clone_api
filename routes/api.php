@@ -70,7 +70,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //AttachmentController
     Route::post('fileDownload/{uuid}', [AttachmentController::class,'fileDownload']);
     // CredentialsController
-<<<<<<< HEAD
     Route::apiResource('credentials', CredentialsController::class)->parameters(['credentials' => 'uuid']);;
 
 });
@@ -78,12 +77,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('menage/credential', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid']);
 });
-=======
-    Route::apiResource('credentials', CredentialsController::class);
-    // AdminPasswordController
-    Route::apiResource('menage/credential', MenageCredentialsController::class)->parameters(['menage/credentials' => 'uuid']);
-
-});
-
-
->>>>>>> cbe14dd57cfefe3e1413df89d0b64ac2efdb4098
