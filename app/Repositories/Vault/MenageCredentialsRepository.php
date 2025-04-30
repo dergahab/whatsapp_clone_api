@@ -17,22 +17,21 @@ class MenageCredentialsRepository
 
     public function index(): Collection
     {
-        return $this->model->with([ "passwords:uuid,title" ])->get();
+        return $this->model->whereHas('passwords')->with([ "passwords:uuid,title" ])->get();
     }
 
-    public function store($uuid, $credentials): User
+    public function store( $request): User
     {
-         $this->getByUuid($uuid)->passwords()->attach($credentials);
+        $this->getByUuid($request->user_id)->passwords()->attach($request->credentials);
 
-        return $this->show($uuid);
+        return $this->show($request->user_id);
     }
 
-    public function update($credentials, $uuid): User
-    {
+    public function update($request): User
+    {   
+        $this->getByUuid($request->user_id)->passwords()->sync($request->credentials);
 
-        $this->getByUuid($uuid)->passwords()->sync($credentials);
-
-        return $this->show($uuid);
+        return $this->show($request->user_id);
     }
 
     public function show(string $uuid): User

@@ -51,4 +51,16 @@ class CredentialsRepository
     {
         return Password::where('uuid', $uuid)->delete();
     }
+
+    public function list($search = null)
+    {
+        return $this->model
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%');
+                });
+            })
+            ->select('uuid', 'title as name')
+            ->get();
+    }
 }

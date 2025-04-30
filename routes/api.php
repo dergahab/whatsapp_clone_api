@@ -50,6 +50,7 @@ Route::post('/verify-code', [AuthController::class, 'isVerificationCodeValid']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     // UsersController
+    Route::get('users/list', [UsersController::class, 'list']);
     Route::post('users/{uuid}', [UsersController::class, 'update']);
     Route::get('users/{uuid}', [UsersController::class, 'show']);
     Route::get('/users', [UsersController::class, 'index']);
@@ -70,7 +71,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //AttachmentController
     Route::post('fileDownload/{uuid}', [AttachmentController::class,'fileDownload']);
     // CredentialsController
-    Route::apiResource('credentials', CredentialsController::class)->parameters(['credentials' => 'uuid']);;
+    Route::get('credentials/list', [CredentialsController::class, 'list']);
+    Route::apiResource('credentials', CredentialsController::class)->parameters(['credentials' => 'uuid']);
 
 });
 // MenageCredentialsController

@@ -13,6 +13,7 @@ use App\Http\Requests\Vault\ShowRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Http\Requests\User\ListRequest;
 
 class CredentialsController extends Controller
 {
@@ -90,6 +91,19 @@ class CredentialsController extends Controller
             return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
         } catch (\Exception $ex) {
             DB::rollBack();
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function list(ListRequest $request)
+    {
+        try {
+            $passwords = $this->service->list($request);
+            $this->authorize('list', User::class);
+            return rp_response($passwords, __('DataFetchedSuccessfully'), Response::HTTP_OK);
+        } catch (AuthorizationException $e) {
+            return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
+        } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

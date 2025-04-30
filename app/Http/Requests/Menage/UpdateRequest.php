@@ -17,4 +17,22 @@ class UpdateRequest extends BaseRequest
             'credentials.*.password_id' => ['required', 'uuid', 'distinct', 'exists:' . rp_get_table(Password::class) . ',uuid'],
         ];
     }
+
+    public function passedValidation()
+    {
+        $this->merge([
+            'user_id' => $this->input('user_id'),
+            'credentials' => collect( $this->input('credentials'))->map(function ($credential) {
+
+                return [
+                    'password_id' => rp_uuid_to_id(Password::class, $credential['password_id']),
+                ];
+            })->toArray(),
+        ]);
+    }
+
+    public function credentialsData(): array
+    {
+        return $this->credentials;
+    }
 }
