@@ -7,7 +7,7 @@ use App\Http\Requests\Menage\DestroyRequest;
 use App\Http\Requests\Menage\UpdateRequest;
 use App\Http\Requests\Menage\StoreRequest;
 use App\Http\Requests\Menage\ShowRequest;
-
+use App\Http\Requests\Menage\IndexRequest;
 
 class MenageCredentialsService
 {
@@ -18,9 +18,9 @@ class MenageCredentialsService
         $this->repository = $repository;
     }
 
-    public function index(): array
+    public function index(IndexRequest $request)
     {
-        return $this->repository->index()->toArray();
+        return $this->repository->index($request->input('page', 1));
     }
 
     public function store(StoreRequest $request): array
