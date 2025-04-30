@@ -32,6 +32,9 @@ class MessageService
         }
         $showdata = $this->repository->show($message->uuid)->toArray();
         event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
+
+//        $this->chatService->getReceiver($chatUuid);
+//        event(new ChatMessageNotificationEvent($message->message));
         return $message;
     }
 
@@ -54,4 +57,6 @@ class MessageService
     {
         return $this->repository->destroy($request->uuid);
     }
+
+
 }

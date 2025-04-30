@@ -64,4 +64,15 @@ class Chat extends Base
 	{
 		return $this->hasMany(Message::class, 'chat_id', 'id')->whereIn('status', [0,1]);
 	}
+
+    public function receiver(): BelongsTo
+    {
+        if (Auth::user()?->id == $this->user1) {
+            return $this->userTwo();
+        }
+
+        return $this->userOne();
+    }
+
+
 }

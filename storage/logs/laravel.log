@@ -4094,3 +4094,11 @@
 #43 C:\\Users\\ali.aj\\Desktop\\WebApp\\api-chat\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\ali.aj...')
 #44 {main}
 "} 
+[2025-04-30 10:37:20] local.ERROR: Command "artisan" is not defined. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"artisan\" is not defined. at C:\\Users\\user0\\Desktop\\api-chat\\vendor\\symfony\\console\\Application.php:737)
+[stacktrace]
+#0 C:\\Users\\user0\\Desktop\\api-chat\\vendor\\symfony\\console\\Application.php(266): Symfony\\Component\\Console\\Application->find('artisan')
+#1 C:\\Users\\user0\\Desktop\\api-chat\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 C:\\Users\\user0\\Desktop\\api-chat\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 C:\\Users\\user0\\Desktop\\api-chat\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 {main}
+"} 

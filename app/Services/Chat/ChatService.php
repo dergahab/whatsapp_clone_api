@@ -40,4 +40,10 @@ class ChatService
     {
         return $this->repository->destroy($request->uuid);
     }
+    public function getReceiver($uuid)
+    {
+        return $this->repository->getReceiver($uuid);
+    }
+
+
 }
