@@ -2,6 +2,7 @@
 
 namespace App\Services\Vault;
 
+use App\Http\Requests\User\ListRequest;
 use App\Repositories\Vault\CredentialsRepository;
 use App\Http\Requests\Vault\DestroyRequest;
 use App\Http\Requests\Vault\UpdateRequest;
@@ -43,5 +44,10 @@ class CredentialsService
     public function destroy(DestroyRequest $request)
     {
         return $this->repository->destroy($request->uuid);
+    }
+
+    public function list(ListRequest $request)
+    {
+        return $this->repository->list($request->search);
     }
 }

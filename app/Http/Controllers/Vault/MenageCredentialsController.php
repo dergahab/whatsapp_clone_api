@@ -50,6 +50,8 @@ class MenageCredentialsController extends Controller
             DB::commit();
             return rp_response($passwords, __('DataUpdatedSuccessfully'), Response::HTTP_OK);
         } catch (\Exception $ex) {
+            DB::rollBack();
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

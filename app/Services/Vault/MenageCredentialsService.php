@@ -23,14 +23,14 @@ class MenageCredentialsService
         return $this->repository->index()->toArray();
     }
 
-    public function store(StoreRequest $service): array
+    public function store(StoreRequest $request): array
     {
-        return $this->repository->store($service->user_id, $service->credentialsData())->toArray();
+        return $this->repository->store($request)->toArray();
     }
 
-    public function update(UpdateRequest $service, $uuid): array
+    public function update(UpdateRequest $request, $uuid): array
     {
-        return $this->repository->update($service->credentialsData(), $uuid)->toArray();
+        return $this->repository->update($request, $uuid)->toArray();
     }
 
     public function show(ShowRequest $request): array

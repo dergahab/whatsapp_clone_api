@@ -34,4 +34,9 @@ class CredentialsPolicy
     {
         return $user->type === "admin";
     }
+
+    public function list(User $user)
+    {
+        return $user->type === "admin";
+    }
 }

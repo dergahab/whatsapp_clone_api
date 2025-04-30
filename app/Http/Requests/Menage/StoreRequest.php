@@ -26,12 +26,11 @@ class StoreRequest extends BaseRequest
     {
         $this->merge([
             'user_id' => $this->input('user_id'),
-            'credentials' => collect( $this->input('credentials'))->map(function ($credential) {
-
-                return [
-                    'password_id' => rp_uuid_to_id(Password::class, $credential['password_id']),
-                ];
-            })->toArray(),
+            'credentials' => collect($this->input('credentials'))
+                ->map(function ($credential) {
+                    return rp_uuid_to_id(Password::class, $credential['password_id']);
+                })
+                ->toArray(),
         ]);
     }
 
