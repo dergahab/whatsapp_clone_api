@@ -19,7 +19,7 @@ class CredentialsService
 
     public function index(IndexRequest $request)
     {
-        return $this->repository->index($request->search, $request->input('page', 1));
+        return $this->repository->index($request->search);
     }
 
     public function store(StoreRequest $request)
