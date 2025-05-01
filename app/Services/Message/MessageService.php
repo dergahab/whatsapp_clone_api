@@ -2,6 +2,7 @@
 
 namespace App\Services\Message;
 
+use App\Events\ChatMessageNotificationEvent;
 use App\Events\ChatNewMessageSendedEvent;
 use App\Http\Requests\Message\DestroyRequest;
 use App\Http\Requests\Message\ShowAllMessageRequest;
@@ -32,12 +33,20 @@ class MessageService
             $this->attachmentService->store($request->file('file'),$message->id);
         }
         $showdata = $this->repository->show($message->uuid)->toArray();
-        event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
 
-        $chat = Chat::where("id",$request->input('chat_id'))->with('receiver')->first();
-        $receivers = [$chat->receiver->uuid];
-        event(new MessageSentNotification($showdata,$receivers));
+        $chatUuid = rp_id_to_uuid(Chat::class, $request->input('chat_id'));
+        event(new ChatNewMessageSendedEvent($showdata, $chatUuid));
+
+//        event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
+
+        $this->chatService->getReceiver($chatUuid);
+        event(new ChatMessageNotificationEvent($message->message));
         return $message;
+
+//        $chat = Chat::where("id",$request->input('chat_id'))->with('receiver')->first();
+//        $receivers = [$chat->receiver->uuid];
+//        event(new MessageSentNotification($showdata,$receivers));
+//        return $message;
     }
 
     public function show(ShowRequest $request)
