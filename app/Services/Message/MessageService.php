@@ -10,6 +10,7 @@ use App\Http\Requests\Message\StoreRequest;
 use App\Http\Requests\Message\UpdateRequest;
 use App\Models\Chat\Chat;
 use App\Models\Chat\Message;
+use App\Notifications\MessageSentNotification;
 use App\Repositories\Message\MessageRepository;
 use App\Services\Attachment\AttachmentService;
 use Illuminate\Http\Request;
@@ -33,8 +34,9 @@ class MessageService
         $showdata = $this->repository->show($message->uuid)->toArray();
         event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
 
-//        $this->chatService->getReceiver($chatUuid);
-//        event(new ChatMessageNotificationEvent($message->message));
+        $chat = Chat::where("id",$request->input('chat_id'))->with('receiver')->first();
+        $receivers = [$chat->receiver->uuid];
+        event(new MessageSentNotification($showdata,$receivers));
         return $message;
     }
 

@@ -32,14 +32,6 @@ Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepo
         $repository->changeMessageStatus($chatUuid, 2);
         return true;
     }
-//    elseif ($chatUuid != $uuid)
-//    {
-//        $message = Message::where('chat_id', $chatUuid)->latest()->first();
-//        $recipient = User::where('chat_uuid', $chatUuid)->first();
-//        if ($recipient) {
-//            $recipient->notify(new MessageSentNotification($message->content));
-//        }
-//    }
     return false;
 });
 
@@ -52,5 +44,9 @@ Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid,GroupMessa
     else{
          return  false;
     }
+});
+
+Broadcast::channel('notification.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
 });
 
