@@ -30,11 +30,9 @@ class MessageSentNotification extends Notification implements ShouldBroadcast
     public function broadcastOn()
     {
         $channels = [];
-
         foreach ($this->receivers as $receiver) {
             $channels[] = new PrivateChannel('notification.' . $receiver);
         }
-
         return $channels;
     }
 }
