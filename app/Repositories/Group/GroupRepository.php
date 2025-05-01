@@ -19,7 +19,7 @@ class GroupRepository
             ->withCount('unread_messages')
 	        ->whereHas('users', function ($q) {
 		        // Filtering users based on the UUID of the authenticated user
-		        $q->where('group_users.uuid', auth()->user()->uuid);
+		        $q->where('group_users.user_id', auth()->user()->id);
 	        })
             ->get();
     }

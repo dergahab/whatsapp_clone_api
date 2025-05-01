@@ -18,8 +18,8 @@ class AttachmentService extends Base
     }
     public function fileDownload($uuid)
     {
-      $filepath= Attachments::where('uuid',$uuid)->value('path');
-      return $this->fileDownloads($filepath);
+        $filepath = Attachments::where('uuid', $uuid)->value('path');
+        return $this->fileDownloads($filepath);
     }
 
 }

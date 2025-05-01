@@ -14,15 +14,18 @@ class AttachmentController extends Controller
     public function fileDownload(AttachmentStoreRequest $request)
     {
         try {
-            $uuid = $request->validated();
+            $validated = $request->validated();
+            $uuid = $validated['uuid'];
             $response = $this->service->fileDownload($uuid);
-            if (!$response) {
+
+            if (!$response || !file_exists($response)) {
                 return rp_response([], __('File not found'), Response::HTTP_NOT_FOUND);
             }
-            else
-                return $response;
+
+            return response()->download($response, basename($response)); // Optional: dynamic file name
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

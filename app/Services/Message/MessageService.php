@@ -2,6 +2,7 @@
 
 namespace App\Services\Message;
 
+use App\Events\ChatMessageNotificationEvent;
 use App\Events\ChatNewMessageSendedEvent;
 use App\Http\Requests\Message\DestroyRequest;
 use App\Http\Requests\Message\ShowAllMessageRequest;
@@ -10,8 +11,10 @@ use App\Http\Requests\Message\StoreRequest;
 use App\Http\Requests\Message\UpdateRequest;
 use App\Models\Chat\Chat;
 use App\Models\Chat\Message;
+use App\Notifications\MessageSentNotification;
 use App\Repositories\Message\MessageRepository;
 use App\Services\Attachment\AttachmentService;
+use App\Services\Chat\ChatService;
 use Illuminate\Http\Request;
 
 class MessageService
@@ -31,7 +34,14 @@ class MessageService
             $this->attachmentService->store($request->file('file'),$message->id);
         }
         $showdata = $this->repository->show($message->uuid)->toArray();
-        event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
+
+        $chatUuid = rp_id_to_uuid(Chat::class, $request->input('chat_id'));
+        event(new ChatNewMessageSendedEvent($showdata, $chatUuid));
+
+        $chat = Chat::where("id",$request->input('chat_id'))->with('receiver')->first();
+        $receivers = [$chat->receiver->uuid];
+
+        event(new  ChatMessageNotificationEvent($showdata,$receivers));
         return $message;
     }
 
@@ -54,4 +64,6 @@ class MessageService
     {
         return $this->repository->destroy($request->uuid);
     }
+
+
 }

@@ -60,10 +60,12 @@ class Base
     public function fileDownloads($filePath)
     {
         $relativePath = str_replace('storage/', '', $filePath);
+
         if (Storage::disk('public')->exists($relativePath)) {
-            return Storage::disk('public')->download($relativePath);
-        } else
-           return false;
+            return Storage::disk('public')->path($relativePath);
+        }
+
+        return false;
     }
 
 }

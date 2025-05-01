@@ -57,4 +57,10 @@ class ChatRepository implements ChatRepositoryİnterface
 
         return $chat?->id ?: false;
     }
+
+    public function getReceiver($uuid)
+    {
+        $result = $this->model->where(['uuid' => $uuid])->with('receiver')->first();
+        return [$result?->receiver->uuid ?? null];
+    }
 }
