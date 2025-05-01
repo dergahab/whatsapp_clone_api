@@ -3,6 +3,7 @@
 	namespace App\Services\Group;
 
 	use App\Events\GroupNewMessageSendedEvent;
+    use App\Events\NotificationEvent;
     use App\Http\Requests\GroupMessage\ShowAllMessageRequest;
     use App\Http\Requests\GroupMessage\StoreRequest;
     use App\Models\Chat\Group;
@@ -21,7 +22,13 @@
                 $this->attachmentService->store($request->file('file'),$message->id);
             }
             $showdata = $this->repository->show($message->uuid)->toArray();
-            event(new GroupNewMessageSendedEvent($showdata, rp_id_to_uuid(Group::class,$request->input('group_id'))));
+
+            $groupUuid = rp_id_to_uuid(Group::class,$request->input('group_id'));
+            event(new GroupNewMessageSendedEvent($showdata, $groupUuid));
+
+            $group = Group::where("id",$request->input('group_id'))->with('receivers')->first();
+            $receivers = $group->receivers->pluck('uuid')->toArray();
+            event(new  NotificationEvent($showdata,$receivers));
             return $message;
         }
 

@@ -5,6 +5,7 @@ namespace App\Models\Chat;
 use App\Models\Base;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,7 +35,19 @@ class Group extends Base
         return $this->belongsToMany(User::class, rp_get_table(GroupUser::class), 'group_id', 'user_id');
     }
 
-	public function message(): HasOne
+    public function receivers(): BelongsToMany
+    {
+        $userId = auth()->id();
+        return $this->belongsToMany(
+            User::class,
+            rp_get_table(GroupUser::class),
+            'group_id',
+            'user_id'
+        )->where('user_id', '!=', $userId);
+    }
+
+
+    public function message(): HasOne
 	{
 		return $this->hasOne(Message::class, 'group_id', 'id')->latest();
 	}
