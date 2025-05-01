@@ -6,6 +6,7 @@ use App\Services\Vault\MenageCredentialsService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Menage\DestroyRequest;
 use App\Http\Requests\Menage\UpdateRequest;
+use App\Http\Requests\Menage\IndexRequest;
 use App\Http\Requests\Menage\StoreRequest;
 use App\Http\Requests\Menage\ShowRequest;
 use App\Http\Controllers\Controller;
@@ -18,10 +19,10 @@ class MenageCredentialsController extends Controller
         $this->middleware('admin');
     }
 
-    public function index()
+    public function index(IndexRequest $request)
     {
         try {
-            $passwords = $this->service->index();
+            $passwords = $this->service->index($request);
             return rp_response($passwords, message: Response::HTTP_OK);
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
