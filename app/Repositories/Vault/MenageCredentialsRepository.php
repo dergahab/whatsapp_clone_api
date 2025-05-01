@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Vault;
 
-use Illuminate\Database\Eloquent\Collection;
 use App\Models\Vault\UserPassword;
 use App\Models\User;
 

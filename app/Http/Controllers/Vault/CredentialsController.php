@@ -10,10 +10,10 @@ use App\Http\Requests\Vault\UpdateRequest;
 use App\Http\Requests\Vault\IndexRequest;
 use App\Http\Requests\Vault\StoreRequest;
 use App\Http\Requests\Vault\ShowRequest;
+use App\Http\Requests\User\ListRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Http\Requests\User\ListRequest;
 
 class CredentialsController extends Controller
 {
@@ -65,18 +65,18 @@ class CredentialsController extends Controller
 
     public function update(UpdateRequest $request, string $uuid)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             $this->authorize('update', User::class);
             $password = $this->service->update($request, $uuid);
             DB::commit();
             return rp_response($password, __('PasswordUpdatedSuccessfully'), Response::HTTP_CREATED);
-        // } catch (AuthorizationException $e) {
-        //     return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
-        // } catch (\Exception $ex) {
-        //     DB::rollBack();
-        //     return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-        // }
+        } catch (AuthorizationException $e) {
+            return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function destroy(DestroyRequest $request)
