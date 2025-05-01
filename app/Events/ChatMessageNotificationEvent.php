@@ -10,36 +10,42 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatMessageNotificationEvent
+class ChatMessageNotificationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
     public $sender;
+    public $receivers;
 
-    public function __construct($message)
+    public function __construct($message, $receivers)
     {
         $this->message = $message;
+        $this->receivers = $receivers;
         $this->sender = str_replace(' ', '_', auth()->user()->name);
     }
 
     public function broadcastOn(): array
     {
-        return [
-            new Channel('notification'),
-        ];
+        $channels = [];
+        foreach ($this->receivers as $receiver) {
+            $channels[] = new Channel('notification.' .$receiver );
+        }
+        return $channels;
     }
 
     public function broadcastAs(): string
     {
-        return 'notification';
+        return 'alert';
     }
 
     public function broadcastWith(): array
     {
         return [
-            'message' => $this->message,
-            'sender' => $this->sender
+            'data' => [
+                'message' => $this->message,
+                'sender' => $this->sender
+            ]
         ];
     }
 }

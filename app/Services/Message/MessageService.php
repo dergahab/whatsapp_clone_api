@@ -14,6 +14,7 @@ use App\Models\Chat\Message;
 use App\Notifications\MessageSentNotification;
 use App\Repositories\Message\MessageRepository;
 use App\Services\Attachment\AttachmentService;
+use App\Services\Chat\ChatService;
 use Illuminate\Http\Request;
 
 class MessageService
@@ -37,16 +38,11 @@ class MessageService
         $chatUuid = rp_id_to_uuid(Chat::class, $request->input('chat_id'));
         event(new ChatNewMessageSendedEvent($showdata, $chatUuid));
 
-//        event(new ChatNewMessageSendedEvent($showdata, rp_id_to_uuid(Chat::class,$request->input('chat_id'))));
+        $chat = Chat::where("id",$request->input('chat_id'))->with('receiver')->first();
+        $receivers = [$chat->receiver->uuid];
 
-        $this->chatService->getReceiver($chatUuid);
-        event(new ChatMessageNotificationEvent($message->message));
+        event(new  ChatMessageNotificationEvent($showdata,$receivers));
         return $message;
-
-//        $chat = Chat::where("id",$request->input('chat_id'))->with('receiver')->first();
-//        $receivers = [$chat->receiver->uuid];
-//        event(new MessageSentNotification($showdata,$receivers));
-//        return $message;
     }
 
     public function show(ShowRequest $request)

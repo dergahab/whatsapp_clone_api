@@ -46,8 +46,8 @@ Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid,GroupMessa
     }
 });
 
-Broadcast::channel('notification', function () {
-    return true;
+Broadcast::channel('notification.{authUser}', function ($authUser, $uuid) {
+   return $authUser == $uuid;
 });
 
 //Broadcast::channel('notification.{id}', function ($user, $id) {
