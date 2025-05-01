@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\User\ListRequest;
 
 class UsersController extends Controller
 {
@@ -72,6 +73,20 @@ class UsersController extends Controller
         DB::beginTransaction();
         try {
             $user = $this->service->show($request);
+
+            return rp_response(data: $user, message: Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function list(ListRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $user = $this->service->list($request);
 
             return rp_response(data: $user, message: Response::HTTP_OK);
 

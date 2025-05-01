@@ -2,6 +2,7 @@
 
 namespace App\Services\Vault;
 
+use App\Http\Requests\User\ListRequest;
 use App\Repositories\Vault\CredentialsRepository;
 use App\Http\Requests\Vault\DestroyRequest;
 use App\Http\Requests\Vault\UpdateRequest;
@@ -18,7 +19,7 @@ class CredentialsService
 
     public function index(IndexRequest $request)
     {
-        return $this->repository->index($request->search);
+        return $this->repository->index($request->search, $request->input('page', 1));
     }
 
     public function store(StoreRequest $request)
@@ -30,7 +31,8 @@ class CredentialsService
     public function show(ShowRequest $request)
     {
         $password = $this->repository->show($request->uuid);
-        $password->credential = rescue(fn() => json_decode(Crypt::decrypt(optional($password)->credential)), null);
+        // $password->credential = rescue(fn() => json_decode(Crypt::decrypt(optional($password)->credential)), null);
+        $password->credential = rescue(fn() => Crypt::decrypt(optional($password)->credential), null);
         return $password;
     }
 
@@ -43,5 +45,10 @@ class CredentialsService
     public function destroy(DestroyRequest $request)
     {
         return $this->repository->destroy($request->uuid);
+    }
+
+    public function list(ListRequest $request)
+    {
+        return $this->repository->list($request->search);
     }
 }

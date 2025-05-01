@@ -13,6 +13,7 @@ use App\Http\Requests\Vault\ShowRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Http\Requests\User\ListRequest;
 
 class CredentialsController extends Controller
 {
@@ -49,7 +50,7 @@ class CredentialsController extends Controller
         }
     }
 
-    public function show(ShowRequest $request)
+    public function show(ShowRequest $request, $credential)
     {
         try {
             $this->authorize('show', User::class);
@@ -64,18 +65,18 @@ class CredentialsController extends Controller
 
     public function update(UpdateRequest $request, string $uuid)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $this->authorize('update', User::class);
             $password = $this->service->update($request, $uuid);
             DB::commit();
             return rp_response($password, __('PasswordUpdatedSuccessfully'), Response::HTTP_CREATED);
-        } catch (AuthorizationException $e) {
-            return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
-        } catch (\Exception $ex) {
-            DB::rollBack();
-            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        // } catch (AuthorizationException $e) {
+        //     return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
+        // } catch (\Exception $ex) {
+        //     DB::rollBack();
+        //     return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        // }
     }
 
     public function destroy(DestroyRequest $request)
@@ -90,6 +91,19 @@ class CredentialsController extends Controller
             return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
         } catch (\Exception $ex) {
             DB::rollBack();
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function list(ListRequest $request)
+    {
+        try {
+            $passwords = $this->service->list($request);
+            $this->authorize('list', User::class);
+            return rp_response($passwords, __('DataFetchedSuccessfully'), Response::HTTP_OK);
+        } catch (AuthorizationException $e) {
+            return rp_response([], __('NotAcess'), Response::HTTP_FORBIDDEN);
+        } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

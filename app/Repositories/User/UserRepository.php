@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryİnterface
 {
+    protected $model;
+
+    public function __construct()
+    {
+        $this->model = new User();
+    }
+
     public function index($search = null): array
     {
-        return User::select('uuid', 'name', 'profile_picture','type')
+        return User::select('uuid', 'name', 'profile_picture', 'type')
             ->where('uuid', '!=', Auth::id())
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
@@ -38,5 +45,16 @@ class UserRepository implements UserRepositoryİnterface
     public function show($uuid): ?User
     {
         return User::select('name', 'email', 'profile_picture')->where('uuid', $uuid)->first();
+    }
+
+    public function list($search = null): array
+    {
+        return $this->model
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%');
+                });
+            })
+            ->select('uuid', 'name')->get()->toArray();
     }
 }

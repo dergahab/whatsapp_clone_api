@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\User\UserRepository;
 use App\Services\Base;
 use Illuminate\Http\Request;
+use App\Http\Requests\User\ListRequest;
 
 class UserService extends Base
 {
@@ -45,5 +46,10 @@ class UserService extends Base
     public function show(ShowRequest $request)
     {
         return $this->repositories->show($request->uuid, $request->page);
+    }
+
+    public function list(ListRequest $request)
+    {
+        return $this->repositories->list($request->search);
     }
 }

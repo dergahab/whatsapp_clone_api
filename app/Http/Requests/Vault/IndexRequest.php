@@ -10,6 +10,7 @@ class IndexRequest extends BaseRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:255'],
+            'page' => ['nullable', 'integer'],
         ];
     }
 }
