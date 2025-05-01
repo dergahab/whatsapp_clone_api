@@ -20,8 +20,8 @@ class ChatRepository implements ChatRepositoryİnterface
                     $q->where('name', 'like', '%'.$search.'%');
                 });
             })
-	           ->orWhere('user_1', auth()->user()->id)
-	           ->orWhere('user_2', auth()->user()->id)
+//	           ->orWhere('user_1', auth()->user()->id)
+//	           ->orWhere('user_2', auth()->user()->id)
             ->get();
     }
 
