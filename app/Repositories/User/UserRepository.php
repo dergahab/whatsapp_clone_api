@@ -21,6 +21,7 @@ class UserRepository implements UserRepositoryİnterface
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
             })
+	        ->where('id', '!=', auth()->user()->id)
             ->get()
             ->toArray();
     }
