@@ -17,6 +17,9 @@ class GroupRepository
                 $q->where('name', 'like', '%'.$search.'%');
             })
             ->withCount('unread_messages')
+	        ->whereHas('usres', function ($q) {
+	            $q->where('uuid', auth()->user()->uuid);
+	        })
             ->get();
     }
 
