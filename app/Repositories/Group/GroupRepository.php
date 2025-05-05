@@ -12,6 +12,7 @@ class GroupRepository
     {
         return $this->model->with([
             'message.creator:id,name,uuid',
+            'message.attachment'
         ])
             ->when($search, function($q) use($search){
                 $q->where('name', 'like', '%'.$search.'%');

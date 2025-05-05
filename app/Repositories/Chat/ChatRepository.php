@@ -12,7 +12,8 @@ class ChatRepository implements ChatRepositoryİnterface
     public function index($search = null)
     {
            return $this->model->with([
-	           'message.creator:id,name,uuid'
+	           'message.creator:id,name,uuid',
+               'message.attachment'
            ])
 	        ->withCount('unread_messages')
             ->when($search, function ($query) use ($search) {

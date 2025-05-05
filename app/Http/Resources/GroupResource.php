@@ -19,7 +19,7 @@ class GroupResource extends JsonResource
 			'name' => $this->name,
 			'unread_count' => $this->unread_count ?? 0,
 			'image' => $this->file,
-
+            'attachment'=>$this->message?->attachment?->attachment_type,
 			'message_text' => $messageArray['message'] ?? null,
 			'message_status' => $messageArray['status'] ?? null,
 			'message_edit_status' => $messageArray['edit_status'] ?? null,
