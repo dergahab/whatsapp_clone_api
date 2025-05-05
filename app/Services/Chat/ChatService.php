@@ -17,7 +17,6 @@ class ChatService
     public function index(SearchRequest $request)
     {
 	    $chats = $this->repository->index($request->search);
-
 	    return ChatResource::collection($chats)->resolve();
     }
 

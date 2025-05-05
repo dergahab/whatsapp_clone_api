@@ -56,7 +56,6 @@ class Chat extends Base
         if (Auth::user()?->id != $this->user1) {
             return $this->userOne();
         }
-
         return $this->userTwo();
     }
 

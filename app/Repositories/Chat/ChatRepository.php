@@ -9,18 +9,20 @@ class ChatRepository implements ChatRepositoryİnterface
 {
     public function __construct(public Chat $model, public MessageService $messageService) {}
 
-    public function index($search = null)
+    public function index($search)
     {
+
            return $this->model->with([
 	           'message.creator:id,name,uuid',
-               'message.attachment'
+               'message.attachment',
+               'receiver'
            ])
+//               ->when($search, function ($q) use ($search) {
+//                   $q->whereHas('receiver', function ($query) use ($search) {
+//                       $query->where('users.name', 'like', '%' . $search . '%');
+//                   });
+//               })
 	        ->withCount('unread_messages')
-            ->when($search, function ($query) use ($search) {
-                $query->whereHas('sendBy', function ($q) use ($search) {
-                    $q->where('name', 'like', '%'.$search.'%');
-                });
-            })
 	           ->orWhere('user1', auth()->user()?->id ?? null)
 	           ->orWhere('user2', auth()->user()?->id ?? null)
             ->get();
