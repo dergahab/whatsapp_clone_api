@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepository $repository) {
     if ($chatUuid == $uuid) {
-        $repository->changeMessageStatus($chatUuid, 2);
+//        $repository->changeMessageStatus($chatUuid, 2);
         return true;
     }
     return false;
@@ -38,7 +38,7 @@ Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepo
 
 Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid,GroupMessageRepository $repository) {
     if ($groupUuid == $uuid) {
-        $repository->changeMessageStatus($groupUuid, 2);
+//        $repository->changeMessageStatus($groupUuid, 2);
         return true;
     }
     else{
@@ -48,6 +48,10 @@ Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid,GroupMessa
 
 Broadcast::channel('notification.{authUser}', function ($authUser, $uuid) {
    return $authUser == $uuid;
+});
+
+Broadcast::channel('sidebar.{authUser}', function ($authUser, $uuid) {
+    return $authUser == $uuid;
 });
 
 //Broadcast::channel('notification.{id}', function ($user, $id) {

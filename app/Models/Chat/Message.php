@@ -91,7 +91,15 @@ class Message extends Model
         return $this->hasOne(Attachments::class,'message_id','id');
     }
 
+    public function chat(): BelongsTo
+    {
+        return $this->belongsTo(Chat::class,'chat_id','id');
+    }
 
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class,'group_id','id');
+    }
 
 
 }
