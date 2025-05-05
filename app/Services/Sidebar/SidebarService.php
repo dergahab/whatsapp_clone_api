@@ -12,12 +12,22 @@ class SidebarService
 
     public function index(SearchRequest $request): array
     {
+        $searchTerm = $request->input('search');
 
-        $merged =  array_merge($this->chatService->index($request), $this->groupService->index($request));
+        $merged = array_merge(
+            $this->chatService->index($request),
+            $this->groupService->index($request)
+        );
+
+        if ($searchTerm) {
+            $merged = array_filter($merged, function ($item) use ($searchTerm) {
+                return stripos($item['name'], $searchTerm) !== false;
+            });
+        }
         usort($merged, function ($a, $b) {
             return strtotime($b['message_time']) <=> strtotime($a['message_time']);
         });
 
-        return $merged;
+        return array_values($merged);
     }
 }
