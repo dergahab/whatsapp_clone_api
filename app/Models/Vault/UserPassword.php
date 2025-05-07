@@ -28,6 +28,13 @@ class UserPassword extends Base
         'modify_by',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'deleted_at' => 'datetime:Y-m-d H:i:s',
+    ];
+
     protected static function booted()
     {
         static::creating(function ($model) {

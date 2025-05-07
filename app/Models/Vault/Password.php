@@ -32,8 +32,10 @@ class Password extends Base
     ];
 
     protected $casts = [
-        'create_by' => 'string',
-        'modify_by' => 'string',
+        'email_verified_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'deleted_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     public function creator()
