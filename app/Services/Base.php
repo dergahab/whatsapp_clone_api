@@ -37,7 +37,6 @@ class Base
             $type = 'other';
         }
         $sizeInKB = round($file->getSize() / 1024, 2);
-
         return [
             'attachment_type' => $type,
             'name' => $originalName,
@@ -60,11 +59,9 @@ class Base
     public function fileDownloads($filePath)
     {
         $relativePath = str_replace('storage/', '', $filePath);
-
         if (Storage::disk('public')->exists($relativePath)) {
             return Storage::disk('public')->path($relativePath);
         }
-
         return false;
     }
 

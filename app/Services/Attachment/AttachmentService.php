@@ -9,7 +9,6 @@ use App\Services\Base;
 class AttachmentService extends Base
 {
     public function __construct(public AttachmentRepository $repository) {}
-
     public function store($file,$message_id)
     {
         $fileInfo=$this->getFileInfo($file);

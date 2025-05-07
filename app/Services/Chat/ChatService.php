@@ -13,13 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 class ChatService
 {
     public function __construct(public ChatRepository $repository, public MessageRepository $messageRepository) {}
-
     public function index(SearchRequest $request)
     {
 	    $chats = $this->repository->index($request->search);
 	    return ChatResource::collection($chats)->resolve();
     }
-
     public function store(array $data)
     {
         if ($this->repository->findChat($data)) {
@@ -29,12 +27,10 @@ class ChatService
         $data = $this->repository->store($data);
         return rp_response($data, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
     }
-
     public function show(ShowRequest $request)
     {
         return $this->repository->show($request->uuid, $request->page);
     }
-
     public function destroy(DestroyRequest $request)
     {
         return $this->repository->destroy($request->uuid);
@@ -43,6 +39,5 @@ class ChatService
     {
         return $this->repository->getReceiver($uuid);
     }
-
 
 }
