@@ -11,7 +11,6 @@ class ChatRepository implements ChatRepositoryİnterface
 
     public function index($search)
     {
-
            return $this->model->with([
 	           'message.creator:id,name,uuid',
                'message.attachment',
@@ -22,7 +21,6 @@ class ChatRepository implements ChatRepositoryİnterface
 //                       $query->where('users.name', 'like', '%' . $search . '%');
 //                   });
 //               })
-	        ->withCount('unread_messages')
 	           ->orWhere('user1', auth()->user()?->id ?? null)
 	           ->orWhere('user2', auth()->user()?->id ?? null)
             ->get();

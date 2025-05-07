@@ -31,7 +31,6 @@ class GroupService extends Base
         if ($request->file('file')) {
             $groupdata['file'] = $this->fileUploadStorage($request->file('file'), 'group');
         }
-
         return $this->repository->store(
             $groupdata,
             $request->groupUsersData()

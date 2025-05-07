@@ -4,11 +4,7 @@ namespace App\Http\Controllers\Sidebar;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Sidebar\SearchRequest;
-use App\Services\Chat\ChatService;
-use App\Services\Group\GroupService;
 use App\Services\Sidebar\SidebarService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 class SidebarController extends Controller
 {
@@ -20,12 +16,9 @@ class SidebarController extends Controller
     {
         try {
             $sidebar = $this->service->index($request);
-
             return rp_response($sidebar);
-
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

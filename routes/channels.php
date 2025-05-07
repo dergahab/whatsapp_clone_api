@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Chat\Message;
-use App\Models\User;
-use App\Notifications\MessageSentNotification;
 use App\Repositories\Group\GroupMessageRepository;
 use App\Repositories\Message\MessageRepository;
 use Illuminate\Support\Facades\Broadcast;
@@ -29,7 +26,7 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepository $repository) {
     if ($chatUuid == $uuid) {
-//        $repository->changeMessageStatus($chatUuid, 2);
+        $repository->changeMessageStatus($chatUuid, 2);
         return true;
     }
     return false;
@@ -38,7 +35,7 @@ Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepo
 
 Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid,GroupMessageRepository $repository) {
     if ($groupUuid == $uuid) {
-//        $repository->changeMessageStatus($groupUuid, 2);
+        $repository->changeMessageStatus($groupUuid, 2);
         return true;
     }
     else{
@@ -53,8 +50,4 @@ Broadcast::channel('notification.{authUser}', function ($authUser, $uuid) {
 Broadcast::channel('sidebar.{authUser}', function ($authUser, $uuid) {
     return $authUser == $uuid;
 });
-
-//Broadcast::channel('notification.{id}', function ($user, $id) {
-//    return (int) $user->id === (int) $id;
-//});
 

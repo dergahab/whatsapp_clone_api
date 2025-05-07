@@ -19,7 +19,7 @@ class ChatResource extends JsonResource
 			'uuid' => $this->uuid,
 			'type' => 'chat',
 			'name' => $this->sendBy->name ?? null,
-			'unread_count' => $this?->message?->unread_messages,
+			'unread_count' => $this?->unread_messages,
 			'image' => $this->sendBy->profile_picture ?? null,
             'attachment'=>$this->message?->attachment?->attachment_type,
 			'message_text' => $messageArray['message'] ?? null,

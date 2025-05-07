@@ -14,9 +14,9 @@ class GroupRepository
             'message.creator:id,name,uuid',
             'message.attachment'
         ])
-            ->when($search, function($q) use($search){
-                $q->where('name', 'like', '%'.$search.'%');
-            })
+//            ->when($search, function($q) use($search){
+//                $q->where('name', 'like', '%'.$search.'%');
+//            })
             ->withCount('unread_messages')
 	        ->whereHas('users', function ($q) {
 		        $q->where('group_users.user_id', auth()->user()->id);
