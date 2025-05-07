@@ -16,24 +16,24 @@ class MenageCredentialsRepository
 
     public function index($page = 1)
     {
-        $credentials =$this->model
+        $credentials = $this->model
             ->whereHas('passwords')
-            ->with([ "passwords:uuid,title" ])
+            ->with(["passwords:uuid,title"])
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
-            return [
-                'current_page' => $credentials->currentPage(),
-                'data' => $credentials->items(),
-                'from' => $credentials->firstItem(),
-                'last_page' => $credentials->lastPage(),
-                'per_page' => $credentials->perPage(),
-                'to' => $credentials->lastItem(),
-                'total' => $credentials->total(),
-            ];
+        return [
+            'current_page' => $credentials->currentPage(),
+            'data' => $credentials->items(),
+            'from' => $credentials->firstItem(),
+            'last_page' => $credentials->lastPage(),
+            'per_page' => $credentials->perPage(),
+            'to' => $credentials->lastItem(),
+            'total' => $credentials->total(),
+        ];
     }
 
-    public function store( $request): User
+    public function store($request): User
     {
         $this->getByUuid($request->user_id)->passwords()->attach($request->credentials);
 
@@ -49,12 +49,13 @@ class MenageCredentialsRepository
 
     public function show(string $uuid): User
     {
-        return $this->model->where('uuid', $uuid)->with([ "passwords:uuid,title" ])->first();
+        return $this->model->where('uuid', $uuid)->with(["passwords:uuid,title"])->first();
     }
 
-    public function destroy(string $uuid): bool
+    public function destroy(string $uuid)
     {
-        return UserPassword::where('uuid', $uuid)->delete();
+        $this->getByUuid($uuid)->passwords()->detach();
+        return true;
     }
 
     public function getByUuid(string $uuid): User
