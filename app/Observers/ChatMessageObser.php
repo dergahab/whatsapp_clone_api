@@ -25,16 +25,5 @@ class ChatMessageObser
         $authUuid=Auth::user()?->uuid;
         $receiverUuids = [...$chatReceivers, ...$groupReceivers, ...[$authUuid]];
         event(new SidebarEvent($this->sidebarService->index(new SearchRequest()),$receiverUuids));
-
-        $showdata = $message->toArray();
-        $chatUuid = $message->chat?->uuid;
-        if ($chatUuid) {
-            event(new ChatNewMessageSendedEvent($showdata, $chatUuid));
-        }
-
-        if ($message->chat && $message->chat->receiver) {
-            $receivers = [$message->chat->receiver->uuid];
-            event(new NotificationEvent($showdata, $receivers));
-        }
     }
 }
