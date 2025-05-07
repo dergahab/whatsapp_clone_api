@@ -16,11 +16,6 @@ class ChatRepository implements ChatRepositoryİnterface
                'message.attachment',
                'receiver'
            ])
-//               ->when($search, function ($q) use ($search) {
-//                   $q->whereHas('receiver', function ($query) use ($search) {
-//                       $query->where('users.name', 'like', '%' . $search . '%');
-//                   });
-//               })
 	           ->orWhere('user1', auth()->user()?->id ?? null)
 	           ->orWhere('user2', auth()->user()?->id ?? null)
             ->get();
