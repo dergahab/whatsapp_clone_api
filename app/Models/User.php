@@ -12,7 +12,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Vault\UserPassword;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -85,22 +84,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Chat::class, 'user2');
     }
 
-    // public function passwords()
-    // {
-    //     return $this->belongsToMany(Password::class, 'user_passwords')
-    //         ->withTimestamps()
-    //         ->withPivot(['uuid']);
-    // }
-
     public function passwords()
-{
-    return $this->belongsToMany(Password::class, 'user_passwords')
-        ->using(UserPassword::class)
-        ->withTimestamps()
-        ->withPivot(['uuid', 'created_at']) // created_at pivotdan gələcək
-        ->orderBy('user_passwords.created_at', 'desc'); // burada pivot cədvələ görə sırala
-}
-
+    {
+        return $this->belongsToMany(Password::class, 'user_passwords')
+            ->withTimestamps()
+            ->withPivot(['uuid']);
+    }
 
     protected function type(): Attribute
     {
