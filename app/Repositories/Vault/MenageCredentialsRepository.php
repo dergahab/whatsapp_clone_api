@@ -17,9 +17,10 @@ class MenageCredentialsRepository
     public function index($page = 1)
     {
         $credentials = $this->model
-            ->whereHas('passwords')
+            ->whereHas('passwords', function ($query) {
+                $query->orderBy('user_passwords.created_at', 'desc');
+            })
             ->with(["passwords:uuid,title"])
-            ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
         return [
