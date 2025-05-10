@@ -12,13 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ChatService
 {
-	protected  $receiver = null;
-    public function __construct(public ChatRepository $repository, public MessageRepository $messageRepository , $receiver = null) {
-	    $this->receiver = $receiver;
+    public function __construct(public ChatRepository $repository, public MessageRepository $messageRepository ,) {
     }
-    public function index(SearchRequest $request)
+    public function index(SearchRequest $request, $receiver = null)
     {
-	    $chats = $this->repository->index($request->search, $this->receiver);
+	    $chats = $this->repository->index($request->search, $receiver);
 	    return ChatResource::collection($chats)->resolve();
     }
     public function store(array $data)

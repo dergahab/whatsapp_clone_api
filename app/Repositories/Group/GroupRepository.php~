@@ -8,16 +8,15 @@ class GroupRepository
 {
     public function __construct(public Group $model) {}
 
-    public function index($search, $receiver = null)
+    public function index($search)
     {
-		$receiver = $receiver ?? auth()->user()->id;
         return $this->model->with([
             'message.creator:id,name,uuid',
             'message.attachment'
         ])
             ->withCount('unread_messages')
-	        ->whereHas('users', function ($q) use ($receiver) {
-		        $q->where('group_users.user_id', $receiver);
+	        ->whereHas('users', function ($q) {
+		        $q->where('group_users.user_id', auth()->user()->id);
 	        })
             ->get();
     }

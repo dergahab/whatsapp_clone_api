@@ -18,9 +18,9 @@ class GroupService extends Base
 {
     public function __construct(public GroupRepository $repository) {}
 
-	public function index(SearchRequest $request)
+	public function index(SearchRequest $request, $receiver = null)
 	{
-		 $data = $this->repository->index($request->search);
+		 $data = $this->repository->index($request->search, $receiver);
 
 		return GroupResource::collection($data)->resolve();
 	}
