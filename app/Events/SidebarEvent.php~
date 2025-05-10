@@ -13,21 +13,21 @@ class SidebarEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $sidebar;
-    public $receiver;
+    public $receivers;
 
-    public function __construct($sidebar,$receiver)
+    public function __construct($sidebar,$receivers)
     {
         $this->sidebar = $sidebar;
-        $this->receivers = $receiver;
+        $this->receivers = $receivers;
 
     }
 
     public function broadcastOn()
     {
         $channels = [];
-
-        $channels[] = new Channel('sidebar.' .$this->receiver );
-
+        foreach ($this->receivers as $receiver) {
+            $channels[] = new Channel('sidebar.' .$receiver );
+        }
         return $channels;
     }
 

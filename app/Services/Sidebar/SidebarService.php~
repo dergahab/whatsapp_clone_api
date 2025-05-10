@@ -8,15 +8,16 @@ use App\Services\Group\GroupService;
 
 class SidebarService
 {
-    public function __construct(public ChatService $chatService,public GroupService $groupService) {}
+	public function __construct(public ChatService $chatService,public GroupService $groupService) {
+	}
 
-    public function index(SearchRequest $request): array
+    public function index(SearchRequest $request, $receiver = null): array
     {
         $searchTerm = $request->input('search');
 
         $merged = array_merge(
-            $this->chatService->index($request),
-            $this->groupService->index($request)
+            $this->chatService->index($request, $receiver),
+            $this->groupService->index($request, $receiver)
         );
 
         if ($searchTerm) {

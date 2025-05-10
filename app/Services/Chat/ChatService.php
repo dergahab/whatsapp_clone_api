@@ -14,7 +14,7 @@ class ChatService
 {
     public function __construct(public ChatRepository $repository, public MessageRepository $messageRepository ,) {
     }
-    public function index(SearchRequest $request, $receiver = null)
+    public function index(SearchRequest $request, $receiver)
     {
 	    $chats = $this->repository->index($request->search, $receiver);
 	    return ChatResource::collection($chats)->resolve();
