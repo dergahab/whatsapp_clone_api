@@ -14,13 +14,18 @@ class UserRepository implements UserRepositoryİnterface
         $this->model = new User();
     }
 
-    public function index($search = null): array
+    public function index($search = null, $group = null): array
     {
         return User::select('uuid', 'name', 'profile_picture', 'type')
             ->where('uuid', '!=', Auth::id())
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
             })
+	        ->when($group, function ($query) use ($group) {
+		        $query->whereHas('groups', function ($q) use ($group, $query) {
+			        $q->where('group_id', "!=", $group);
+		        });
+	        })
 	        ->where('id', '!=', auth()->user()->id)
             ->get()
             ->toArray();

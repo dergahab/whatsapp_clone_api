@@ -18,7 +18,7 @@ class ChatMessageObser
    }
     public function created(Message $message): void
     {
-        $message = $message->load('chat.receiver' ,'chat.unread_messages', 'group.receivers');
+        $message = $message->load('chat.receiver' ,'chat.unread_messages', 'group.receivers')->last();
         Log::alert($message->chat?->unread_messages);
         $chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
         $groupReceivers=$message?->group?->receivers->pluck('uuid')->toArray() ?? [];

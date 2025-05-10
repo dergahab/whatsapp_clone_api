@@ -9,15 +9,16 @@ class ChatRepository implements ChatRepositoryİnterface
 {
     public function __construct(public Chat $model, public MessageService $messageService) {}
 
-    public function index($search)
+    public function index($search, $receiver = null)
     {
+			$userId = $receiver ?? auth()->user()->id;
            return $this->model->with([
 	           'message.creator:id,name,uuid',
                'message.attachment',
                'receiver'
            ])
-	           ->orWhere('user1', auth()->user()?->id ?? null)
-	           ->orWhere('user2', auth()->user()?->id ?? null)
+	           ->orWhere('user1', $userId ?? null)
+	           ->orWhere('user2', $userId ?? null)
             ->get();
     }
 
