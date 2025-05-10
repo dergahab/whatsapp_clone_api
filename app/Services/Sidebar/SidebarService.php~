@@ -11,7 +11,7 @@ class SidebarService
 	public function __construct(public ChatService $chatService,public GroupService $groupService) {
 	}
 
-    public function index(SearchRequest $request, $receiver = null): array
+    public function index(SearchRequest $request, $receiver): array
     {
         $searchTerm = $request->input('search');
 
