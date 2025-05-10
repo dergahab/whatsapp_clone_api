@@ -18,7 +18,7 @@ class SidebarEvent implements ShouldBroadcast
     public function __construct($sidebar,$receiver)
     {
         $this->sidebar = $sidebar;
-        $this->receiver = $receiver;
+        $this->receivers = $receiver;
 
     }
 
