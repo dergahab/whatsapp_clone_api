@@ -66,7 +66,7 @@ class Chat extends Base
 	}
     public function getUnreadMessagesAttribute(): int
     {
-        return $this->hasMany(Message::class, 'chat_id', 'id')
+        return $this->hasMany(Message::class, 'chat_id', 'id')->where('create_by','!=',Auth::user()?->id)
             ->whereIn('status', [0, 1])
             ->count();
     }
