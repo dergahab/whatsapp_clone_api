@@ -64,4 +64,9 @@ class GroupService extends Base
     {
         return $this->repository->destroy($request->uuid);
     }
+
+    public function getUsers(ShowRequest $request)
+    {
+        return $this->repository->getUsers($request->uuid);
+    }
 }
