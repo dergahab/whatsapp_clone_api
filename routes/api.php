@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Attachment\AttachmentController;
 use App\Http\Controllers\Group\GroupMessageController;
+use App\Http\Controllers\GroupUsers\GroupUserController;
 use App\Http\Controllers\Vault\MenageCredentialsController;
 use App\Http\Controllers\Vault\CredentialsController;
 use App\Http\Controllers\Sidebar\SidebarController;
@@ -73,6 +74,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // CredentialsController
     Route::get('credentials/list', [CredentialsController::class, 'list']);
     Route::apiResource('credentials', CredentialsController::class)->parameters(['credentials' => 'uuid']);
+    //GroupUserController
+    Route::get('group-users/{uuid}', [GroupUserController::class, 'index']);
+
+
 
 });
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {

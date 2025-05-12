@@ -17,7 +17,6 @@ class ChatRepository implements ChatRepositoryİnterface
                'message.attachment',
                'receiver'
            ])
-           ->has('messages')
            ->where(function ($query) use ($userId) {
 	           $query->where('user1', $userId)
 		           ->orWhere('user2', $userId);
