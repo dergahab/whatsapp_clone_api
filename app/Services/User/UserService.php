@@ -5,19 +5,19 @@ namespace App\Services\User;
 use App\Http\Requests\User\ShowRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
+use App\Http\Requests\User\IndexRequest;
 use App\Models\User;
 use App\Repositories\User\UserRepository;
 use App\Services\Base;
-use Illuminate\Http\Request;
 use App\Http\Requests\User\ListRequest;
 
 class UserService extends Base
 {
     public function __construct(public UserRepository $repositories) {}
 
-    public function index(Request $request)
+    public function index(IndexRequest $request)
     {
-        return $this->repositories->index($request?->search);
+        return $this->repositories->index($request->validationData());
     }
 
     public function store(StoreRequest $request)
