@@ -3,6 +3,7 @@
 namespace App\Repositories\Group;
 
 use App\Models\Chat\Group;
+use Illuminate\Database\Eloquent\Model;
 
 class GroupRepository
 {
@@ -24,7 +25,7 @@ class GroupRepository
 
     public function store(array $groupData, array $userUuids): Group
     {
-        $group = Group::create(
+        $group =  $this->model::create(
             $groupData
         );
 
@@ -37,9 +38,9 @@ class GroupRepository
     {
         $data = array_filter($data, fn($value) => !is_null($value));
 
-        Group::where('uuid', $uuid)->update($data);
+        $this->model::where('uuid', $uuid)->update($data);
 
-        return Group::where('uuid', $uuid)->first();
+        return  $this->model::where('uuid', $uuid)->first();
     }
 
 
@@ -52,14 +53,25 @@ class GroupRepository
         return $group->load('users:id,uuid,name');
     }
 
-    public function show($uuid): ?Group
+    public function show($uuid , $relations = []): Group|Model
     {
-        return Group::select('name', 'file')->where('uuid', $uuid)->first();
+        $query = $this->model->query();
+
+        if(count($relations)){
+            $query->with($relations);
+        }
+
+        return $query->where('uuid', $uuid)->first();
     }
 
     public function destroy($uuid)
     {
         return $this->model->where('uuid', $uuid)->delete();
     }
+    public function getUsers($uuid)
+    {
+        return $this->show($uuid, ["users:id,uuid,name,profile_picture"]);
+    }
+
 
 }

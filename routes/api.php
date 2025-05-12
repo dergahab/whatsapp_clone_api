@@ -59,6 +59,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('groups', GroupController::class)->except('update', 'index')->parameters(['groups' => 'uuid']);
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
     Route::post('add-user', [GroupController::class, 'addUser']);
+    Route::get('group-all-users/{uuid}', [GroupController::class, 'getUsers']);
     //GroupMessageController
     Route::apiResource('group-messages', GroupMessageController::class)->except('index', 'show', 'update', 'destroy');
     Route::get('/group/messages', [GroupMessageController::class, 'show_messages']);
@@ -74,8 +75,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // CredentialsController
     Route::get('credentials/list', [CredentialsController::class, 'list']);
     Route::apiResource('credentials', CredentialsController::class)->parameters(['credentials' => 'uuid']);
-    //GroupUserController
-    Route::get('group-users/{uuid}', [GroupUserController::class, 'index']);
 
 
 

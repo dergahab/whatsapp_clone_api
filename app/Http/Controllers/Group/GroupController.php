@@ -107,4 +107,14 @@ class GroupController extends Controller
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function getUsers(ShowRequest $request)
+    {
+        try {
+            $data = $this->service->getUsers($request);
+            return rp_response(data: $data, message: Response::HTTP_OK);
+        } catch (\Exception $ex) {
+            return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
