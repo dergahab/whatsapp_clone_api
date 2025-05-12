@@ -5,8 +5,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Models\Base;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class UserPassword extends Base
+class UserPassword extends Pivot
 {
     use SoftDeletes;
 
