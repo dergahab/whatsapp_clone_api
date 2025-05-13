@@ -11,21 +11,22 @@ class GroupRepository
 
     public function index($search, $receiver = null)
     {
-		$receiver = $receiver ?? auth()->user()->id;
+        $receiver = $receiver ?? auth()->user()->id;
+
         return $this->model->with([
             'message.creator:id,name,uuid',
-            'message.attachment'
+            'message.attachment',
         ])
             ->withCount('unread_messages')
-	        ->whereHas('users', function ($q) use ($receiver) {
-		        $q->where('group_users.user_id', $receiver);
-	        })
+            ->whereHas('users', function ($q) use ($receiver) {
+                $q->where('group_users.user_id', $receiver);
+            })
             ->get();
     }
 
     public function store(array $groupData, array $userUuids): Group
     {
-        $group =  $this->model::create(
+        $group = $this->model::create(
             $groupData
         );
 
@@ -36,13 +37,12 @@ class GroupRepository
 
     public function update($data, $uuid)
     {
-        $data = array_filter($data, fn($value) => !is_null($value));
+        $data = array_filter($data, fn ($value) => ! is_null($value));
 
         $this->model::where('uuid', $uuid)->update($data);
 
-        return  $this->model::where('uuid', $uuid)->first();
+        return $this->model::where('uuid', $uuid)->first();
     }
-
 
     public function addUser($uuid, array $userUuids): Group
     {
@@ -53,11 +53,11 @@ class GroupRepository
         return $group->load('users:id,uuid,name');
     }
 
-    public function show($uuid , $relations = []): Group|Model
+    public function show($uuid, $relations = []): Group|Model
     {
         $query = $this->model->query();
 
-        if(count($relations)){
+        if (count($relations)) {
             $query->with($relations);
         }
 
@@ -68,18 +68,18 @@ class GroupRepository
     {
         return $this->model->where('uuid', $uuid)->delete();
     }
+
     public function getUsers($uuid)
     {
-        return $this->show($uuid, ["users:id,uuid,name,profile_picture"]);
+        return $this->show($uuid, ['users:id,uuid,name,profile_picture']);
     }
 
     public function deleteUserFromGroup($data)
     {
-        $group_uuid=$data['uuid'];
-        $user_id=$data['user_id'];
-        $group = Group::find($group_uuid);
+        $uuid = $data['uuid'];
+        $user_id = $data['user_id'];
+        $group = $this->model->where('uuid', $uuid)->first();
+
         return $group->users()->detach($user_id);
     }
-
-
 }
