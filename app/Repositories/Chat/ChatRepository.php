@@ -42,7 +42,7 @@ class ChatRepository implements ChatRepositoryİnterface
         return $this->model->where('uuid', $uuid)->delete();
     }
 
-    public function findChat(array $data): Chat
+    public function findChat(array $data): Chat|null
     {
        return $this->model::where(function ($query) use ($data) {
             $query->where('user1', $data['user1'])
