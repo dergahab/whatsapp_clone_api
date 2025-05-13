@@ -26,14 +26,14 @@ class Group extends Base
     protected $hidden = [
         'id',
         'created_at',
-        'updated_at',
-        'deleted_at',
+        'updated_at',        'deleted_at',
     ];
 
     public function users()
     {
         return $this->belongsToMany(User::class, rp_get_table(GroupUser::class), 'group_id', 'user_id');
     }
+
 
     public function receivers(): BelongsToMany
     {
