@@ -10,14 +10,14 @@ class IndexRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'group_id' => ['nullable','uuid', 'exists:'.rp_get_table(Group::class).',uuid'],
+            'uuid' => ['nullable','uuid', 'exists:'.rp_get_table(Group::class).',uuid'],
             'search' => ['nullable', 'string'],
         ];
     }
     public function passedValidation()
     {
         $this->merge([
-            'group_id' => rp_uuid_to_id(Group::class, $this->input('group_id')),
+            'group_id' => rp_uuid_to_id(Group::class, $this->input('uuid')),
         ]);
     }
     public function validationData()

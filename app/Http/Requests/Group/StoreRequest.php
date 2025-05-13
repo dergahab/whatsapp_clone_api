@@ -36,7 +36,6 @@ class StoreRequest extends BaseRequest
         $users[] = [
             'user_id' => auth()->user()->id,
         ];
-
         return $users;
     }
 

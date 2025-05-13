@@ -3,6 +3,7 @@
 namespace App\Services\Group;
 
 use App\Http\Requests\Group\AddUserToGroupRequest;
+use App\Http\Requests\Group\DeleteUserFromGroupRequest;
 use App\Http\Requests\Group\DestroyRequest;
 use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
@@ -69,4 +70,9 @@ class GroupService extends Base
     {
         return $this->repository->getUsers($request->uuid);
     }
+    public function deleteUserFromGroup($data)
+    {
+        return $this->repository->deleteUserFromGroup($data);
+    }
+
 }

@@ -73,5 +73,13 @@ class GroupRepository
         return $this->show($uuid, ["users:id,uuid,name,profile_picture"]);
     }
 
+    public function deleteUserFromGroup($data)
+    {
+        $group_uuid=$data['uuid'];
+        $user_id=$data['user_id'];
+        $group = Group::find($group_uuid);
+        return $group->users()->detach($user_id);
+    }
+
 
 }

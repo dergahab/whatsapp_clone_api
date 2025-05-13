@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Group\AddUserToGroupRequest;
+use App\Http\Requests\Group\DeleteUserFromGroupRequest;
 use App\Http\Requests\Group\DestroyRequest;
 use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
@@ -115,6 +116,23 @@ class GroupController extends Controller
             return rp_response(data: $data, message: Response::HTTP_OK);
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function deleteUserFromGroup(DeleteUserFromGroupRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $data=$request->validationData();
+            $this->service->deleteUserFromGroup($data);
+            DB::commit();
+
+            return rp_response($data, __('UserDeletedSuccessfully'), Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+            DB::rollBack();
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -59,7 +59,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('groups', GroupController::class)->except('update', 'index')->parameters(['groups' => 'uuid']);
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
     Route::post('add-user', [GroupController::class, 'addUser']);
-    Route::get('group-all-users/{uuid}', [GroupController::class, 'getUsers']);
+    Route::get('group-users/{uuid}', [GroupController::class, 'getUsers']);
+    Route::delete('group-detach/{uuid}', [GroupController::class, 'deleteUserFromGroup']);
     //GroupMessageController
     Route::apiResource('group-messages', GroupMessageController::class)->except('index', 'show', 'update', 'destroy');
     Route::get('/group/messages', [GroupMessageController::class, 'show_messages']);
