@@ -12,7 +12,7 @@ class StoreRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:groups'],
+            'name' => ['required', 'string', 'max:255'],
             'file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'users' => ['required', 'array'],
             'users.*' => ['required', 'uuid', 'exists:'.rp_get_table(User::class).',uuid'],
