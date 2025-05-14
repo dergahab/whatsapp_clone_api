@@ -2,6 +2,7 @@
 
 namespace App\Repositories\User;
 
+use App\Models\Chat\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,20 +17,24 @@ class UserRepository implements UserRepositoryİnterface
 
     public function index($data = []): array
     {
-        $group = $data['group_id'] ?? null;
+        $groupId = $data['uuid'] ?? null;
         $search = $data['search'] ?? null;
 
+        $excludedUserIds = [];
+        if ($groupId) {
+            $group = Group::find($groupId);
+            if ($group) {
+                $excludedUserIds = $group->users()->pluck('users.id')->toArray();
+            }
+        }
+        $excludedUserIds[] = auth()->id();
+
+
         return User::select('uuid', 'name', 'profile_picture', 'type')
-            ->where('uuid', '!=', Auth::id())
+            ->whereNotIn('id', $excludedUserIds)
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
             })
-            ->when($group, function ($query) use ($group) {
-                $query->whereHas('groups', function ($q) use ($group) {
-                    $q->where('group_id', '!=', $group);
-                });
-            })
-            ->where('id', '!=', auth()->user()->id)
             ->get()
             ->toArray();
     }

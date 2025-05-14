@@ -22,13 +22,13 @@ class UsersController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        try {
+//        try {
             $data = $this->service->index($request);
 
             return rp_response(data: $data, message: Response::HTTP_OK);
-        } catch (\Exception $ex) {
-            return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+//        } catch (\Exception $ex) {
+//            return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
+//        }
     }
 
     public function update(UpdateRequest $request, string $uuid)

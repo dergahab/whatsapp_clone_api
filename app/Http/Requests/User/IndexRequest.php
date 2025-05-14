@@ -18,7 +18,7 @@ class IndexRequest extends BaseRequest
     public function passedValidation()
     {
         $this->merge([
-            'group_id' => rp_uuid_to_id(Group::class, $this->input('uuid')),
+            'uuid' => rp_uuid_to_id(Group::class, $this->input('uuid')),
         ]);
     }
 

@@ -49,10 +49,10 @@ Route::post('/verify-code', [AuthController::class, 'isVerificationCodeValid']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     // UsersController
+    Route::get('/users', [UsersController::class, 'index']);
     Route::get('users/list', [UsersController::class, 'list']);
     Route::post('users/{uuid}', [UsersController::class, 'update']);
     Route::get('users/{uuid}', [UsersController::class, 'show']);
-    Route::get('/users', [UsersController::class, 'index']);
     // GroupController
     Route::apiResource('groups', GroupController::class)->except('update', 'index')->parameters(['groups' => 'uuid']);
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
