@@ -4,8 +4,6 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -15,7 +13,9 @@ class NotificationEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+
     public $sender;
+
     public $receivers;
 
     public function __construct($message, $receivers)
@@ -29,8 +29,9 @@ class NotificationEvent implements ShouldBroadcast
     {
         $channels = [];
         foreach ($this->receivers as $receiver) {
-            $channels[] = new Channel('notification.' .$receiver );
+            $channels[] = new Channel('notification.'.$receiver);
         }
+
         return $channels;
     }
 
@@ -44,8 +45,8 @@ class NotificationEvent implements ShouldBroadcast
         return [
             'data' => [
                 'message' => $this->message,
-                'sender' => $this->sender
-            ]
+                'sender' => $this->sender,
+            ],
         ];
     }
 }

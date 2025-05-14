@@ -1,18 +1,17 @@
 <?php
 
-use App\Http\Controllers\Attachment\AttachmentController;
-use App\Http\Controllers\Group\GroupMessageController;
-use App\Http\Controllers\GroupUsers\GroupUserController;
-use App\Http\Controllers\Vault\MenageCredentialsController;
-use App\Http\Controllers\Vault\CredentialsController;
-use App\Http\Controllers\Sidebar\SidebarController;
-use App\Http\Controllers\Message\MessageController;
-use App\Http\Controllers\Users\UsersController;
-use App\Http\Controllers\Group\GroupController;
-use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Attachment\AttachmentController;
+use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Group\GroupController;
+use App\Http\Controllers\Group\GroupMessageController;
+use App\Http\Controllers\Message\MessageController;
+use App\Http\Controllers\Sidebar\SidebarController;
+use App\Http\Controllers\Users\UsersController;
+use App\Http\Controllers\Vault\CredentialsController;
+use App\Http\Controllers\Vault\MenageCredentialsController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,16 +28,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request 
     return $request->user();
 });
 
-
-//// Email Verification
-//Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])->middleware('auth:sanctum');
-//Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify')->middleware('auth:sanctum');
+// // Email Verification
+// Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail'])->middleware('auth:sanctum');
+// Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify')->middleware('auth:sanctum');
 
 // Password Reset
-//Route::post('forgot-password', [NewPasswordController::class, 'forgotPassword']);
-//Route::post('reset-password', [NewPasswordController::class, 'reset']);
+// Route::post('forgot-password', [NewPasswordController::class, 'forgotPassword']);
+// Route::post('reset-password', [NewPasswordController::class, 'reset']);
 
-//AuthController
+// AuthController
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout/{uuid}', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
@@ -55,29 +53,27 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('users/{uuid}', [UsersController::class, 'update']);
     Route::get('users/{uuid}', [UsersController::class, 'show']);
     Route::get('/users', [UsersController::class, 'index']);
-    //GroupController
+    // GroupController
     Route::apiResource('groups', GroupController::class)->except('update', 'index')->parameters(['groups' => 'uuid']);
     Route::post('groups/{uuid}', [GroupController::class, 'update']);
     Route::post('add-user', [GroupController::class, 'addUser']);
     Route::get('group-users/{uuid}', [GroupController::class, 'getUsers']);
     Route::delete('group-detach/{uuid}', [GroupController::class, 'deleteUserFromGroup']);
-    //GroupMessageController
+    // GroupMessageController
     Route::apiResource('group-messages', GroupMessageController::class)->except('index', 'show', 'update', 'destroy');
     Route::get('/group/messages', [GroupMessageController::class, 'show_messages']);
-    //ChatController
+    // ChatController
     Route::apiResource('chats', ChatController::class)->except(['update', 'index'])->parameters(['chat' => 'uuid']);
-    //MessageController
+    // MessageController
     Route::apiResource('messages', MessageController::class)->except(['index'])->parameters(['messages' => 'uuid']);
     Route::get('/chat/messages', [MessageController::class, 'show_messages']);
-    //SidebarController
+    // SidebarController
     Route::get('sidebar', SidebarController::class);
-    //AttachmentController
-    Route::post('fileDownload/{uuid}', [AttachmentController::class,'fileDownload']);
+    // AttachmentController
+    Route::post('fileDownload/{uuid}', [AttachmentController::class, 'fileDownload']);
     // CredentialsController
     Route::get('credentials/list', [CredentialsController::class, 'list']);
     Route::apiResource('credentials', CredentialsController::class)->parameters(['credentials' => 'uuid']);
-
-
 
 });
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {

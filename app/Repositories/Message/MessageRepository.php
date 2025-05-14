@@ -15,7 +15,7 @@ class MessageRepository
 
     public function show($uuid): ?Message
     {
-        return $this->model->where('uuid', $uuid) ->with('creator','attachment')->first();
+        return $this->model->where('uuid', $uuid)->with('creator', 'attachment')->first();
     }
 
     public function update(array $data, $uuid): int
@@ -25,10 +25,10 @@ class MessageRepository
 
     public function showAllMessages($chat_id, $page = 1): array
     {
-        $this->changeMessageStatus($chat_id,2);
+        $this->changeMessageStatus($chat_id, 2);
         $messages = $this->model
             ->where('chat_id', $chat_id)
-            ->with('creator','attachment')
+            ->with('creator', 'attachment')
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
@@ -48,10 +48,10 @@ class MessageRepository
         return $this->model->where('uuid', $uuid)->delete();
     }
 
-    public function changeMessageStatus($chat_id,$status)
+    public function changeMessageStatus($chat_id, $status)
     {
-            $this->model
+        $this->model
             ->where('chat_id', $chat_id)
-            ->update(['status' =>$status]);
+            ->update(['status' => $status]);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Models\Chat;
 use App\Models\Base;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -57,25 +56,28 @@ class Chat extends Base
         if (Auth::user()?->id != $this->user1) {
             return $this->userOne();
         }
+
         return $this->userTwo();
     }
 
-	public function unread_messages(): HasMany
-	{
-		return $this->hasMany(Message::class, 'chat_id', 'id');
-	}
+    public function unread_messages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'chat_id', 'id');
+    }
+
     public function getUnreadMessagesAttribute(): int
     {
-        return $this->hasMany(Message::class, 'chat_id', 'id')->where('create_by','!=',Auth::user()?->id)
+        return $this->hasMany(Message::class, 'chat_id', 'id')->where('create_by', '!=', Auth::user()?->id)
             ->whereIn('status', [0, 1])
             ->count();
     }
+
     public function receiver(): BelongsTo
     {
         if (Auth::user()?->id == $this->user1) {
             return $this->userTwo();
         }
+
         return $this->userOne();
     }
-
 }

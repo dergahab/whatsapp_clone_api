@@ -17,7 +17,7 @@ return [
         // \Rakutentech\LaravelRequestDocs\NotFoundWhenProduction::class,
     ],
 
-    //Use only routes where ->uri start with next string Using Str::startWith( . e.g. - /api/mobile
+    // Use only routes where ->uri start with next string Using Str::startWith( . e.g. - /api/mobile
     'only_route_uri_start_with' => '',
 
     'hide_matching' => [
@@ -38,11 +38,11 @@ return [
     // https://github.com/rakutentech/laravel-request-docs/pull/92
     // When rules are put in other method than rules()
     'rules_methods' => [
-        'rules'
+        'rules',
     ],
 
     // Can be overridden as // @LRDresponses 200|400|401
-    'default_responses' => [ "200", "400", "401", "403", "404", "405", "422", "429", "500", "503"],
+    'default_responses' => ['200', '400', '401', '403', '404', '405', '422', '429', '500', '503'],
 
     // changes default headers on first load for Set Global Headers
     // Later the local storage is used when edits are made
@@ -57,7 +57,7 @@ return [
         'uri_patterns' => [
             '^api/v[\d]+/', // `/api/v1/users/store` group as `/api/v1/users`.
             '^api/',        // `/api/users/store` group as `/api/users`.
-        ]
+        ],
     ],
 
     // No need to touch below
@@ -74,10 +74,10 @@ return [
         'license' => 'Apache 2.0',
         'license_url' => 'https://www.apache.org/licenses/LICENSE-2.0.html',
         'server_url' => env('APP_URL', 'http://localhost'),
-        //openapi 3.0.x doesn't support request body for delete operation
-        //ref: https://github.com/OAI/OpenAPI-Specification/pull/2117
+        // openapi 3.0.x doesn't support request body for delete operation
+        // ref: https://github.com/OAI/OpenAPI-Specification/pull/2117
         'delete_with_body' => false,
-        //exclude http methods that will be excluded from openapi export
+        // exclude http methods that will be excluded from openapi export
         'exclude_http_methods' => [],
         // for now putting default responses for all. This can be changed later based on specific needs
         'responses' => [
@@ -162,19 +162,19 @@ return [
                 ],
             ],
         ],
-        //openapi export with security configuration,
+        // openapi export with security configuration,
         // if type set null then doc will exclude global security schema.
         // Ref: https://spec.openapis.org/oas/v3.0.3#security-scheme-object
         'security' => [
-            //available options [null, bearer, basic, apikey, jwt]
+            // available options [null, bearer, basic, apikey, jwt]
             'type' => 'bearer',
             'name' => 'api_key',
-            //Note: only works for "apikey" & "jwt", available options [query, header, cookie]
+            // Note: only works for "apikey" & "jwt", available options [query, header, cookie]
             'position' => 'header',
         ],
     ],
 
-    //export request docs as json file from terminal
-    //from project root directory
-    'export_path' => 'api.json'
+    // export request docs as json file from terminal
+    // from project root directory
+    'export_path' => 'api.json',
 ];

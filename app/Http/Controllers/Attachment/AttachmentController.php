@@ -18,7 +18,7 @@ class AttachmentController extends Controller
             $uuid = $validated['uuid'];
             $response = $this->service->fileDownload($uuid);
 
-            if (!$response || !file_exists($response)) {
+            if (! $response || ! file_exists($response)) {
                 return rp_response([], __('File not found'), Response::HTTP_NOT_FOUND);
             }
 
@@ -27,5 +27,4 @@ class AttachmentController extends Controller
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

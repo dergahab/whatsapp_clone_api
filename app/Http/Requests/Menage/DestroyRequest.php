@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests\Menage;
 
-use App\Models\User;
 use App\Http\Requests\BaseRequest;
+use App\Models\User;
 
 class DestroyRequest extends BaseRequest
 {
     public function rules(): array
     {
         return [
-            'uuid' => ['required', 'uuid', 'exists:' . rp_get_table(User::class) . ',uuid'],
+            'uuid' => ['required', 'uuid', 'exists:'.rp_get_table(User::class).',uuid'],
         ];
     }
 

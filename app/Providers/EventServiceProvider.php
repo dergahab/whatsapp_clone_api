@@ -22,9 +22,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-//        ChatNewMessageSendedEvent::class => [
-//            UpdateMessageStatusToRead::class,
-//        ],
+        //        ChatNewMessageSendedEvent::class => [
+        //            UpdateMessageStatusToRead::class,
+        //        ],
     ];
 
     /**

@@ -1,15 +1,16 @@
 <?php
+
 //
-//namespace App\Http\Controllers\Api;
+// namespace App\Http\Controllers\Api;
 //
-//use App\Http\Controllers\Controller;
-//use Illuminate\Auth\Events\Verified;
-//use Illuminate\Foundation\Auth\EmailVerificationRequest;
-//use Illuminate\Http\Request;
-//use Illuminate\Http\Response;
+// use App\Http\Controllers\Controller;
+// use Illuminate\Auth\Events\Verified;
+// use Illuminate\Foundation\Auth\EmailVerificationRequest;
+// use Illuminate\Http\Request;
+// use Illuminate\Http\Response;
 //
-//class EmailVerificationController extends Controller
-//{
+// class EmailVerificationController extends Controller
+// {
 //    public function sendVerificationEmail(Request $request)
 //    {
 //        if ($request->user()->hasVerifiedEmail()) {
@@ -45,4 +46,4 @@
 //            'status' => Response::HTTP_OK,
 //        ];
 //    }
-//}
+// }

@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Requests\Message;
-use Illuminate\Validation\Rule;
+
 use App\Http\Requests\BaseRequest;
 use App\Models\Chat\Chat;
 use App\Models\Chat\Message;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends BaseRequest
 {
@@ -19,7 +20,7 @@ class StoreRequest extends BaseRequest
             ],
             'message' => [
                 Rule::requiredIf(function () {
-                    return !$this->hasFile('file');
+                    return ! $this->hasFile('file');
                 }),
             ],
             'file' => ['nullable', 'file', 'max:10240'],

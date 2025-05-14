@@ -13,9 +13,10 @@ class SidebarEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $sidebar;
+
     public $receiver;
 
-    public function __construct($sidebar,$receiver)
+    public function __construct($sidebar, $receiver)
     {
         $this->sidebar = $sidebar;
         $this->receiver = $receiver;
@@ -26,7 +27,7 @@ class SidebarEvent implements ShouldBroadcast
     {
         $channels = [];
 
-        $channels[] = new Channel('sidebar.' .$this->receiver );
+        $channels[] = new Channel('sidebar.'.$this->receiver);
 
         return $channels;
     }
@@ -35,6 +36,7 @@ class SidebarEvent implements ShouldBroadcast
     {
         return 'new-sidebar';
     }
+
     public function broadcastWith(): array
     {
         return [
@@ -42,4 +44,3 @@ class SidebarEvent implements ShouldBroadcast
         ];
     }
 }
-

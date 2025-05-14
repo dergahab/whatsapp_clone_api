@@ -5,29 +5,29 @@ namespace App\Http\Controllers\Group;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupMessage\ShowAllMessageRequest;
 use App\Http\Requests\GroupMessage\StoreRequest;
-use App\Services\Attachment\AttachmentService;
 use App\Services\Group\GroupMessageService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class GroupMessageController extends Controller
 {
-	public function __construct(public GroupMessageService $service)
-	{
+    public function __construct(public GroupMessageService $service) {}
 
-	}
     public function store(StoreRequest $request)
     {
-	    DB::beginTransaction();
+        DB::beginTransaction();
         try {
-        $message = $this->service->store($request);
+            $message = $this->service->store($request);
             DB::commit();
-	    return rp_response($message, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
+
+            return rp_response($message, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
         } catch (\Exception $ex) {
             DB::rollBack();
-            return rp_response([], __('FailureProcess'),  Response::HTTP_INTERNAL_SERVER_ERROR);
+
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     public function show_messages(ShowAllMessageRequest $request)
     {
         try {

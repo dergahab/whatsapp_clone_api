@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Events;
+
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -12,6 +13,7 @@ class ChatNewMessageSendedEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $data;
+
     public $chatUuid;
 
     public function __construct($data, $chatUuid)
@@ -23,7 +25,7 @@ class ChatNewMessageSendedEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('message.' . $this->chatUuid),
+            new Channel('message.'.$this->chatUuid),
         ];
     }
 

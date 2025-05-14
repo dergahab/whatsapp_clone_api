@@ -8,7 +8,6 @@ use App\Http\Requests\Message\ShowAllMessageRequest;
 use App\Http\Requests\Message\ShowRequest;
 use App\Http\Requests\Message\StoreRequest;
 use App\Http\Requests\Message\UpdateRequest;
-use App\Services\Attachment\AttachmentService;
 use App\Services\Message\MessageService;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;

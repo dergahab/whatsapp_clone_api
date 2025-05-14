@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Chat\Message;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Attachments extends Base
@@ -15,7 +14,7 @@ class Attachments extends Base
         'attachment_type',
         'name',
         'path',
-        'size'
+        'size',
     ];
 
     protected $hidden = [
@@ -25,10 +24,8 @@ class Attachments extends Base
         'updated_at',
     ];
 
-    public function messages():BelongsTo
+    public function messages(): BelongsTo
     {
         return $this->belongsTo(Message::class);
     }
-
-
 }

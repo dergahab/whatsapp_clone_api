@@ -3,6 +3,7 @@
 namespace App\Http\Requests\User;
 
 use App\Http\Requests\BaseRequest;
+
 class UpdateRequest extends BaseRequest
 {
     public function rules(): array
@@ -13,6 +14,4 @@ class UpdateRequest extends BaseRequest
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
         ];
     }
-
-
 }

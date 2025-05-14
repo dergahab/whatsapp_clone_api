@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Vault;
 
-use Illuminate\Support\Facades\Crypt;
 use App\Http\Requests\BaseRequest;
 use App\Models\Vault\Password;
+use Illuminate\Support\Facades\Crypt;
 
 class StoreRequest extends BaseRequest
 {

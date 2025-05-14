@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Vault;
 
-use App\Models\Vault\UserPassword;
 use App\Models\User;
 
 class MenageCredentialsRepository
@@ -11,7 +10,7 @@ class MenageCredentialsRepository
 
     public function __construct()
     {
-        $this->model = new User();
+        $this->model = new User;
     }
 
     public function index($page = 1)
@@ -20,7 +19,7 @@ class MenageCredentialsRepository
             ->whereHas('passwords', function ($query) {
                 $query->orderBy('user_passwords.created_at', 'desc');
             })
-            ->with(["passwords:uuid,title"])
+            ->with(['passwords:uuid,title'])
             ->paginate(30, ['*'], 'page', $page);
 
         return [
@@ -50,12 +49,13 @@ class MenageCredentialsRepository
 
     public function show(string $uuid): User
     {
-        return $this->model->where('uuid', $uuid)->with(["passwords:uuid,title"])->first();
+        return $this->model->where('uuid', $uuid)->with(['passwords:uuid,title'])->first();
     }
 
     public function destroy(string $uuid)
     {
         $this->getByUuid($uuid)->passwords()->detach();
+
         return true;
     }
 

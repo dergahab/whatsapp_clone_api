@@ -5,14 +5,13 @@ namespace App\Http\Requests\Group;
 use App\Http\Requests\BaseRequest;
 use App\Models\Chat\Group;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class StoreRequest extends BaseRequest
 {
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:groups'],
+            'name' => ['required', 'string', 'max:255'],
             'file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'users' => ['required', 'array'],
             'users.*' => ['required', 'uuid', 'exists:'.rp_get_table(User::class).',uuid'],
@@ -36,6 +35,7 @@ class StoreRequest extends BaseRequest
         $users[] = [
             'user_id' => auth()->user()->id,
         ];
+
         return $users;
     }
 

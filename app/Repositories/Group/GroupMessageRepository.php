@@ -1,27 +1,29 @@
 <?php
 
 namespace App\Repositories\Group;
-use App\Models\Chat\Group;
-use App\Models\Chat\GroupUser;
+
 use App\Models\Chat\Message;
 
 class GroupMessageRepository
 {
     public function __construct(public Message $model) {}
+
     public function store(array $data): Message
     {
-       return $this->model::create($data);
+        return $this->model::create($data);
     }
+
     public function show($uuid): ?Message
     {
         return $this->model->where('uuid', $uuid)->with(['creator', 'attachment'])->first();
     }
+
     public function showAllMessages($group_id, $page = 1): array
     {
-        $this->changeMessageStatus($group_id,2);
+        $this->changeMessageStatus($group_id, 2);
         $messages = $this->model
             ->where('group_id', $group_id)
-            ->with('creator','attachment')
+            ->with('creator', 'attachment')
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
@@ -36,10 +38,10 @@ class GroupMessageRepository
         ];
     }
 
-    public function changeMessageStatus($group_id,$status)
+    public function changeMessageStatus($group_id, $status)
     {
         $this->model
             ->where('group_id', $group_id)
-            ->update(['status' =>$status]);
+            ->update(['status' => $status]);
     }
 }

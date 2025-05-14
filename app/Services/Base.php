@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Base
 {
@@ -17,12 +16,13 @@ class Base
         $directory = 'uploads/files/'.$directory;
         $fileName = "{$directory}/{$slugifiedName}_{$timestamp}.{$extension}";
         $file->storeAs('public', $fileName);
+
         return 'storage/'.$fileName;
     }
 
     public function getFileInfo($file)
     {
-        $path=$this->fileUploadStorage($file,'uploads');
+        $path = $this->fileUploadStorage($file, 'uploads');
         $originalName = str_replace(' ', '', $file->getClientOriginalName());
         $extension = strtolower($file->getClientOriginalExtension());
         if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'])) {
@@ -37,22 +37,25 @@ class Base
             $type = 'other';
         }
         $sizeInKB = round($file->getSize() / 1024, 2);
+
         return [
             'attachment_type' => $type,
             'name' => $originalName,
             'size' => $sizeInKB,
-            'path'=>$path
+            'path' => $path,
         ];
     }
 
     public function fileDeleteStorage($filePath)
     {
         $relativePath = Str::replaceFirst('storage/', '', $filePath);
-        $fullPath = storage_path('app/public/' . $relativePath);
+        $fullPath = storage_path('app/public/'.$relativePath);
         if (file_exists($fullPath) && is_file($fullPath)) {
             unlink($fullPath);
+
             return true;
         }
+
         return false;
     }
 
@@ -62,7 +65,7 @@ class Base
         if (Storage::disk('public')->exists($relativePath)) {
             return Storage::disk('public')->path($relativePath);
         }
+
         return false;
     }
-
 }

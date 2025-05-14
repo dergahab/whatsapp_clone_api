@@ -8,8 +8,7 @@ use App\Services\Group\GroupService;
 
 class SidebarService
 {
-	public function __construct(public ChatService $chatService,public GroupService $groupService) {
-	}
+    public function __construct(public ChatService $chatService, public GroupService $groupService) {}
 
     public function index(SearchRequest $request, $receiver = null): array
     {

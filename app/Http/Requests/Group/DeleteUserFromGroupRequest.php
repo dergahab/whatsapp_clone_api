@@ -16,16 +16,17 @@ class DeleteUserFromGroupRequest extends BaseRequest
         ];
     }
 
-
     public function passedValidation()
     {
         $this->merge([
             'user_id' => rp_uuid_to_id(User::class, $this->input('user_id')),
         ]);
     }
+
     public function validationData()
     {
         $data = $this->all();
+
         return $data;
     }
 }

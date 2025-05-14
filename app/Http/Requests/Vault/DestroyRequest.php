@@ -18,7 +18,7 @@ class DestroyRequest extends BaseRequest
             'uuid' => [
                 'required',
                 'uuid',
-                'exists:' . rp_get_table(Password::class) . ',uuid',
+                'exists:'.rp_get_table(Password::class).',uuid',
             ],
         ];
     }

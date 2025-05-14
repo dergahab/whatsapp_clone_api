@@ -2,9 +2,9 @@
 
 namespace App\Models\Vault;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
 use App\Models\Base;
+use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Password extends Base
 {
@@ -28,7 +28,7 @@ class Password extends Base
         'deleted_at',
         'create_by',
         'modify_by',
-        "pivot"
+        'pivot',
     ];
 
     protected $casts = [
