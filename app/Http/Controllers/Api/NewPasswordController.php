@@ -1,19 +1,20 @@
 <?php
+
 //
-//namespace App\Http\Controllers\Api;
+// namespace App\Http\Controllers\Api;
 //
-//use App\Http\Controllers\Controller;
-//use App\Http\Requests\Auth\ForgotPasswordRequest;
-//use App\Http\Requests\Auth\ResetPasswordRequest;
-//use Illuminate\Auth\Events\PasswordReset;
-//use Illuminate\Http\Response;
-//use Illuminate\Support\Facades\Hash;
-//use Illuminate\Support\Facades\Password;
-//use Illuminate\Support\Str;
-//use Illuminate\Validation\ValidationException;
+// use App\Http\Controllers\Controller;
+// use App\Http\Requests\Auth\ForgotPasswordRequest;
+// use App\Http\Requests\Auth\ResetPasswordRequest;
+// use Illuminate\Auth\Events\PasswordReset;
+// use Illuminate\Http\Response;
+// use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Password;
+// use Illuminate\Support\Str;
+// use Illuminate\Validation\ValidationException;
 //
-//class NewPasswordController extends Controller
-//{
+// class NewPasswordController extends Controller
+// {
 //    public function forgotPassword(ForgotPasswordRequest $request)
 //    {
 //        $status = Password::sendResetLink(
@@ -61,4 +62,4 @@
 //            'status' => Response::HTTP_UNPROCESSABLE_ENTITY,
 //        ]);
 //    }
-//}
+// }

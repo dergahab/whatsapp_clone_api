@@ -18,6 +18,7 @@ class Message extends Model
     use SoftDeletes;
 
     protected $table = 'messages';
+
     protected $appends = ['create_by_label'];
 
     protected $fillable = [
@@ -33,8 +34,8 @@ class Message extends Model
         'chat_id',
         'updated_at',
         'deleted_at',
-	    'group_id',
-	    'create_by'
+        'group_id',
+        'create_by',
     ];
 
     protected static function booted()
@@ -43,16 +44,18 @@ class Message extends Model
             $model->uuid = Str::uuid();
         });
     }
+
     protected function createByLabel(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->create_by == Auth::id() ? 'sender' : 'receiver'
         );
     }
-	public function creator(): BelongsTo
-	{
-		return $this->belongsTo(User::class, 'create_by', 'id');
-	}
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'create_by', 'id');
+    }
 
     protected function editStatus(): Attribute
     {
@@ -86,20 +89,18 @@ class Message extends Model
         );
     }
 
-    public function attachment():HasOne
+    public function attachment(): HasOne
     {
-        return $this->hasOne(Attachments::class,'message_id','id');
+        return $this->hasOne(Attachments::class, 'message_id', 'id');
     }
 
     public function chat(): BelongsTo
     {
-        return $this->belongsTo(Chat::class,'chat_id','id');
+        return $this->belongsTo(Chat::class, 'chat_id', 'id');
     }
 
     public function group(): BelongsTo
     {
-        return $this->belongsTo(Group::class,'group_id','id');
+        return $this->belongsTo(Group::class, 'group_id', 'id');
     }
-
-
 }

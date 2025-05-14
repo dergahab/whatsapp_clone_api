@@ -10,7 +10,7 @@ class ShowRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'uuid' => ['required', 'uuid', 'exists:' . rp_get_table(Password::class) . ',uuid'],
+            'uuid' => ['required', 'uuid', 'exists:'.rp_get_table(Password::class).',uuid'],
         ];
     }
 }

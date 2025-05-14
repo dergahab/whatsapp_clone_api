@@ -9,13 +9,13 @@ class MessageResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-	    return [
-		    'uuid' => $this->uuid,
-		    'status' => $this->status,
-		    'edit_status' =>  $this->edit_status,
-		    'message' => $this->message,
-		    'created_at' => $this->created_at,
-		    'create_by' => $this->creator->name,
-	    ];
+        return [
+            'uuid' => $this->uuid,
+            'status' => $this->status,
+            'edit_status' => $this->edit_status,
+            'message' => $this->message,
+            'created_at' => $this->created_at,
+            'create_by' => $this->creator->name,
+        ];
     }
 }

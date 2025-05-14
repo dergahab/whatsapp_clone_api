@@ -10,19 +10,19 @@ class CredentialsRepository
 
     public function __construct()
     {
-        $this->model = new Password();
+        $this->model = new Password;
     }
 
     public function index($search = null, $page = 1)
     {
-        $credentials =$this->model
+        $credentials = $this->model
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('title', 'like', '%' . $search . '%')
-                        ->orWhere('description', 'like', '%' . $search . '%');
+                    $q->where('title', 'like', '%'.$search.'%')
+                        ->orWhere('description', 'like', '%'.$search.'%');
                 });
             })
-            ->when(auth()->user()->type === "user", function ($query) {
+            ->when(auth()->user()->type === 'user', function ($query) {
                 $query->whereHas('users', function ($q) {
                     $q->where('user_id', auth()->user()->id);
                 });
@@ -31,15 +31,15 @@ class CredentialsRepository
 
             ->paginate(30, ['*'], 'page', $page);
 
-            return [
-                'current_page' => $credentials->currentPage(),
-                'data' => $credentials->items(),
-                'from' => $credentials->firstItem(),
-                'last_page' => $credentials->lastPage(),
-                'per_page' => $credentials->perPage(),
-                'to' => $credentials->lastItem(),
-                'total' => $credentials->total(),
-            ];
+        return [
+            'current_page' => $credentials->currentPage(),
+            'data' => $credentials->items(),
+            'from' => $credentials->firstItem(),
+            'last_page' => $credentials->lastPage(),
+            'per_page' => $credentials->perPage(),
+            'to' => $credentials->lastItem(),
+            'total' => $credentials->total(),
+        ];
     }
 
     public function store(array $data): Password
@@ -55,6 +55,7 @@ class CredentialsRepository
     public function update(array $data, $uuid)
     {
         $this->model->where('uuid', $uuid)->update($data);
+
         return $this->show($uuid);
     }
 
@@ -68,7 +69,7 @@ class CredentialsRepository
         return $this->model
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('title', 'like', '%' . $search . '%');
+                    $q->where('title', 'like', '%'.$search.'%');
                 });
             })
             ->select('uuid', 'title as name')

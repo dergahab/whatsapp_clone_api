@@ -5,7 +5,6 @@ namespace App\Http\Requests\Group;
 use App\Http\Requests\BaseRequest;
 use App\Models\Chat\Group;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class StoreRequest extends BaseRequest
 {
@@ -36,6 +35,7 @@ class StoreRequest extends BaseRequest
         $users[] = [
             'user_id' => auth()->user()->id,
         ];
+
         return $users;
     }
 

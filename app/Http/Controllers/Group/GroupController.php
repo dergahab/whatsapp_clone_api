@@ -17,7 +17,6 @@ class GroupController extends Controller
 {
     public function __construct(public GroupService $service) {}
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -113,6 +112,7 @@ class GroupController extends Controller
     {
         try {
             $data = $this->service->getUsers($request);
+
             return rp_response(data: $data, message: Response::HTTP_OK);
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -123,7 +123,7 @@ class GroupController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data=$request->validationData();
+            $data = $request->validationData();
             $this->service->deleteUserFromGroup($data);
             DB::commit();
 

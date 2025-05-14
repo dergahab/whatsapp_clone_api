@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\IndexRequest;
+use App\Http\Requests\User\ListRequest;
 use App\Http\Requests\User\ShowRequest;
 use App\Http\Requests\User\StoreRequest;
-use App\Http\Requests\User\IndexRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Services\User\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\User\ListRequest;
-use Spatie\LaravelIgnition\FlareMiddleware\AddQueries;
 
 class UsersController extends Controller
 {
@@ -24,7 +23,8 @@ class UsersController extends Controller
     public function index(IndexRequest $request)
     {
         try {
-           $data = $this->service->index($request);
+            $data = $this->service->index($request);
+
             return rp_response(data: $data, message: Response::HTTP_OK);
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), \Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);

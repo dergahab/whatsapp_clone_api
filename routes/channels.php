@@ -27,27 +27,27 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('message.{chatUuid}', function ($chatUuid, $uuid, MessageRepository $repository) {
     if ($chatUuid == $uuid) {
         $repository->changeMessageStatus($chatUuid, 2);
+
         return true;
     }
+
     return false;
 });
 
-
-Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid,GroupMessageRepository $repository) {
+Broadcast::channel('message.{groupUuid}', function ($groupUuid, $uuid, GroupMessageRepository $repository) {
     if ($groupUuid == $uuid) {
         $repository->changeMessageStatus($groupUuid, 2);
+
         return true;
-    }
-    else{
-         return  false;
+    } else {
+        return false;
     }
 });
 
 Broadcast::channel('notification.{authUser}', function ($authUser, $uuid) {
-   return $authUser == $uuid;
+    return $authUser == $uuid;
 });
 
 Broadcast::channel('sidebar.{authUser}', function ($authUser, $uuid) {
     return $authUser == $uuid;
 });
-

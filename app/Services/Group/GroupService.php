@@ -3,35 +3,34 @@
 namespace App\Services\Group;
 
 use App\Http\Requests\Group\AddUserToGroupRequest;
-use App\Http\Requests\Group\DeleteUserFromGroupRequest;
 use App\Http\Requests\Group\DestroyRequest;
 use App\Http\Requests\Group\ShowRequest;
 use App\Http\Requests\Group\StoreRequest;
+use App\Http\Requests\Group\UpdateRequest;
 use App\Http\Requests\Sidebar\SearchRequest;
 use App\Http\Resources\GroupResource;
-use App\Http\Requests\Group\UpdateRequest;
 use App\Models\Chat\Group;
 use App\Repositories\Group\GroupRepository;
 use App\Services\Base;
-
 
 class GroupService extends Base
 {
     public function __construct(public GroupRepository $repository) {}
 
-	public function index(SearchRequest $request, $receiver = null)
-	{
-		 $data = $this->repository->index($request->search, $receiver);
+    public function index(SearchRequest $request, $receiver = null)
+    {
+        $data = $this->repository->index($request->search, $receiver);
 
-		return GroupResource::collection($data)->resolve();
-	}
+        return GroupResource::collection($data)->resolve();
+    }
 
-	public function store(StoreRequest $request): Group
+    public function store(StoreRequest $request): Group
     {
         $groupdata = $request->groupData();
         if ($request->file('file')) {
             $groupdata['file'] = $this->fileUploadStorage($request->file('file'), 'group');
         }
+
         return $this->repository->store(
             $groupdata,
             $request->groupUsersData()
@@ -70,9 +69,9 @@ class GroupService extends Base
     {
         return $this->repository->getUsers($request->uuid);
     }
+
     public function deleteUserFromGroup($data)
     {
         return $this->repository->deleteUserFromGroup($data);
     }
-
 }

@@ -1,11 +1,11 @@
 <?php
+
 namespace App\Models\Vault;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
-use App\Models\Base;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class UserPassword extends Pivot
 {

@@ -11,16 +11,18 @@ class ChatRepository implements ChatRepositoryİnterface
 
     public function index($search, $receiver)
     {
-			$userId = $receiver ?? auth()->user()->id;
-           return $this->model->with([
-	           'message.creator:id,name,uuid',
-               'message.attachment',
-               'receiver'
-           ])
-           ->where(function ($query) use ($userId) {
-	           $query->where('user1', $userId)
-		           ->orWhere('user2', $userId);
-           })
+        $userId = $receiver ?? auth()->user()->id;
+
+        return $this->model->with([
+            'message.creator:id,name,uuid',
+            'message.attachment',
+            'receiver',
+        ])
+            ->where(function ($query) use ($userId) {
+                $query->where('user1', $userId)
+                    ->orWhere('user2', $userId);
+            })
+            ->has('messages')
             ->get();
     }
 
@@ -29,6 +31,7 @@ class ChatRepository implements ChatRepositoryİnterface
         if ($data['user1'] === $data['user2']) {
             throw new \InvalidArgumentException('User1 and User2 cannot be the same.');
         }
+
         return Chat::create($data);
     }
 
@@ -42,9 +45,9 @@ class ChatRepository implements ChatRepositoryİnterface
         return $this->model->where('uuid', $uuid)->delete();
     }
 
-    public function findChat(array $data): Chat|null
+    public function findChat(array $data): ?Chat
     {
-       return $this->model::where(function ($query) use ($data) {
+        return $this->model::where(function ($query) use ($data) {
             $query->where('user1', $data['user1'])
                 ->where('user2', $data['user2']);
         })
@@ -59,6 +62,7 @@ class ChatRepository implements ChatRepositoryİnterface
     public function getReceiver($uuid)
     {
         $result = $this->model->where(['uuid' => $uuid])->with('receiver')->first();
+
         return [$result?->receiver->uuid ?? null];
     }
 }

@@ -11,12 +11,12 @@ class UserRepository implements UserRepositoryİnterface
 
     public function __construct()
     {
-        $this->model = new User();
+        $this->model = new User;
     }
 
     public function index($data = []): array
     {
-        $group  = $data['group_id'] ?? null;
+        $group = $data['group_id'] ?? null;
         $search = $data['search'] ?? null;
 
         return User::select('uuid', 'name', 'profile_picture', 'type')
@@ -24,12 +24,12 @@ class UserRepository implements UserRepositoryİnterface
             ->when($search, function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
             })
-	        ->when($group, function ($query) use ($group) {
-		        $query->whereHas('groups', function ($q) use ($group, $query) {
-			        $q->where('group_id', "!=", $group);
-		        });
-	        })
-	        ->where('id', '!=', auth()->user()->id)
+            ->when($group, function ($query) use ($group) {
+                $query->whereHas('groups', function ($q) use ($group) {
+                    $q->where('group_id', '!=', $group);
+                });
+            })
+            ->where('id', '!=', auth()->user()->id)
             ->get()
             ->toArray();
     }
@@ -43,13 +43,12 @@ class UserRepository implements UserRepositoryİnterface
 
     public function update(array $data, string $uuid): ?User
     {
-        $data = array_filter($data, fn($value) => !is_null($value));
+        $data = array_filter($data, fn ($value) => ! is_null($value));
 
         User::where('uuid', $uuid)->update($data);
 
         return User::where('uuid', $uuid)->first();
     }
-
 
     public function show($uuid): ?User
     {
@@ -61,7 +60,7 @@ class UserRepository implements UserRepositoryİnterface
         return $this->model
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%');
+                    $q->where('name', 'like', '%'.$search.'%');
                 });
             })
             ->select('uuid', 'name')->get()->toArray();

@@ -7,11 +7,10 @@ use App\Models\User;
 
 class ShowRequest extends BaseRequest
 {
-
     public function rules()
     {
         return [
-            'uuid' => 'required|exists:' . rp_get_table(User::class) . ',uuid',
+            'uuid' => 'required|exists:'.rp_get_table(User::class).',uuid',
         ];
     }
 }

@@ -6,10 +6,10 @@ use App\Models\Chat\Chat;
 use App\Models\Vault\Password;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -44,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
         'deleted_at',
-        "pivot",
+        'pivot',
     ];
 
     /**
@@ -62,7 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
 
-        $url = 'https://spa.test/reset-password?token=' . $token;
+        $url = 'https://spa.test/reset-password?token='.$token;
 
         $this->notify(new ResetPasswordNotification($url));
     }
@@ -94,7 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function type(): Attribute
     {
         return Attribute::make(
-            get: function($value) {
+            get: function ($value) {
                 return $value == 0 ? 'user' : 'admin';
             }
         );

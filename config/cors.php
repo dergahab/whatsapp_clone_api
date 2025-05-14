@@ -22,8 +22,8 @@ return [
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [
-		'https://chat.erp-intel.az/*',
-	    'https://chat.erp-intel.az'
+        'https://chat.erp-intel.az/*',
+        'https://chat.erp-intel.az',
     ],
 
     'allowed_headers' => ['*'],

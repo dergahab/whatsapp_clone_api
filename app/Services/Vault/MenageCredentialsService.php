@@ -2,12 +2,12 @@
 
 namespace App\Services\Vault;
 
-use App\Repositories\Vault\MenageCredentialsRepository;
 use App\Http\Requests\Menage\DestroyRequest;
-use App\Http\Requests\Menage\UpdateRequest;
-use App\Http\Requests\Menage\StoreRequest;
-use App\Http\Requests\Menage\ShowRequest;
 use App\Http\Requests\Menage\IndexRequest;
+use App\Http\Requests\Menage\ShowRequest;
+use App\Http\Requests\Menage\StoreRequest;
+use App\Http\Requests\Menage\UpdateRequest;
+use App\Repositories\Vault\MenageCredentialsRepository;
 
 class MenageCredentialsService
 {

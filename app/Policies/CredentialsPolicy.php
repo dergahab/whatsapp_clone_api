@@ -2,9 +2,8 @@
 
 namespace App\Policies;
 
-
-use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CredentialsPolicy
 {
@@ -12,31 +11,31 @@ class CredentialsPolicy
 
     public function index(User $user)
     {
-        return $user->type === "user" || $user->type === "admin";
+        return $user->type === 'user' || $user->type === 'admin';
     }
 
     public function show(User $user)
     {
-        return $user->type === "user" || $user->type === "admin";
+        return $user->type === 'user' || $user->type === 'admin';
     }
 
     public function store(User $user)
     {
-        return $user->type === "admin";
+        return $user->type === 'admin';
     }
 
     public function update(User $user)
     {
-        return $user->type === "admin";
+        return $user->type === 'admin';
     }
 
     public function destroy(User $user)
     {
-        return $user->type === "admin";
+        return $user->type === 'admin';
     }
 
     public function list(User $user)
     {
-        return $user->type === "admin";
+        return $user->type === 'admin';
     }
 }

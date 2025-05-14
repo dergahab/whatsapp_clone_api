@@ -2,14 +2,14 @@
 
 namespace App\Services\User;
 
+use App\Http\Requests\User\IndexRequest;
+use App\Http\Requests\User\ListRequest;
 use App\Http\Requests\User\ShowRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
-use App\Http\Requests\User\IndexRequest;
 use App\Models\User;
 use App\Repositories\User\UserRepository;
 use App\Services\Base;
-use App\Http\Requests\User\ListRequest;
 
 class UserService extends Base
 {
@@ -26,6 +26,7 @@ class UserService extends Base
         if ($request->file('profile_picture')) {
             $groupdata['profile_picture'] = $this->fileUploadStorage($request->file('profile_picture'), 'user');
         }
+
         return $this->repositories->store($groupdata);
     }
 

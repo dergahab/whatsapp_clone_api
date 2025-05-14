@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Vault;
 
-use App\Services\Vault\MenageCredentialsService;
-use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Menage\DestroyRequest;
-use App\Http\Requests\Menage\UpdateRequest;
-use App\Http\Requests\Menage\IndexRequest;
-use App\Http\Requests\Menage\StoreRequest;
-use App\Http\Requests\Menage\ShowRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Menage\DestroyRequest;
+use App\Http\Requests\Menage\IndexRequest;
+use App\Http\Requests\Menage\ShowRequest;
+use App\Http\Requests\Menage\StoreRequest;
+use App\Http\Requests\Menage\UpdateRequest;
+use App\Services\Vault\MenageCredentialsService;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class MenageCredentialsController extends Controller
 {
@@ -23,6 +23,7 @@ class MenageCredentialsController extends Controller
     {
         try {
             $passwords = $this->service->index($request);
+
             return rp_response($passwords, message: Response::HTTP_OK);
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -36,9 +37,11 @@ class MenageCredentialsController extends Controller
         try {
             $passwords = $this->service->store($request);
             DB::commit();
+
             return rp_response($passwords, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
         } catch (\Exception $ex) {
             DB::rollBack();
+
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -49,9 +52,11 @@ class MenageCredentialsController extends Controller
         try {
             $passwords = $this->service->update($request, $uuid);
             DB::commit();
+
             return rp_response($passwords, __('DataUpdatedSuccessfully'), Response::HTTP_OK);
         } catch (\Exception $ex) {
             DB::rollBack();
+
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -60,6 +65,7 @@ class MenageCredentialsController extends Controller
     {
         try {
             $password = $this->service->show($request);
+
             return rp_response($password, message: Response::HTTP_OK);
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -72,9 +78,11 @@ class MenageCredentialsController extends Controller
         try {
             $result = $this->service->destroy($request);
             DB::commit();
+
             return rp_response($result, __('DataDeletedSuccessfully'), Response::HTTP_OK);
         } catch (\Exception $ex) {
             DB::rollBack();
+
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
