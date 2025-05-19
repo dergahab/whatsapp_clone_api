@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class Chat extends Base
 {
@@ -59,7 +60,6 @@ class Chat extends Base
 
         return $this->userTwo();
     }
-
     public function unread_messages(): HasMany
     {
         return $this->hasMany(Message::class, 'chat_id', 'id');
@@ -74,10 +74,9 @@ class Chat extends Base
 
     public function receiver(): BelongsTo
     {
-        if (Auth::user()?->id == $this->user1) {
+        if (auth()->user()?->id == $this->user1) {
             return $this->userTwo();
         }
-
         return $this->userOne();
     }
 }

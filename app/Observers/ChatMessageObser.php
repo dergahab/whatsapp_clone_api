@@ -16,28 +16,29 @@ class ChatMessageObser
 
     public function created(Message $message): void
     {
-        $message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
+        Log::info("---------------");
+        Log::info('Authenticated User:', ['user' => Auth::user()]);
 
-        $chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
+        $message = Message::where('uuid', $message->uuid)->with(['chat.userOne', 'chat.userTwo', 'chat.unread_messages', 'group.receivers'])->first();
+
+
+        $chatReceivers = [$message?->chat?->userTwo?->uuid ,$message?->chat?->userOne?->uuid] ?? [];
+
+        Log::info($message?->chat?->receiver);
         $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-        $authUuid = Auth::user()?->uuid;
+        $authUuid = Auth::user()?->name;
+
         $receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
-
-        Log::alert('------------------');
-
         foreach ($receiverUuids as $receiverUuid) {
             $user = User::where('uuid', $receiverUuid)->first();
             if (! $user) {
                 continue;
             }
-            // Müvəqqəti həmin istifadəçi ilə "login"
             Auth::setUser($user);
-            $userId = $user->id; // <-- Düzgün ID tapılır
-
+            $userId = $user->id;
             $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
             Log::alert(json_encode($sidebarData));
             event(new SidebarEvent($sidebarData, $receiverUuid));
         }
-
     }
 }

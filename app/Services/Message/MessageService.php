@@ -28,7 +28,6 @@ class MessageService
     {
         $data = $request->validationData();
         $message = $this->repository->store($data);
-
         if ($request->file('file')) {
             $this->attachmentService->store($request->file('file'), $message->id);
         }
@@ -38,7 +37,6 @@ class MessageService
         $chat = Chat::where('id', $request->input('chat_id'))->with('receiver')->first();
         $receivers = [$chat->receiver->uuid];
         event(new NotificationEvent($showdata, $receivers));
-
         return $message;
     }
 
