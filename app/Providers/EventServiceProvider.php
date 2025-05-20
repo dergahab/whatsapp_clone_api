@@ -2,14 +2,13 @@
 
 namespace App\Providers;
 
-use App\Events\ChatNewMessageSendedEvent;
-use App\Listeners\UpdateMessageStatusToRead;
+use App\Models\Attachments;
 use App\Models\Chat\Message;
-use App\Observers\ChatMessageObser;
+use App\Observers\AttachmentObserver;
+use App\Observers\ChatMessageObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,9 +21,6 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        //        ChatNewMessageSendedEvent::class => [
-        //            UpdateMessageStatusToRead::class,
-        //        ],
     ];
 
     /**
@@ -32,7 +28,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Message::observe(ChatMessageObser::class);
+        Message::observe(ChatMessageObserver::class);
+        Attachments::observe(AttachmentObserver::class);
     }
 
     /**
