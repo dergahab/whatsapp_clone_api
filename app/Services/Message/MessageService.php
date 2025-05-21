@@ -37,7 +37,7 @@ class MessageService
         $chat = Chat::where('id', $request->input('chat_id'))->with(['userOne', 'userTwo'])->first();
 
 
-        $receivers = [$chat->userOne->uuid == auth()->user()->uuid ? $chat->userOne->uuid : $chat->userTwo->uuid];
+        $receivers = [$chat->userOne->uuid == auth()->user()->uuid ? $chat->userTwo->uuid : $chat->userOne->uuid];
         event(new NotificationEvent($showdata, $receivers));
         return $message;
     }
