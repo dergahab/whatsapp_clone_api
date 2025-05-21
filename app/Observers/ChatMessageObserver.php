@@ -10,34 +10,27 @@ use App\Services\Sidebar\SidebarService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class ChatMessageObser
+class ChatMessageObserver
 {
     public function __construct(public SidebarService $sidebarService) {}
 
     public function created(Message $message): void
     {
-        $message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
-
-        $chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
+        Log::info('Authenticated User:', ['user' => Auth::user()]);
+        $message = Message::where('uuid', $message->uuid)->with(['chat.userOne', 'chat.userTwo', 'chat.unread_messages', 'group.receivers'])->first();
+        $chatReceivers = [$message?->chat?->userTwo?->uuid ,$message?->chat?->userOne?->uuid] ?? [];
         $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-        $authUuid = Auth::user()?->uuid;
-        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
-
-        Log::alert('------------------');
-
+        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers])->unique()->values();
         foreach ($receiverUuids as $receiverUuid) {
             $user = User::where('uuid', $receiverUuid)->first();
             if (! $user) {
                 continue;
             }
-            // Müvəqqəti həmin istifadəçi ilə "login"
             Auth::setUser($user);
-            $userId = $user->id; // <-- Düzgün ID tapılır
-
+            $userId = $user->id;
             $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
             Log::alert(json_encode($sidebarData));
             event(new SidebarEvent($sidebarData, $receiverUuid));
         }
-
     }
 }

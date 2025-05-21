@@ -28,7 +28,7 @@ class MessageController extends Controller
         } catch (\Exception $ex) {
             DB::rollBack();
 
-            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+           return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

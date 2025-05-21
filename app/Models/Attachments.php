@@ -24,7 +24,7 @@ class Attachments extends Base
         'updated_at',
     ];
 
-    public function messages(): BelongsTo
+    public function message(): BelongsTo
     {
         return $this->belongsTo(Message::class);
     }
