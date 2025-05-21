@@ -34,8 +34,10 @@ class MessageService
         $showdata = $this->repository->show($message->uuid)->toArray();
         $chatUuid = rp_id_to_uuid(Chat::class, $request->input('chat_id'));
         event(new ChatNewMessageSendedEvent($showdata, $chatUuid));
-        $chat = Chat::where('id', $request->input('chat_id'))->with('receiver')->first();
-        $receivers = [$chat->receiver->uuid];
+        $chat = Chat::where('id', $request->input('chat_id'))->with(['userOne', 'userTwo'])->first();
+
+
+        $receivers = [$chat->userOne->uuid == auth()->user()->uuid ? $chat->userOne->uuid : $chat->userTwo->uuid];
         event(new NotificationEvent($showdata, $receivers));
         return $message;
     }

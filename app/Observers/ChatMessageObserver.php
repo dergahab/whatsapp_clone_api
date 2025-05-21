@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Observers;
 
 use App\Events\SidebarEvent;
-use App\Http\Requests\Sidebar\SearchRequest;
 use App\Models\Chat\Message;
 use App\Models\User;
 use App\Services\Sidebar\SidebarService;
@@ -12,77 +10,68 @@ use Illuminate\Support\Facades\Log;
 
 class ChatMessageObserver
 {
-    public function __construct(public SidebarService $sidebarService) {}
+	public function __construct(public SidebarService $sidebarService)
+	{
+	}
 
-    public function created(Message $message): void
-    {
-        Log::info('Authenticated User:', ['user' => Auth::user()]);
-        $message = Message::where('uuid', $message->uuid)->with(['chat.userOne', 'chat.userTwo', 'chat.unread_messages', 'group.receivers'])->first();
-        $chatReceivers = [$message?->chat?->userTwo?->uuid ,$message?->chat?->userOne?->uuid] ?? [];
-        $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers])->unique()->values();
-        foreach ($receiverUuids as $receiverUuid) {
-            $user = User::where('uuid', $receiverUuid)->first();
-            if (! $user) {
-                continue;
-            }
-            Auth::setUser($user);
-            $userId = $user->id;
-            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-            Log::alert(json_encode($sidebarData));
-            event(new SidebarEvent($sidebarData, $receiverUuid));
-        }
-    }
+	public function created(Message $message): void
+	{
+		$this->dispatchSidebarUpdateForMessage($message, 'created');
+	}
+
 	public function updated(Message $message): void
-    {
-        $message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
-
-        $chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
-        $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-        $authUuid = Auth::user()?->uuid;
-        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
-
-        Log::alert('------------------');
-
-        foreach ($receiverUuids as $receiverUuid) {
-            $user = User::where('uuid', $receiverUuid)->first();
-            if (! $user) {
-                continue;
-            }
-            // Müvəqqəti həmin istifadəçi ilə "login"
-            Auth::setUser($user);
-            $userId = $user->id; // <-- Düzgün ID tapılır
-
-            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-            Log::alert(json_encode($sidebarData));
-            event(new SidebarEvent($sidebarData, $receiverUuid));
-        }
-
-    }
+	{
+		$this->dispatchSidebarUpdateForMessage($message, 'updated');
+	}
 
 	public function deleted(Message $message): void
 	{
-		$message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
+		$this->dispatchSidebarUpdateForMessage($message, 'deleted');
+	}
 
-		$chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
-		$groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
+	/**
+	 * Dispatch sidebar update for all relevant users when a message is changed.
+	 */
+	private function dispatchSidebarUpdateForMessage(Message $message, string $action): void
+	{
+		$message = Message::where('uuid', $message->uuid)
+			->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])
+			->first();
+
+		if (!$message) {
+			Log::warning("Message not found for UUID: {$message->uuid}");
+			return;
+		}
+
+		$chatReceivers = [$message->chat?->receiver?->uuid] ?? [];
+		$groupReceivers = $message->group?->receivers?->pluck('uuid')->toArray() ?? [];
 		$authUuid = Auth::user()?->uuid;
-		$receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
+		$receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])
+			->filter()
+			->unique()
+			->values();
+
+		Log::info("Dispatching sidebar update for message action '{$action}' for UUIDs: " . implode(', ', $receiverUuids->toArray()));
 
 		foreach ($receiverUuids as $receiverUuid) {
 			$user = User::where('uuid', $receiverUuid)->first();
-			if (! $user) {
+
+			if (!$user) {
+				Log::warning("User not found with UUID: {$receiverUuid}");
 				continue;
 			}
-			// Müvəqqəti həmin istifadəçi ilə "login"
-			Auth::setUser($user);
-			$userId = $user->id; // <-- Düzgün ID tapılır
 
-			$sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-			Log::alert(json_encode($sidebarData));
+			// Temporarily impersonate user
+			Auth::setUser($user);
+
+			$userId = $user->id;
+
+			// If your SidebarService::index depends on SearchRequest, refactor it to use a simple method like this:
+			$sidebarData = $this->sidebarService->getSidebarDataForUser($userId); // ← You need to implement this method
+
+			Log::info("Sidebar data prepared for user {$userId}: " . json_encode($sidebarData));
+
 			event(new SidebarEvent($sidebarData, $receiverUuid));
 		}
-
 	}
-
 }
