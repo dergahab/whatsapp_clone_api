@@ -3,6 +3,7 @@
 namespace App\Repositories\Vault;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class MenageCredentialsRepository
 {
@@ -16,11 +17,11 @@ class MenageCredentialsRepository
     public function index($page = 1)
     {
         $credentials = $this->model
-            ->whereHas('passwords', function ($query) {
-                $query->orderBy('user_passwords.created_at', 'desc');
-            })
+            ->whereHas('passwords')
+            ->orderByLastPassword()
             ->with(['passwords:uuid,title'])
             ->paginate(30, ['*'], 'page', $page);
+
 
         return [
             'current_page' => $credentials->currentPage(),
@@ -42,7 +43,9 @@ class MenageCredentialsRepository
 
     public function update($request): User
     {
-        $this->getByUuid($request->user_id)->passwords()->sync($request->credentials);
+        $this->getByUuid($request->user_id)
+            ->passwords()
+            ->sync(array_unique(data_get($request->credentials, '*.password_id')));
 
         return $this->show($request->user_id);
     }
