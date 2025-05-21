@@ -94,7 +94,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function scopeOrderByLastPassword($query)
     {
-        // https://stackoverflow.com/questions/3647063/order-by-desc-in-reverse-order
         return $query->orderByDesc(
             DB::table('user_passwords')
                 ->select('created_at')

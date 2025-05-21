@@ -16,11 +16,6 @@ class MenageCredentialsRepository
 
     public function index($page = 1)
     {
-
-        //     ->whereHas('passwords', function ($query) {
-        //         $query->orderBy('user_passwords.created_at', 'desc');
-        //     })
-
         $credentials = $this->model
             ->whereHas('passwords')
             ->orderByLastPassword()
@@ -48,14 +43,6 @@ class MenageCredentialsRepository
 
     public function update($request): User
     {
-        // https://stackoverflow.com/questions/34405138/laravel-5-2-pluck-method-returns-array
-        //     $ids = collect($request->credentials)
-        //         ->pluck('password_id')  // sadəcə ID-ləri al
-        //         ->unique()              // təkrarlananları çıxar
-        //         ->toArray();            // array formatına çevir
-        //     $this->getByUuid($request->user_id)->passwords()->sync($ids);
-
-        // $this->getByUuid($request->user_id)->passwords()->sync($request->credentials);
         $this->getByUuid($request->user_id)
             ->passwords()
             ->sync(array_unique(data_get($request->credentials, '*.password_id')));
