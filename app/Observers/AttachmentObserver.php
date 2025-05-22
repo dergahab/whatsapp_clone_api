@@ -18,17 +18,43 @@ class AttachmentObserver
         $attachment = Attachments::where('uuid', $attachments->uuid)
             ->with(['message.chat.userOne', 'message.chat.userTwo', 'message.chat.unread_messages', 'message.group.receivers'])
             ->first();
-        Log::info($attachment);
+        $chatReceivers = $attachment?->message?->chat
+            ? [$attachment->message->chat->userTwo?->uuid, $attachment->message->chat->userOne?->uuid]
+            : [];
+        $groupReceivers = $attachment?->message?->group?->receivers->pluck('uuid')->toArray() ?? [];
+
+        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers])->unique()->values();
+        $auth = Auth::user();
+        foreach ($receiverUuids as $receiverUuid) {
+            $user = User::where('uuid', $receiverUuid)->first();
+            if (! $user) {
+                continue;
+            }
+            Auth::setUser($user);
+            $userId = $user->id;
+
+            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
+            Log::alert(json_encode($sidebarData));
+            event(new SidebarEvent($sidebarData, $receiverUuid));
+        }
+        Auth::setUser($auth);
+    }
+
+    public function deleted(Attachments $attachments): void
+    {
+        $attachment = Attachments::where('uuid', $attachments->uuid)
+            ->with(['message.chat.userOne', 'message.chat.userTwo', 'message.chat.unread_messages', 'message.group.receivers'])
+            ->first();
+
         $chatReceivers = $attachment?->message?->chat
             ? [$attachment->message->chat->userTwo?->uuid, $attachment->message->chat->userOne?->uuid]
             : [];
 
-        Log::info($chatReceivers);
         $groupReceivers = $attachment?->message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-        Log::info($groupReceivers);
 
         $receiverUuids = collect([...$chatReceivers, ...$groupReceivers])->unique()->values();
-        Log::info($receiverUuids);
+
+        $auth = Auth::user();
         foreach ($receiverUuids as $receiverUuid) {
             $user = User::where('uuid', $receiverUuid)->first();
             if (! $user) {
@@ -40,46 +66,6 @@ class AttachmentObserver
             Log::alert(json_encode($sidebarData));
             event(new SidebarEvent($sidebarData, $receiverUuid));
         }
+        Auth::setUser($auth);
     }
-
-    public function deleted(Attachments $attachments): void
-    {
-        $attachment = Attachments::where('uuid', $attachments->uuid)
-            ->with(['message.chat.userOne', 'message.chat.userTwo', 'message.chat.unread_messages', 'message.group.receivers'])
-            ->first();
-
-        Log::info('Deleted Attachment:', [$attachment]);
-
-        $chatReceivers = $attachment?->message?->chat
-            ? [$attachment->message->chat->userTwo?->uuid, $attachment->message->chat->userOne?->uuid]
-            : [];
-
-        Log::info('Chat Receivers:', $chatReceivers);
-
-        $groupReceivers = $attachment?->message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-
-        Log::info('Group Receivers:', $groupReceivers);
-
-        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers])->unique()->values();
-
-        Log::info('All Receivers:', $receiverUuids);
-
-        foreach ($receiverUuids as $receiverUuid) {
-            $user = User::where('uuid', $receiverUuid)->first();
-            if (! $user) {
-                continue;
-            }
-
-            Auth::setUser($user);
-            $userId = $user->id;
-
-            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-
-            Log::alert('Sidebar Data on Delete:', [json_encode($sidebarData)]);
-
-            event(new SidebarEvent($sidebarData, $receiverUuid));
-        }
-    }
-
-
 }

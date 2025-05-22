@@ -38,22 +38,18 @@ class ChatMessageObserver
 	public function updated(Message $message): void
     {
         $message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
-
         $chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
         $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
         $authUuid = Auth::user()?->uuid;
         $receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
-
         $auth = Auth::user();
         foreach ($receiverUuids as $receiverUuid) {
             $user = User::where('uuid', $receiverUuid)->first();
             if (! $user) {
                 continue;
             }
-
             Auth::setUser($user);
             $userId = $user->id;
-
             $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
             Log::alert(json_encode($sidebarData));
             event(new SidebarEvent($sidebarData, $receiverUuid));
@@ -64,24 +60,24 @@ class ChatMessageObserver
 	public function deleted(Message $message): void
 	{
 		$message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
-
 		$chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
 		$groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
 		$authUuid = Auth::user()?->uuid;
-
 		$receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
+        $auth = Auth::user();
+        foreach ($receiverUuids as $receiverUuid) {
+            $user = User::where('uuid', $receiverUuid)->first();
+            if (! $user) {
+                continue;
+            }
+            Auth::setUser($user);
+            $userId = $user->id;
 
-		foreach ($receiverUuids as $receiverUuid) {
-			$user = User::where('uuid', $receiverUuid)->first();
-			if (! $user) {
-				continue;
-			}
-			$userId = $user->id;
-
-			$sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-			Log::alert(json_encode($sidebarData));
-			event(new SidebarEvent($sidebarData, $receiverUuid));
-		}
+            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
+            Log::alert(json_encode($sidebarData));
+            event(new SidebarEvent($sidebarData, $receiverUuid));
+        }
+        Auth::setUser($auth);
 
 	}
 
