@@ -22,7 +22,7 @@ class AttachmentController extends Controller
                 return rp_response([], __('File not found'), Response::HTTP_NOT_FOUND);
             }
 
-            return response()->download($response, basename($response)); // Optional: dynamic file name
+            return response()->download($response, basename($response));
         } catch (\Exception $ex) {
             return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

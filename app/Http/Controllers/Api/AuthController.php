@@ -96,7 +96,7 @@ class AuthController extends Controller
                         'Authorization' => [
                             'access_token' => $token->plainTextToken,
                             'token_type' => 'Bearer',
-                            'expires_in' => 60 * 24 * 365, // 1 yıl
+                            'expires_in' => 60 * 24 * 365,
                         ],
                         'user_info' => $user,
                     ],
