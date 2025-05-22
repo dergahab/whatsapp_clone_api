@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class Chat extends Base
 {
@@ -79,4 +78,9 @@ class Chat extends Base
         }
         return $this->userOne();
     }
+    public function returnAuth()
+    {
+        return auth()->user()->id;
+    }
+
 }

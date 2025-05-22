@@ -14,6 +14,7 @@ use App\Models\Chat\Message;
 use App\Repositories\Message\MessageRepository;
 use App\Services\Attachment\AttachmentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MessageService
 {
@@ -34,7 +35,8 @@ class MessageService
         $showdata = $this->repository->show($message->uuid)->toArray();
         $chatUuid = rp_id_to_uuid(Chat::class, $request->input('chat_id'));
         event(new ChatNewMessageSendedEvent($showdata, $chatUuid));
-        $chat = Chat::where('id', $request->input('chat_id'))->with(['receiver', 'userOne', 'userTwo'])->first();
+
+        $chat = Chat::where('id', $request->input('chat_id'))->with(['userOne', 'userTwo'])->first();
         $receivers = [$chat->receiver->uuid];
         event(new NotificationEvent($showdata, $receivers));
         return $message;
