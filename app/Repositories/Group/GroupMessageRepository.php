@@ -23,7 +23,6 @@ class GroupMessageRepository
 
     public function showAllMessages($group_id, $page = 1): array
     {
-        $userId = auth()->user()->id;
         $this->changeMessageStatus($group_id, 2);
 
         $messages = $this->model
@@ -32,7 +31,7 @@ class GroupMessageRepository
             ->orderBy('created_at', 'desc')
             ->paginate(30, ['*'], 'page', $page);
 
-        $this->unread_messages($messages->pluck('id'), $userId);
+        $this->read_messages($messages->pluck('id'));
 
         return [
             'current_page' => $messages->currentPage(),
@@ -45,8 +44,9 @@ class GroupMessageRepository
         ];
     }
 
-    public function unread_messages($messageIds, int $userId): void
+    public function read_messages($messageIds): void
     {
+        $userId = auth()->user()->id;
         $this->messageRead::insertOrIgnore(
             collect($messageIds)
                 ->filter(fn($id) => !$this->messageRead::where('message_id', $id)->where('user_id', $userId)->exists())
@@ -57,7 +57,7 @@ class GroupMessageRepository
 
     public function changeMessageStatus($group_id, $status)
     {
-        $this->unread_messages($this->model->where('group_id', $group_id)->pluck('id'), auth()->user()->id);
+        $this->read_messages($this->model->where('group_id', $group_id)->pluck('id'));
         return
         $this->model
             ->where('group_id', $group_id)
