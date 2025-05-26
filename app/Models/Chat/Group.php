@@ -24,7 +24,8 @@ class Group extends Base
     protected $hidden = [
         'id',
         'created_at',
-        'updated_at',        'deleted_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function users()
@@ -51,6 +52,16 @@ class Group extends Base
 
     public function unread_messages(): HasMany
     {
-        return $this->hasMany(Message::class, 'group_id', 'id')->where('status', 1);
+        return $this->hasMany(Message::class, 'group_id', 'id')->where('create_by', '!=', auth()->id())
+            ->whereDoesntHave('reads', function ($query) {
+                $query->where('message_reads.user_id', auth()->id());
+            });
+    }
+
+    protected $appends = ['unread_count'];
+
+    public function getUnreadCountAttribute()
+    {
+        return $this->unread_messages()->count();
     }
 }
