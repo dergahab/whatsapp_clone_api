@@ -57,11 +57,4 @@ class Group extends Base
                 $query->where('message_reads.user_id', auth()->id());
             });
     }
-
-    protected $appends = ['unread_count'];
-
-    public function getUnreadCountAttribute()
-    {
-        return $this->unread_messages()->count();
-    }
 }
