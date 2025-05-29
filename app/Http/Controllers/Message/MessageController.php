@@ -20,10 +20,10 @@ class MessageController extends Controller
     {
         DB::beginTransaction();
         try {
-            $this->service->store($request);
+          $data = $this->service->store($request);
             DB::commit();
 
-            return rp_response([], __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
+            return rp_response($data, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
 
         } catch (\Exception $ex) {
             DB::rollBack();
@@ -66,17 +66,17 @@ class MessageController extends Controller
     public function destroy(DestroyRequest $request)
     {
         DB::beginTransaction();
-        try {
-            $message = $this->service->destroy($request);
+//        try {
+            $this->service->destroy($request);
             DB::commit();
 
-            return rp_response($message, __('DataDeletedSuccessfully'), Response::HTTP_OK);
-
-        } catch (\Exception $ex) {
-            DB::rollBack();
-
-            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+            return rp_response([], __('DataDeletedSuccessfully'), Response::HTTP_OK);
+//
+//        } catch (\Exception $ex) {
+//            DB::rollBack();
+//
+//            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+//        }
     }
 
     public function show_messages(ShowAllMessageRequest $request)
