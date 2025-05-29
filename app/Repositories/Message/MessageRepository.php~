@@ -50,7 +50,11 @@ class MessageRepository
 
     public function destroy($uuid)
     {
-        return $this->model->where('uuid', $uuid)->delete();
+	    $message = $this->model->where('uuid', $uuid)->first();
+
+	    $message->delete();
+
+		return $message;
     }
 
     public function changeMessageStatus($chat_id, $status)

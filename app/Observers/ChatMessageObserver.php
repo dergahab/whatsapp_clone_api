@@ -1,84 +1,72 @@
 <?php
+	namespace App\Observers;
 
-namespace App\Observers;
+	use App\Events\SidebarEvent;
+	use App\Http\Requests\Sidebar\SearchRequest;
+	use App\Models\Chat\Message;
+	use App\Models\User;
+	use App\Services\Sidebar\SidebarService;
+	use Illuminate\Support\Facades\Auth;
+	use Illuminate\Support\Facades\Log;
 
-use App\Events\SidebarEvent;
-use App\Http\Requests\Sidebar\SearchRequest;
-use App\Models\Chat\Message;
-use App\Models\User;
-use App\Services\Sidebar\SidebarService;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
-class ChatMessageObserver
-{
-    public function __construct(public SidebarService $sidebarService) {}
-
-    public function created(Message $message): void
-    {
-        Log::info('Authenticated User:', ['user' => Auth::user()]);
-        $message = Message::where('uuid', $message->uuid)->with(['chat.userOne', 'chat.userTwo', 'chat.unread_messages', 'group.receivers'])->first();
-        $chatReceivers = [$message?->chat?->userTwo?->uuid ,$message?->chat?->userOne?->uuid] ?? [];
-        $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers])->unique()->values();
-        $auth = Auth::user();
-        foreach ($receiverUuids as $receiverUuid) {
-            $user = User::where('uuid', $receiverUuid)->first();
-            if (! $user) {
-                continue;
-            }
-            Auth::setUser($user);
-            $userId = $user->id;
-            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-            Log::alert(json_encode($sidebarData));
-            event(new SidebarEvent($sidebarData, $receiverUuid));
-        }
-        Auth::setUser($auth);
-    }
-	public function updated(Message $message): void
-    {
-        $message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
-        $chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
-        $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-        $authUuid = Auth::user()?->uuid;
-        $receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
-        $auth = Auth::user();
-        foreach ($receiverUuids as $receiverUuid) {
-            $user = User::where('uuid', $receiverUuid)->first();
-            if (! $user) {
-                continue;
-            }
-            Auth::setUser($user);
-            $userId = $user->id;
-            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-            Log::alert(json_encode($sidebarData));
-            event(new SidebarEvent($sidebarData, $receiverUuid));
-        }
-        Auth::setUser($auth);
-    }
-
-	public function deleted(Message $message): void
+	class ChatMessageObserver
 	{
-		$message = Message::where('uuid', $message->uuid)->with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])->first();
-		$chatReceivers = [$message?->chat?->receiver?->uuid] ?? [];
-		$groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-		$authUuid = Auth::user()?->uuid;
-		$receiverUuids = collect([...$chatReceivers, ...$groupReceivers, $authUuid])->unique()->values();
-        $auth = Auth::user();
-        foreach ($receiverUuids as $receiverUuid) {
-            $user = User::where('uuid', $receiverUuid)->first();
-            if (! $user) {
-                continue;
-            }
-            Auth::setUser($user);
-            $userId = $user->id;
+		public function __construct(public SidebarService $sidebarService) {}
 
-            $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-            Log::alert(json_encode($sidebarData));
-            event(new SidebarEvent($sidebarData, $receiverUuid));
-        }
-        Auth::setUser($auth);
+	    public function created(Message $message): void
+	    {
+	        $this->handleSidebarUpdate($message);
+	    }
+
+		public function updated(Message $message): void
+		{
+			$this->handleSidebarUpdate($message);
+		}
+
+		public function deleted(Message $message): void
+		{
+			$this->handleSidebarUpdate($message);
+		}
+
+		private function handleSidebarUpdate(Message $message): void
+		{
+			// Fully reload the message and all needed relationships
+			$message = Message::with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])
+				->where('uuid', $message->uuid)
+				->firstOrFail();
+
+			$chatReceiverUuid = $message->chat?->receiver?->uuid;
+			$groupReceiverUuids = $message->group?->receivers->pluck('uuid')->toArray() ?? [];
+			$currentUser = Auth::user();
+
+			if (!$currentUser) {
+				\Log::warning('No authenticated user for sidebar update.');
+				return;
+			}
+
+			$receiverUuids = collect([$chatReceiverUuid, ...$groupReceiverUuids, $currentUser->uuid])
+				->filter()
+				->unique()
+				->values();
+
+			foreach ($receiverUuids as $uuid) {
+				$user = User::where('uuid', $uuid)->first();
+				if (! $user) {
+					continue;
+				}
+
+				try {
+					Log::debug("Sidebar update for user ID: {$user->id}");
+
+					$sidebarData = $this->sidebarService->index(new SearchRequest(), $user->id);
+
+					Log::debug('Sidebar data generated:', $sidebarData);
+
+					event(new SidebarEvent($sidebarData, $uuid));
+				} catch (\Throwable $e) {
+					Log::error("Sidebar update failed for {$uuid}", ['error' => $e->getMessage()]);
+				}
+			}
+		}
 
 	}
-
-}

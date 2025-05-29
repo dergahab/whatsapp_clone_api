@@ -47,9 +47,12 @@ class MessageService
         return $this->repository->show($request->uuid);
     }
 
-    public function update(UpdateRequest $request, $uuid): int
+    public function update(UpdateRequest $request, $uuid): Message
     {
-        return $this->repository->update($request->validatedData(), $uuid);
+	    $showdata = $this->repository->update($request->validatedData(), $uuid);
+
+	    return  $showdata;
+
     }
 
     public function showAllMessages(ShowAllMessageRequest $request)

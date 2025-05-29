@@ -18,7 +18,7 @@ class ChatResource extends JsonResource
             'name' => $this->sendBy->name ?? null,
             'unread_count' => $this?->unread_messages,
             'image' => $this->sendBy->profile_picture ?? null,
-            'attachment' => $this->message?->attachment?->attachment_type,
+            'attachment' => $this->message?->attachment?->attachment_type ?? null,
             'message_text' => $messageArray['message'] ?? null,
             'message_status' => $messageArray['status'] ?? null,
             'message_edit_status' => $messageArray['edit_status'] ?? null,
