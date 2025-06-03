@@ -16,28 +16,7 @@ class ChatMessageObserver
 
     public function created(Message $message): void
     {
-	    $message = Message::where('uuid', $message->uuid)->with(['chat.userOne', 'chat.userTwo', 'chat.unread_messages', 'group.receivers'])->first();
-	    $chatReceivers = [$message?->chat?->userTwo?->uuid ,$message?->chat?->userOne?->uuid] ?? [];
-
-	    $groupReceivers = $message?->group?->receivers->pluck('uuid')->toArray() ?? [];
-	    $receiverUuids = collect([...$chatReceivers, ...$groupReceivers])->unique()->values();
-
-	    $auth = Auth::user();
-
-	    foreach ($receiverUuids as $receiverUuid) {
-		    $user = User::where('uuid', $receiverUuid)->first();
-		    if (! $user) {
-			    continue;
-		    }
-		    Auth::setUser($user);
-		    $userId = $user->id;
-		    $sidebarData = $this->sidebarService->index(new SearchRequest, $userId);
-		    Log::alert(json_encode($sidebarData));
-		    event(new SidebarEvent($sidebarData, $receiverUuid));
-	    }
-
-	    Auth::setUser($auth);
-
+        $this->handleSidebarUpdate($message);
     }
 
     public function updated(Message $message): void
