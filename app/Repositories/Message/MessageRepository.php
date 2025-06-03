@@ -18,14 +18,15 @@ class MessageRepository
         return $this->model->where('uuid', $uuid)->with('creator', 'attachment')->first();
     }
 
-    public function update(array $data, $uuid):Message
+    public function update(array $data, $uuid): Message
     {
-	    $message = $this->model->where('uuid', $uuid)->first();
+        $message = $this->model->where('uuid', $uuid)->first();
 
-		$message->fill($data);
+        $message->fill($data);
 
-		 $message->save();
-		return $message;
+        $message->save();
+
+        return $message;
     }
 
     public function showAllMessages($chat_id, $page = 1): array

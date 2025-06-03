@@ -31,6 +31,7 @@ class ChatRepository implements ChatRepositoryİnterface
         if ($data['user1'] === $data['user2']) {
             throw new \InvalidArgumentException('User1 and User2 cannot be the same.');
         }
+
         return Chat::create($data);
     }
 

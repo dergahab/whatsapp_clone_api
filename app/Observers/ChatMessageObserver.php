@@ -1,72 +1,73 @@
 <?php
-	namespace App\Observers;
 
-	use App\Events\SidebarEvent;
-	use App\Http\Requests\Sidebar\SearchRequest;
-	use App\Models\Chat\Message;
-	use App\Models\User;
-	use App\Services\Sidebar\SidebarService;
-	use Illuminate\Support\Facades\Auth;
-	use Illuminate\Support\Facades\Log;
+namespace App\Observers;
 
-	class ChatMessageObserver
-	{
-		public function __construct(public SidebarService $sidebarService) {}
+use App\Events\SidebarEvent;
+use App\Http\Requests\Sidebar\SearchRequest;
+use App\Models\Chat\Message;
+use App\Models\User;
+use App\Services\Sidebar\SidebarService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
-	    public function created(Message $message): void
-	    {
-	        $this->handleSidebarUpdate($message);
-	    }
+class ChatMessageObserver
+{
+    public function __construct(public SidebarService $sidebarService) {}
 
-		public function updated(Message $message): void
-		{
-			$this->handleSidebarUpdate($message);
-		}
+    public function created(Message $message): void
+    {
+        $this->handleSidebarUpdate($message);
+    }
 
-		public function deleted(Message $message): void
-		{
-			$this->handleSidebarUpdate($message);
-		}
+    public function updated(Message $message): void
+    {
+        $this->handleSidebarUpdate($message);
+    }
 
-		private function handleSidebarUpdate(Message $message): void
-		{
-			// Fully reload the message and all needed relationships
-			$message = Message::with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])
-				->where('uuid', $message->uuid)
-				->firstOrFail();
+    public function deleted(Message $message): void
+    {
+        $this->handleSidebarUpdate($message);
+    }
 
-			$chatReceiverUuid = $message->chat?->receiver?->uuid;
-			$groupReceiverUuids = $message->group?->receivers->pluck('uuid')->toArray() ?? [];
-			$currentUser = Auth::user();
+    private function handleSidebarUpdate(Message $message): void
+    {
+        // Fully reload the message and all needed relationships
+        $message = Message::with(['chat.receiver', 'chat.unread_messages', 'group.receivers'])
+            ->where('uuid', $message->uuid)
+            ->firstOrFail();
 
-			if (!$currentUser) {
-				\Log::warning('No authenticated user for sidebar update.');
-				return;
-			}
+        $chatReceiverUuid = $message->chat?->receiver?->uuid;
+        $groupReceiverUuids = $message->group?->receivers->pluck('uuid')->toArray() ?? [];
+        $currentUser = Auth::user();
 
-			$receiverUuids = collect([$chatReceiverUuid, ...$groupReceiverUuids, $currentUser->uuid])
-				->filter()
-				->unique()
-				->values();
+        if (! $currentUser) {
+            \Log::warning('No authenticated user for sidebar update.');
 
-			foreach ($receiverUuids as $uuid) {
-				$user = User::where('uuid', $uuid)->first();
-				if (! $user) {
-					continue;
-				}
+            return;
+        }
 
-				try {
-					Log::debug("Sidebar update for user ID: {$user->id}");
+        $receiverUuids = collect([$chatReceiverUuid, ...$groupReceiverUuids, $currentUser->uuid])
+            ->filter()
+            ->unique()
+            ->values();
 
-					$sidebarData = $this->sidebarService->index(new SearchRequest(), $user->id);
+        foreach ($receiverUuids as $uuid) {
+            $user = User::where('uuid', $uuid)->first();
+            if (! $user) {
+                continue;
+            }
 
-					Log::debug('Sidebar data generated:', $sidebarData);
+            try {
+                Log::debug("Sidebar update for user ID: {$user->id}");
 
-					event(new SidebarEvent($sidebarData, $uuid));
-				} catch (\Throwable $e) {
-					Log::error("Sidebar update failed for {$uuid}", ['error' => $e->getMessage()]);
-				}
-			}
-		}
+                $sidebarData = $this->sidebarService->index(new SearchRequest, $user->id);
 
-	}
+                Log::debug('Sidebar data generated:', $sidebarData);
+
+                event(new SidebarEvent($sidebarData, $uuid));
+            } catch (\Throwable $e) {
+                Log::error("Sidebar update failed for {$uuid}", ['error' => $e->getMessage()]);
+            }
+        }
+    }
+}

@@ -20,7 +20,7 @@ class MessageController extends Controller
     {
         DB::beginTransaction();
         try {
-          $data = $this->service->store($request);
+            $data = $this->service->store($request);
             DB::commit();
 
             return rp_response($data, __('DataCreatedSuccessfully'), Response::HTTP_CREATED);
@@ -28,7 +28,7 @@ class MessageController extends Controller
         } catch (\Exception $ex) {
             DB::rollBack();
 
-           return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -66,17 +66,17 @@ class MessageController extends Controller
     public function destroy(DestroyRequest $request)
     {
         DB::beginTransaction();
-//        try {
-            $this->service->destroy($request);
-            DB::commit();
+        //        try {
+        $this->service->destroy($request);
+        DB::commit();
 
-            return rp_response([], __('DataDeletedSuccessfully'), Response::HTTP_OK);
-//
-//        } catch (\Exception $ex) {
-//            DB::rollBack();
-//
-//            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
-//        }
+        return rp_response([], __('DataDeletedSuccessfully'), Response::HTTP_OK);
+        //
+        //        } catch (\Exception $ex) {
+        //            DB::rollBack();
+        //
+        //            return rp_response([], __('FailureProcess'), Response::HTTP_INTERNAL_SERVER_ERROR);
+        //        }
     }
 
     public function show_messages(ShowAllMessageRequest $request)

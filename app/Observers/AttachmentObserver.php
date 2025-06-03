@@ -3,16 +3,17 @@
 namespace App\Observers;
 
 use App\Events\SidebarEvent;
+use App\Http\Requests\Sidebar\SearchRequest;
 use App\Models\Attachments;
-use App\Models\Chat\Message;
+use App\Models\User;
 use App\Services\Sidebar\SidebarService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Http\Requests\Sidebar\SearchRequest;
-use App\Models\User;
+
 class AttachmentObserver
 {
     public function __construct(public SidebarService $sidebarService) {}
+
     public function created(Attachments $attachments): void
     {
         $attachment = Attachments::where('uuid', $attachments->uuid)

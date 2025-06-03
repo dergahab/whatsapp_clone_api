@@ -3,17 +3,16 @@
 namespace App\Models\Chat;
 
 use App\Models\Attachments;
+use App\Models\Read\MessageRead;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use App\Models\Read\MessageRead;
 
 class Message extends Model
 {
@@ -50,7 +49,7 @@ class Message extends Model
     protected function createByLabel(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->create_by == Auth::id() ? 'sender' : 'receiver'
+            get: fn () => $this->create_by == Auth::id() ? 'sender' : 'receiver'
         );
     }
 
@@ -62,7 +61,7 @@ class Message extends Model
     protected function editStatus(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value == 0 ? false : true
+            get: fn ($value) => $value == 0 ? false : true
         );
     }
 
@@ -87,7 +86,7 @@ class Message extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->format('Y-m-d H:i:s')
+            get: fn ($value) => Carbon::parse($value)->format('Y-m-d H:i:s')
         );
     }
 

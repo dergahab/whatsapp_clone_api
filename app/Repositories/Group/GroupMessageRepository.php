@@ -7,9 +7,7 @@ use App\Models\Read\MessageRead;
 
 class GroupMessageRepository
 {
-    public function __construct(public Message $model, public MessageRead $messageRead)
-    {
-    }
+    public function __construct(public Message $model, public MessageRead $messageRead) {}
 
     public function store(array $data): Message
     {
@@ -49,8 +47,8 @@ class GroupMessageRepository
         $userId = auth()->user()->id;
         $this->messageRead::insertOrIgnore(
             collect($messageIds)
-                ->filter(fn($id) => !$this->messageRead::where('message_id', $id)->where('user_id', $userId)->exists())
-                ->map(fn($id) => ['message_id' => $id, 'user_id' => $userId, 'read_at' => now()])
+                ->filter(fn ($id) => ! $this->messageRead::where('message_id', $id)->where('user_id', $userId)->exists())
+                ->map(fn ($id) => ['message_id' => $id, 'user_id' => $userId, 'read_at' => now()])
                 ->all()
         );
     }
@@ -58,6 +56,7 @@ class GroupMessageRepository
     public function changeMessageStatus($group_id, $status)
     {
         $this->read_messages($this->model->where('group_id', $group_id)->pluck('id'));
+
         return
         $this->model
             ->where('group_id', $group_id)

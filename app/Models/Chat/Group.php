@@ -64,5 +64,4 @@ class Group extends Base
     {
         return $this->unread_messages()->count();
     }
-
 }

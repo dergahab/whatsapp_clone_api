@@ -59,6 +59,7 @@ class Chat extends Base
 
         return $this->userTwo();
     }
+
     public function unread_messages(): HasMany
     {
         return $this->hasMany(Message::class, 'chat_id', 'id');
@@ -76,11 +77,12 @@ class Chat extends Base
         if (auth()->user()?->id == $this->user1) {
             return $this->userTwo();
         }
+
         return $this->userOne();
     }
+
     public function returnAuth()
     {
         return auth()->user()->id;
     }
-
 }

@@ -4,7 +4,6 @@ namespace App\Repositories\User;
 
 use App\Models\Chat\Group;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryİnterface
 {
@@ -28,7 +27,6 @@ class UserRepository implements UserRepositoryİnterface
             }
         }
         $excludedUserIds[] = auth()->id();
-
 
         return User::select('uuid', 'name', 'profile_picture', 'type')
             ->whereNotIn('id', $excludedUserIds)

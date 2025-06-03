@@ -3,7 +3,6 @@
 namespace App\Repositories\Vault;
 
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class MenageCredentialsRepository
 {
@@ -21,7 +20,6 @@ class MenageCredentialsRepository
             ->orderByLastPassword()
             ->with(['passwords:uuid,title'])
             ->paginate(30, ['*'], 'page', $page);
-
 
         return [
             'current_page' => $credentials->currentPage(),
