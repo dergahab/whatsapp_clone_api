@@ -1,92 +1,110 @@
-# Chat
+# API Chat - WhatsApp Clone API
 
+A robust backend API for a real-time chat application, built with Laravel 10. This project serves as the core infrastructure for a WhatsApp-like messaging platform, supporting one-on-one chats, group conversations, and file attachments.
 
+## 🚀 Key Features
 
-## Getting started
+*   **Authentication & Security**: Secure user authentication using Laravel Sanctum, including registration, login, password reset, and email verification.
+*   **Real-time Messaging**: Powered by `beyondcode/laravel-websockets` and Pusher for instant message delivery.
+*   **Group Chats**: Full support for creating groups, managing members, and group messaging.
+*   **File Attachments**: Capability to send and download files within chats.
+*   **User Management**: Endpoints for updating user profiles and retrieving user lists.
+*   **Vault/Credentials**: Integrated features for managing secure credentials (password manager functionality).
+*   **API Documentation**: Auto-generated API documentation using `rakutentech/laravel-request-docs`.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## 🛠️ Tech Stack
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+*   **Framework**: [Laravel 10](https://laravel.com)
+*   **Language**: PHP 8.1+
+*   **Real-time**: Laravel WebSockets, Pusher
+*   **Authentication**: Laravel Sanctum
+*   **Build Tool**: Vite
 
-## Add your files
+## 📦 Installation
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/dergahab/whatsapp_clone_api.git
+    cd api-chat
+    ```
 
-```
-cd existing_repo
-git remote add origin http://gitlab.erp-intel.com/chat/back-end/chat.git
-git branch -M main
-git push -uf origin main
-```
+2.  **Install PHP dependencies**
+    ```bash
+    composer install
+    ```
 
-## Integrate with your tools
+3.  **Install Node.js dependencies**
+    ```bash
+    npm install
+    ```
 
-- [ ] [Set up project integrations](http://gitlab.erp-intel.com/chat/back-end/chat/-/settings/integrations)
+4.  **Environment Setup**
+    Copy the example environment file and configure your database and websocket settings.
+    ```bash
+    cp .env.example .env
+    ```
+    Update `.env` with your database credentials and other configurations.
 
-## Collaborate with your team
+5.  **Generate Application Key**
+    ```bash
+    php artisan key:generate
+    ```
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+6.  **Run Migrations**
+    ```bash
+    php artisan migrate
+    ```
 
-## Test and Deploy
+7.  **Start the Server**
+    ```bash
+    php artisan serve
+    ```
 
-Use the built-in continuous integration in GitLab.
+8.  **Start WebSockets (if applicable)**
+    ```bash
+    php artisan websockets:serve
+    ```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 🏗️ Code Architecture
 
-***
+This project follows a modular and service-oriented architecture to ensure scalability and maintainability.
 
-# Editing this README
+### 📂 Directory Structure Highlights
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+*   **`app/Http/Controllers`**: Handles incoming HTTP requests and returns responses. Controllers are kept thin by delegating business logic to Services.
+*   **`app/Http/Requests`**: Manages form validation. Each request has a dedicated class to ensure data integrity before it reaches the controller.
+*   **`app/Http/Resources`**: Transforms models into JSON responses, ensuring a consistent API output format.
+*   **`app/Services`**: Contains the core business logic. Services isolate complex operations from controllers, making the code reusable and easier to test.
+*   **`app/Repositories`**: Handles data access logic. This layer abstracts database interactions, allowing for cleaner code and easier swapping of data sources if needed.
+*   **`app/Policies`**: Manages authorization logic, defining who can perform specific actions on resources.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+### 🔄 Request Lifecycle
 
-## Name
-Choose a self-explaining name for your project.
+1.  **Route**: The request hits a route defined in `routes/api.php`.
+2.  **Middleware**: Authentication and other checks are performed (e.g., `auth:sanctum`).
+3.  **Request Validation**: The incoming data is validated using a Form Request class.
+4.  **Controller**: The controller receives the validated request.
+5.  **Service**: The controller calls a Service method to perform the business logic.
+6.  **Repository**: The Service interacts with a Repository to fetch or persist data.
+7.  **Resource**: The result is transformed into a JSON response using an API Resource.
+8.  **Response**: The final JSON response is sent back to the client.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## 🔌 API Endpoints
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+The API provides a comprehensive set of endpoints. Here are some of the main routes:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+*   **Auth**: `/api/login`, `/api/user_register`, `/api/logout`
+*   **Users**: `/api/users`, `/api/users/{uuid}`
+*   **Chats**: `/api/chats`, `/api/messages`
+*   **Groups**: `/api/groups`, `/api/group-messages`
+*   **Attachments**: `/api/fileDownload/{uuid}`
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+For full documentation, ensure `rakutentech/laravel-request-docs` is configured and visit the documentation route (usually `/request-docs`).
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## 🤝 Contributing
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## 📄 License
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
